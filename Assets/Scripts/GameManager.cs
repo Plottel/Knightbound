@@ -70,7 +70,7 @@ public class GameManager : MonoBehaviour
         // Change Tree and send Update packet on U
         if (Input.GetKeyDown(KeyCode.U))
         {
-            tree.name = "UPDATED NAME";
+            tree.name = "I UPDATED";
             if (server.replicator.context.TryGetNetworkID(tree, out int networkID))
             {
                 var packet = new ReplicationPacket();
