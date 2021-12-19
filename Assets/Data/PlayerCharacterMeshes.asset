@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 30bd57896c9e99d4ab0043051a3907f9, type: 3}
+  m_Name: PlayerCharacterMeshes
+  m_EditorClassIdentifier: 
+  transforms:
+  - {fileID: -8679921383154817045, guid: 97345055ca198894dbeb5f87c76b6629, type: 3}
+  - {fileID: -8679921383154817045, guid: 28adc4531fe58bc4aaf1f48900a6f254, type: 3}
+  - {fileID: -8679921383154817045, guid: ffe10f07908c12f4da72e849a46da4db, type: 3}
+  - {fileID: -8679921383154817045, guid: f8ed120e31c80e54280757e02fd6666a, type: 3}
+  - {fileID: -8679921383154817045, guid: 599e9dc582c2ddc4e8aa5577cf1f02df, type: 3}
+  - {fileID: -8679921383154817045, guid: 76a6002eb6b5e77468689575226ad091, type: 3}
+  - {fileID: -8679921383154817045, guid: cba7559b37f4b9f439f1264b7b18e391, type: 3}
+  - {fileID: -8679921383154817045, guid: eeaf65e47ce396f43adfdcefd709ab85, type: 3}
+  - {fileID: -8679921383154817045, guid: 7030286b291cf1342970f9e4225707a2, type: 3}
+  - {fileID: -8679921383154817045, guid: 8b929489674eb1843b40282ed8608572, type: 3}

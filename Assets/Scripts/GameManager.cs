@@ -2,106 +2,82 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
+using Deft;
 using Deft.Networking;
+using ParrelSync;
 
 public class GameManager : MonoBehaviour
 {
+    public NetworkObjectMap NetworkPrefabs;
+
     private string hostName = "127.0.0.1";
     private ushort port = 6005;
 
-    private GameServer server;
-    private GameClient client;
-
-    int frameCount;
-    int packetCount;
-
-    Tree tree;
+    private List<Singleton> managers;
 
     void Awake()
     {
+        // Setup Game Resources
+        var prefabs = NetworkPrefabs.prefabs;
+        NetworkPrefabRegistry.SetPrefabCount(prefabs.Length);
+
+        // Register Netowrk Prefabs
+        for (int i = 0; i < prefabs.Length; i++)
+            NetworkPrefabRegistry.Register((NetworkObjectType)i, prefabs[i]);
+
+        // Setup Networking
         ENet.Library.Initialize();
 
-        server = new GameServer();
-        client = new GameClient();
-        client.replicator.context = server.replicator.context; // Local client - share context.
+        // Create Managers
+        managers = new List<Singleton>();
 
-        server.SetPacketHandler<WelcomePacketHandlerServer>(PacketType.Welcome);
-        server.SetPacketHandler<ConsoleMessagePacketHandlerServer>(PacketType.ConsoleMessage);
+        AddManager<NetworkManagerClient>();
 
-        client.SetPacketHandler<WelcomePacketHandlerClient>(PacketType.Welcome);
-        client.SetPacketHandler<ConsoleMessagePacketHandlerClient>(PacketType.ConsoleMessage);
-        client.SetPacketHandler<ReplicationPacketHandlerClient>(PacketType.Replication);
+        if (!ClonesManager.IsClone())
+            AddManager<NetworkManagerServer>();
 
-        server.LaunchServer(port);
-        client.JoinServer(hostName, port);
+        foreach (var manager in managers)
+            manager.OnAwake();
+    }
+
+    private void Start()
+    {
+        // The original makes the server.
+        if (!ClonesManager.IsClone())
+        {
+            NetworkManagerServer.Get.LaunchServer(port);
+            NetworkManagerClient.Get.SetContext(NetworkManagerServer.Get.GetContext());
+        }
+
+        NetworkManagerClient.Get.JoinServer(hostName, port);
+
+        foreach (var manager in managers)
+            manager.OnStart();
     }
 
     void Update()
     {
-        server.ProcessPackets();
-        client.ProcessPackets();
+        foreach (var manager in managers)
+            manager.OnUpdate();
+    }
 
-        // Send Message on Space
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            var packet = NetworkUtils.CreateConsoleMessagePacket("My First Message");
-            client.SendPacket(PacketType.ConsoleMessage, packet);
-        }
-
-        // Spawn Tree and send Create packet on C
-        if (Input.GetKeyDown(KeyCode.C))
-        {
-            // Create a Tree on the server
-            tree = NetworkPrefabRegistry.Create<Tree>(NetworkObjectType.Tree);
-            tree.name = "IM A TREE!";
-
-            int networkID = server.replicator.context.RegisterNewNetworkObject(tree);
-            NetworkObjectType classID = NetworkObjectType.Tree;
-
-            var packet = new ReplicationPacket();
-            packet.action = ReplicationAction.Create;
-            packet.classID = classID;
-            packet.networkID = networkID;
-            packet.obj = tree;
-
-            server.BroadcastPacket(PacketType.Replication, packet);    
-        }
-
-        // Change Tree and send Update packet on U
-        if (Input.GetKeyDown(KeyCode.U))
-        {
-            tree.name = "I UPDATED";
-            if (server.replicator.context.TryGetNetworkID(tree, out int networkID))
-            {
-                var packet = new ReplicationPacket();
-                packet.action = ReplicationAction.Update;
-                packet.classID = NetworkObjectType.Tree;
-                packet.networkID = networkID;
-                packet.obj = tree;
-
-                server.BroadcastPacket(PacketType.Replication, packet);
-            }
-
-        }
-
-        // Delete Tree and send Destroy packet on D
-        if (Input.GetKeyDown(KeyCode.D))
-        {
-            if (server.replicator.context.TryGetNetworkID(tree, out int networkID))
-            {
-                var packet = new ReplicationPacket();
-                packet.action = ReplicationAction.Destroy;
-                packet.classID = NetworkObjectType.Tree;
-                packet.networkID = networkID;
-                packet.obj = tree; // Don't need to serialize object for Destroy
-
-                server.BroadcastPacket(PacketType.Replication, packet);
-            }
-        }
+    void LateUpdate()
+    {
+        foreach (var manager in managers)
+            manager.OnLateUpdate();
     }
 
     private void OnDestroy()
     {
         ENet.Library.Deinitialize();
+    }
+
+    protected void AddManager<T>() where T : Singleton
+    {
+        var manager = new GameObject().AddComponent<T>();
+        manager.name = typeof(T).Name;
+        manager.transform.parent = transform;
+
+        managers.Add(manager);
     }
 }
