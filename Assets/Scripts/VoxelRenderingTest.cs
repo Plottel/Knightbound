@@ -5,6 +5,9 @@ using UnityEngine;
 [RequireComponent(typeof(MeshFilter), typeof(MeshRenderer))]
 public class VoxelRenderingTest : MonoBehaviour
 {
+    public Vector3 worldOrigin;
+
+    VoxelWorldData worldData;
     Mesh mesh;
 
     List<Vector3> vertices;
@@ -17,6 +20,7 @@ public class VoxelRenderingTest : MonoBehaviour
 
     private void Start()
     {
+        worldData = new VoxelWorldData();
         GenerateMeshData();
         ConstructMesh();
     }
@@ -26,30 +30,40 @@ public class VoxelRenderingTest : MonoBehaviour
         vertices = new List<Vector3>();
         triangles = new List<int>();
 
-        MakeCube(new Vector3(0, 0, 0));
-        MakeCube(new Vector3(1, 0, 0));
-        MakeCube(new Vector3(0, 0, 1));
-        MakeCube(new Vector3(1, 0, 1));
+        MakeVoxelWorld(worldData);
+
+        //MakeCube(new Vector3(0, 0, 0));
+        //MakeCube(new Vector3(1, 0, 0));
+        //MakeCube(new Vector3(0, 0, 1));
+        //MakeCube(new Vector3(1, 0, 1));
     }
 
-    void MakeQuad(Vector3 position)
+    void MakeVoxelWorld(VoxelWorldData data)
     {
-        vertices.AddRange(VoxelUtils.GetQuadVertices(position));
-
-        // Add the most recent 6 indexes of vertices to triangles
-        int lastIndex = vertices.Count - 1;
-        triangles.Add(lastIndex - 5);
-        triangles.Add(lastIndex - 4);
-        triangles.Add(lastIndex - 3);
-        triangles.Add(lastIndex - 2);
-        triangles.Add(lastIndex - 1);
-        triangles.Add(lastIndex);
+        for (int x = 0; x < data.Width; ++x)
+        {
+            for (int z = 0; z < data.Depth; ++z)
+            {
+                if (data.GetBlockType(x, z) != BlockType.Air)
+                {
+                    var blockPosition = worldOrigin + new Vector3(x, 0, z);
+                    MakeCube(blockPosition, x, z, data);
+                }
+            }
+        }
     }
 
-    void MakeCube(Vector3 position)
+    void MakeCube(Vector3 position, int x, int z, VoxelWorldData data)
     {
         for (int i = 0; i < 6; ++i)
-            MakeCubeFace((VoxelDirection)i, position);
+        {
+            var direction = (VoxelDirection)i;
+
+            // Only draw faces facing Air.
+            if (data.GetNeighborBlockType(x, z, direction) == BlockType.Air)
+                MakeCubeFace((VoxelDirection)i, position);
+
+        }
     }
 
     void MakeCubeFace(VoxelDirection direction, Vector3 position)
