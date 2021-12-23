@@ -26,7 +26,10 @@ public class VoxelRenderingTest : MonoBehaviour
         vertices = new List<Vector3>();
         triangles = new List<int>();
 
-        MakeCube();
+        MakeCube(new Vector3(0, 0, 0));
+        MakeCube(new Vector3(1, 0, 0));
+        MakeCube(new Vector3(0, 0, 1));
+        MakeCube(new Vector3(1, 0, 1));
     }
 
     void MakeQuad(Vector3 position)
@@ -43,16 +46,16 @@ public class VoxelRenderingTest : MonoBehaviour
         triangles.Add(lastIndex);
     }
 
-    void MakeCube()
+    void MakeCube(Vector3 position)
     {
         for (int i = 0; i < 6; ++i)
-            MakeCubeFace((VoxelDirection)i);
+            MakeCubeFace((VoxelDirection)i, position);
     }
 
-    void MakeCubeFace(VoxelDirection direction)
+    void MakeCubeFace(VoxelDirection direction, Vector3 position)
     {
         // Fetch 6 vertices and 6 Triangles
-        vertices.AddRange(VoxelUtils.GetFaceVertices6Verts(direction));
+        vertices.AddRange(VoxelUtils.GetFaceVertices6Verts(direction, position));
 
         // Add the most recent 6 indexes of vertices to triangles
         int lastIndex = vertices.Count - 1;

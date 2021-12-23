@@ -82,11 +82,11 @@ public static class VoxelUtils
         return result;
     }
 
-    public static Vector3[] GetFaceVertices6Verts(VoxelDirection direction)
+    public static Vector3[] GetFaceVertices6Verts(VoxelDirection direction, Vector3 position)
     {
         Vector3[] result = new Vector3[6];
         for (int i = 0; i < 6; ++i)
-            result[i] = cubeVertexOffsets[faceTriangles6Verts[(int)direction][i]];
+            result[i] = cubeVertexOffsets[faceTriangles6Verts[(int)direction][i]] + position;
 
         return result;
     }
