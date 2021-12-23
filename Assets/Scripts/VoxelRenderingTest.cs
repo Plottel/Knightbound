@@ -31,7 +31,7 @@ public class VoxelRenderingTest : MonoBehaviour
 
     void MakeQuad(Vector3 position)
     {
-        vertices.AddRange(VoxelHelper.GetQuadVertices(position));
+        vertices.AddRange(VoxelUtils.GetQuadVertices(position));
 
         // Add the most recent 6 indexes of vertices to triangles
         int lastIndex = vertices.Count - 1;
@@ -51,13 +51,13 @@ public class VoxelRenderingTest : MonoBehaviour
 
     void MakeCubeFace(VoxelDirection direction)
     {
-        // Fetch 4 vertices and 6 Triangles
-        vertices.AddRange(VoxelHelper.GetFaceVertices4Verts(direction));
+        // Fetch 6 vertices and 6 Triangles
+        vertices.AddRange(VoxelUtils.GetFaceVertices6Verts(direction));
 
-        // Add the most recent 4 indexes of vertices to triangles
+        // Add the most recent 6 indexes of vertices to triangles
         int lastIndex = vertices.Count - 1;
-        //triangles.Add(lastIndex - 5);
-        //triangles.Add(lastIndex - 4);
+        triangles.Add(lastIndex - 5);
+        triangles.Add(lastIndex - 4);
         triangles.Add(lastIndex - 3);
         triangles.Add(lastIndex - 2);
         triangles.Add(lastIndex - 1);
@@ -78,7 +78,7 @@ public class VoxelRenderingTest : MonoBehaviour
     {
         Gizmos.DrawSphere(Vector3.zero, 0.1f);
 
-        foreach (Vector3 v in VoxelHelper.GetCubeVertexOffsets())
+        foreach (Vector3 v in VoxelUtils.GetCubeVertexOffsets())
             Gizmos.DrawSphere(v, 0.1f);
     }
 }
