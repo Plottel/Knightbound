@@ -20,9 +20,12 @@ public class VoxelWorldData
 
     public int[,] voxelData = new int[,]
     {
-        {0, 1, 1},
-        {1, 1, 1},
-        {1, 1, 0}
+        {0, 1, 1, 1, 1, 0},
+        {1, 2, 2, 2, 2, 1},
+        {1, 2, 2, 2, 2, 1},
+        {1, 2, 2, 2, 2, 1},
+        {1, 2, 2, 2, 2, 1},
+        {0, 1, 1, 1, 1, 0},
     };
 
     public int Width => voxelData.GetLength(0);

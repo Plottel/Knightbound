@@ -5,5 +5,5 @@ using UnityEngine;
 public static class BlockType
 {
     public const int Air = 0;
-    public const int Ground = 1;
+    public const int Dirt = 1;
 }

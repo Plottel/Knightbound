@@ -42,7 +42,7 @@ public static class VoxelUtils
         new Vector3(0.5f, -0.5f, -0.5f)     // Right Bottom Back
     };
 
-    // 4 verts is 0, 1, 2 3
+    // 4 verts is 0, 1, 2, 3
     private static int[][] faceTriangles4Verts = new int[][]
     {
         new int[] {0, 1, 3, 2},     // Top
@@ -73,11 +73,11 @@ public static class VoxelUtils
         return result;
     }
 
-    public static Vector3[] GetFaceVertices4Verts(VoxelDirection direction)
+    public static Vector3[] GetFaceVertices4Verts(VoxelDirection direction, Vector3 position)
     {
         Vector3[] result = new Vector3[4];
         for (int i = 0; i < 4; ++i)
-            result[i] = cubeVertexOffsets[faceTriangles4Verts[(int)direction][i]];
+            result[i] = cubeVertexOffsets[faceTriangles4Verts[(int)direction][i]] + position;
 
         return result;
     }
