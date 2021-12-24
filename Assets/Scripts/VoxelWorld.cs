@@ -3,17 +3,17 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.U2D;
 
-[RequireComponent(typeof(MeshFilter), typeof(MeshRenderer))]
-public class VoxelRenderingTest : MonoBehaviour
+[RequireComponent(typeof(MeshFilter), typeof(MeshRenderer), typeof(MeshCollider))]
+public class VoxelWorld : MonoBehaviour
 {
-    public Texture2D[] blockTextures;
-    public Rect[] blockTextureUVs;
+    public Texture2D[] textures;
+    private TextureAtlas atlas;
 
-    public Texture2D blockTextureAtlas;
     public Vector3 worldOrigin;
 
     VoxelWorldData worldData;
     Mesh mesh;
+    MeshCollider meshCollider;
 
     List<Vector3> vertices;
     List<int> triangles;
@@ -21,32 +21,24 @@ public class VoxelRenderingTest : MonoBehaviour
 
     private void Awake()
     {
+        atlas = new TextureAtlas(textures);
         mesh = GetComponent<MeshFilter>().mesh;
-        GetComponent<MeshRenderer>().sharedMaterial.mainTexture = blockTextureAtlas;
+        meshCollider = GetComponent<MeshCollider>();
+        GetComponent<MeshRenderer>().sharedMaterial.mainTexture = atlas.GetTexture();
     }
 
     private void Start()
     {
         worldData = new VoxelWorldData();
-        GenerateMeshData();
-        ConstructMesh();
-    }
-
-    void GenerateMeshData()
-    {
         vertices = new List<Vector3>();
         triangles = new List<int>();
         uvs = new List<Vector2>();
 
-        MakeVoxelWorld(worldData);
-
-        //MakeCube(new Vector3(0, 0, 0));
-        //MakeCube(new Vector3(1, 0, 0));
-        //MakeCube(new Vector3(0, 0, 1));
-        //MakeCube(new Vector3(1, 0, 1));
+        GenerateMeshData(worldData);
+        FinalizeMesh();
     }
 
-    void MakeVoxelWorld(VoxelWorldData data)
+    void GenerateMeshData(VoxelWorldData data)
     {
         for (int x = 0; x < data.Width; ++x)
         {
@@ -55,13 +47,13 @@ public class VoxelRenderingTest : MonoBehaviour
                 if (data.GetBlockType(x, z) != BlockType.Air)
                 {
                     var blockPosition = worldOrigin + new Vector3(x, 0, z);
-                    MakeCube(blockPosition, x, z, data);
+                    AddCubeMesh(blockPosition, x, z, data);
                 }
             }
         }
     }
 
-    void MakeCube(Vector3 position, int x, int z, VoxelWorldData data)
+    void AddCubeMesh(Vector3 position, int x, int z, VoxelWorldData data)
     {
         for (int i = 0; i < 6; ++i)
         {
@@ -69,14 +61,13 @@ public class VoxelRenderingTest : MonoBehaviour
 
             // Only draw faces facing Air.
             if (data.GetNeighborBlockType(x, z, direction) == BlockType.Air)
-                MakeCubeFace((VoxelDirection)i, position, data.GetBlockType(x, z));
-
+                AddCubeFaceMesh((VoxelDirection)i, position, data.GetBlockType(x, z));
         }
     }
 
-    void MakeCubeFace(VoxelDirection direction, Vector3 position, int blockType)
+    void AddCubeFaceMesh(VoxelDirection direction, Vector3 position, int blockType)
     {
-        Vector3[] faceVertices = VoxelUtils.GetFaceVertices6Verts(direction, position);
+        Vector3[] faceVertices = VoxelMeshUtils.GetFaceVertices6Verts(direction, position);
 
         // Fetch 6 vertices and 6 Triangles
         vertices.AddRange(faceVertices);
@@ -98,7 +89,7 @@ public class VoxelRenderingTest : MonoBehaviour
         // Each U and V will be a number between 0 and 1
 
         // Assume Block type 0 (Air) never gets here.
-        Rect uvRect = blockTextureUVs[blockType - 1];
+        Rect uvRect = atlas.GetUVs(blockType - 1);
 
         Vector2 topLeft = new Vector2(uvRect.xMin, uvRect.yMax);
         Vector2 topRight = new Vector2(uvRect.xMax, uvRect.yMax);
@@ -114,7 +105,7 @@ public class VoxelRenderingTest : MonoBehaviour
         uvs.Add(bottomRight);
     }
 
-    void ConstructMesh()
+    void FinalizeMesh()
     {
         mesh.Clear();
 
@@ -123,13 +114,8 @@ public class VoxelRenderingTest : MonoBehaviour
         mesh.uv = uvs.ToArray();
 
         mesh.RecalculateNormals();
-    }
+        mesh.RecalculateBounds();
 
-    private void OnDrawGizmos()
-    {
-        Gizmos.DrawSphere(Vector3.zero, 0.1f);
-
-        foreach (Vector3 v in VoxelUtils.GetCubeVertexOffsets())
-            Gizmos.DrawSphere(v, 0.1f);
+        meshCollider.sharedMesh = mesh;
     }
 }

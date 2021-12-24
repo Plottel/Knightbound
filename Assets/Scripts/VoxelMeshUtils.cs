@@ -2,34 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public static class VoxelUtils
+public static class VoxelMeshUtils
 {
-    private static Vector3[] quadVertices = new Vector3[]
-    {
-        new Vector3(0, 0, 0), new Vector3(0, 0, 1), new Vector3(1, 0, 0),
-        new Vector3(1, 0, 0), new Vector3(0, 0, 1), new Vector3(1, 0, 1)
-    };
-
-    private static Vector3[] centeredQuadVertices = new Vector3[]
-    {
-        new Vector3(-0.5f, 0, -0.5f), new Vector3(-0.5f, 0, 0.5f), new Vector3(0.5f, 0, -0.5f),
-        new Vector3(0.5f, 0, -0.5f), new Vector3(-0.5f, 0, 0.5f), new Vector3(0.5f, 0, 0.5f)
-    };
-
-    private static int[] quadTriangles = new int[]
-    {
-        0, 1, 2, 3, 4, 5
-    };
-
-    public static Vector3[] GetQuadVertices(Vector3 position)
-    {
-        Vector3[] result = new Vector3[quadVertices.Length];
-        for (int i = 0; i < quadVertices.Length; ++i)
-            result[i] = centeredQuadVertices[i] + position;
-
-        return result;
-    }
-
     private static Vector3[] cubeVertexOffsets = new Vector3[]
     {
         new Vector3(-0.5f, 0.5f, 0.5f),     // Left Top Front

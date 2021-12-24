@@ -7,17 +7,6 @@ public class VoxelWorldData
 {
     private static Vector3Int[] kNeighbourOffsets;
 
-    static VoxelWorldData()
-    {
-        kNeighbourOffsets = new Vector3Int[Enum.GetValues(typeof(VoxelDirection)).Length];
-        kNeighbourOffsets[(int)VoxelDirection.Up] =         new Vector3Int(0, 1, 0);
-        kNeighbourOffsets[(int)VoxelDirection.Down] =       new Vector3Int(0, -1, 0);
-        kNeighbourOffsets[(int)VoxelDirection.Left] =       new Vector3Int(-1, 0, 0);
-        kNeighbourOffsets[(int)VoxelDirection.Right] =      new Vector3Int(1, 0, 0);
-        kNeighbourOffsets[(int)VoxelDirection.Front] =      new Vector3Int(0, 0, 1);
-        kNeighbourOffsets[(int)VoxelDirection.Back] =       new Vector3Int(0, 0, -1);
-    }
-
     public int[,] voxelData = new int[,]
     {
         {0, 1, 1, 1, 1, 0},
@@ -30,6 +19,17 @@ public class VoxelWorldData
 
     public int Width => voxelData.GetLength(0);
     public int Depth => voxelData.GetLength(1);
+
+    static VoxelWorldData()
+    {
+        kNeighbourOffsets = new Vector3Int[Enum.GetValues(typeof(VoxelDirection)).Length];
+        kNeighbourOffsets[(int)VoxelDirection.Up] =         new Vector3Int(0, 1, 0);
+        kNeighbourOffsets[(int)VoxelDirection.Down] =       new Vector3Int(0, -1, 0);
+        kNeighbourOffsets[(int)VoxelDirection.Left] =       new Vector3Int(-1, 0, 0);
+        kNeighbourOffsets[(int)VoxelDirection.Right] =      new Vector3Int(1, 0, 0);
+        kNeighbourOffsets[(int)VoxelDirection.Front] =      new Vector3Int(0, 0, 1);
+        kNeighbourOffsets[(int)VoxelDirection.Back] =       new Vector3Int(0, 0, -1);
+    }
 
     public int GetBlockType(int x, int z)
     {
