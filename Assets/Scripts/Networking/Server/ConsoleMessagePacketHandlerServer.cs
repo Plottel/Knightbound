@@ -19,7 +19,7 @@ public class ConsoleMessagePacketHandlerServer : PacketHandlerServer
                 writer.Write(message);
             }
 
-            DeftNetworkManagerServer.Get.TrueBroadcastPacket(stream);
+            NetworkManagerServer.Get.TrueBroadcastPacket(stream);
         }
     }
 }

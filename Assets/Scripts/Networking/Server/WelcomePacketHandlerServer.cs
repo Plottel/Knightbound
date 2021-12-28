@@ -9,7 +9,7 @@ public class WelcomePacketHandlerServer : PacketHandlerServer
 {
     public override void HandlePacket(uint peerID, BinaryReader reader)
     {
-        DeftNetworkManagerServer nms = DeftNetworkManagerServer.Get;
+        NetworkManagerServer nms = NetworkManagerServer.Get;
         var state = (WelcomeState)reader.ReadInt32();
 
         int playerID = 0;

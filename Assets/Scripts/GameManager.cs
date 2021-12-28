@@ -31,10 +31,10 @@ public class GameManager : MonoBehaviour
         // Create Managers
         managers = new List<Singleton>();
 
-        AddManager<DeftNetworkManagerClient>();
+        AddManager<NetworkManagerClient>();
 
         if (!ClonesManager.IsClone())
-            AddManager<DeftNetworkManagerServer>();
+            AddManager<NetworkManagerServer>();
 
         foreach (var manager in managers)
             manager.OnAwake();
@@ -45,11 +45,11 @@ public class GameManager : MonoBehaviour
         // The original makes the server.
         if (!ClonesManager.IsClone())
         {
-            DeftNetworkManagerServer.Get.LaunchServer(port);
-            DeftNetworkManagerClient.Get.SetContext(DeftNetworkManagerServer.Get.GetContext());
+            NetworkManagerServer.Get.LaunchServer(port);
+            NetworkManagerClient.Get.SetContext(NetworkManagerServer.Get.GetContext());
         }
 
-        DeftNetworkManagerClient.Get.JoinServer(hostName, port);
+        NetworkManagerClient.Get.JoinServer(hostName, port);
 
         foreach (var manager in managers)
             manager.OnStart();

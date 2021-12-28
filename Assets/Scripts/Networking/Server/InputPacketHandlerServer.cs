@@ -13,7 +13,7 @@ public class InputPacketHandlerServer : PacketHandlerServer
         var inputState = new InputState();
         inputState.Deserialize(reader);
 
-        ClientProxy client = DeftNetworkManagerServer.Get.GetClientProxy(playerID);
+        ClientProxy client = NetworkManagerServer.Get.GetClientProxy(playerID);
         client.AddInputState(inputState);
     }
 }

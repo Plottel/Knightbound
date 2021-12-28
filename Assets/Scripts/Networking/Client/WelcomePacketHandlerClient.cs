@@ -9,7 +9,7 @@ public class WelcomePacketHandlerClient : PacketHandlerClient
 {
     public override void HandlePacket(string originIP, BinaryReader reader)
     {
-        var nmc = DeftNetworkManagerClient.Get;
+        var nmc = NetworkManagerClient.Get;
         var state = (WelcomeState)reader.ReadInt32();
 
         switch (state)
