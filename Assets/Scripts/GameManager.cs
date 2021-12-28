@@ -23,7 +23,7 @@ public class GameManager : MonoBehaviour
 
         // Register Netowrk Prefabs
         for (int i = 0; i < prefabs.Length; i++)
-            NetworkPrefabRegistry.Register((NetworkObjectType)i, prefabs[i]);
+            NetworkPrefabRegistry.Register(i, prefabs[i]);
 
         // Setup Networking
         ENet.Library.Initialize();
@@ -31,10 +31,10 @@ public class GameManager : MonoBehaviour
         // Create Managers
         managers = new List<Singleton>();
 
-        AddManager<NetworkManagerClient>();
+        AddManager<DeftNetworkManagerClient>();
 
         if (!ClonesManager.IsClone())
-            AddManager<NetworkManagerServer>();
+            AddManager<DeftNetworkManagerServer>();
 
         foreach (var manager in managers)
             manager.OnAwake();
@@ -45,11 +45,11 @@ public class GameManager : MonoBehaviour
         // The original makes the server.
         if (!ClonesManager.IsClone())
         {
-            NetworkManagerServer.Get.LaunchServer(port);
-            NetworkManagerClient.Get.SetContext(NetworkManagerServer.Get.GetContext());
+            DeftNetworkManagerServer.Get.LaunchServer(port);
+            DeftNetworkManagerClient.Get.SetContext(DeftNetworkManagerServer.Get.GetContext());
         }
 
-        NetworkManagerClient.Get.JoinServer(hostName, port);
+        DeftNetworkManagerClient.Get.JoinServer(hostName, port);
 
         foreach (var manager in managers)
             manager.OnStart();

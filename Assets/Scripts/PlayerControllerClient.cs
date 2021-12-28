@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Deft;
+using Deft.Networking;
 
 public class PlayerControllerClient
 {
@@ -10,7 +12,7 @@ public class PlayerControllerClient
     {
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            NetworkManagerClient.Get.SendConsoleMessagePacket("My First Message");
+            DeftNetworkManagerClient.Get.SendConsoleMessagePacket("My First Message");
         }
 
         var inputState = new InputState
@@ -18,6 +20,6 @@ public class PlayerControllerClient
             move = Input.GetKeyDown(KeyCode.W)
         };
 
-        NetworkManagerClient.Get.SendInputPacket(inputState);
+        DeftNetworkManagerClient.Get.SendInputPacket(inputState);
     }
 }
