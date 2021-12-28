@@ -23,7 +23,7 @@ public class GameManager : MonoBehaviour
 
         // Register Netowrk Prefabs
         for (int i = 0; i < prefabs.Length; i++)
-            NetworkPrefabRegistry.Register((NetworkObjectType)i, prefabs[i]);
+            NetworkPrefabRegistry.Register(i, prefabs[i]);
 
         // Setup Networking
         ENet.Library.Initialize();

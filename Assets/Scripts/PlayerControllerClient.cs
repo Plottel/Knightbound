@@ -1,16 +1,20 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
+using Deft;
 
 public class PlayerControllerClient
 {
     public Tree player;
+    public int playerID;
 
     public void OnUpdate()
     {
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            NetworkManagerClient.Get.SendConsoleMessagePacket("My First Message");
+            var consolePacket = PacketHelperClient.MakeConsoleMessagePacket("My First Message");
+            NetworkManagerClient.Get.SendPacket(consolePacket);
         }
 
         var inputState = new InputState
@@ -18,6 +22,7 @@ public class PlayerControllerClient
             move = Input.GetKeyDown(KeyCode.W)
         };
 
-        NetworkManagerClient.Get.SendInputPacket(inputState);
+        var inputPacket = PacketHelperClient.MakeInputPacket(inputState, playerID);
+        NetworkManagerClient.Get.SendPacket(inputPacket);
     }
 }
