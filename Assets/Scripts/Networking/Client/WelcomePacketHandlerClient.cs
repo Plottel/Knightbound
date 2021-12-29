@@ -10,35 +10,49 @@ public class WelcomePacketHandlerClient : PacketHandlerClient
     public override void HandlePacket(string originIP, BinaryReader reader)
     {
         var nmc = NetworkManagerClient.Get;
-        var state = (WelcomeState)reader.ReadInt32();
+        var message = (WelcomeMessage)reader.ReadInt32();
 
-        switch (state)
+        switch (message)
         {
-            case WelcomeState.PlayerID:
-                int playerID = reader.ReadInt32();
-                nmc.SetPlayerID(playerID);
-
-                using (MemoryStream stream = new MemoryStream())
+            // Set Player ID and Request Spawn from server.
+            case WelcomeMessage.ConnectionApproved:
                 {
-                    using (BinaryWriter writer = new BinaryWriter(stream, Encoding.Default, true))
-                    {
-                        writer.Write((int)PacketType.Welcome);
-                        writer.Write((int)WelcomeState.PlayerObjectID);
-                    }
+                    nmc.state = NetworkState.Connected;
 
-                    nmc.SendPacket(stream);
+                    int playerID = reader.ReadInt32();
+                    nmc.SetPlayerID(playerID);
+
+                    Debug.Log("Setting Player ID to " + playerID.ToString());
+
+                    var packet = PacketHelperClient.MakeWelcomePacket(WelcomeMessage.RequestSpawn);
+                    nmc.SendPacket(packet);
                 }
-
                 break;
 
-            case WelcomeState.PlayerObjectID:
-                int playerObjNetworkID = reader.ReadInt32();
-                nmc.SetPlayerObjNetworkID(playerObjNetworkID);
+            // Set Player Network ID and Request Start
+            case WelcomeMessage.Spawn:
+                {
+                    nmc.state = NetworkState.Welcomed;
 
-                // Now ready to request Game Data..
+                    int playerID = reader.ReadInt32();
+                    int networkID = reader.ReadInt32();
 
+                    if (playerID == nmc.playerID)
+                        nmc.SetPlayerNetworkID(networkID);
+
+                    var packet = PacketHelperClient.MakeWelcomePacket(WelcomeMessage.RequestBeginPlaying);
+                    nmc.SendPacket(packet);
+                }
                 break;
 
+            // Ready to Play!
+            case WelcomeMessage.BeginPlaying:
+                {
+                    nmc.state = NetworkState.Playing;
+                }
+                break;
         }
+
+        Debug.Log("CLIENT RECEIVES WELCOME. MESSAGE: " + message.ToString());
     }
 }

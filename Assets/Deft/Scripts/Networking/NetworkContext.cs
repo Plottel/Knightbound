@@ -61,5 +61,10 @@ namespace Deft.Networking
         {
             return networkIDs.TryGetValue(obj, out networkID);
         }
+
+        public int GetNetworkID(NetworkObject obj)
+        {
+            return networkIDs[obj];
+        }
     }
 }

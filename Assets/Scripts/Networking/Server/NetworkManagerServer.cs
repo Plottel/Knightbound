@@ -13,13 +13,16 @@ public class NetworkManagerServer : Manager<NetworkManagerServer>
     private NetworkServer server;
 
     private int nextPlayerID;
-    private Dictionary<int, ClientProxy> clientProxies;
+    private Dictionary<uint, ClientInfo> peerIDToClientInfo;
+    private Dictionary<int, ClientInfo> playerIDToClientInfo;
+    private Dictionary<int, int> playerIDToPlayerNetworkID;
+    private Dictionary<int, ClientProxy> playerIDToClientProxy;
 
     private Dictionary<PacketType, PacketHandlerServer> packetHandlers;
 
     public NetworkReplicator replicator;
 
-    private const int kUpdateSendInterval = 1;
+    private const float kUpdateSendInterval = 0.033f;
     private float timeSinceLastUpdate;
 
     public override void OnAwake()
@@ -29,7 +32,10 @@ public class NetworkManagerServer : Manager<NetworkManagerServer>
         server = new NetworkServer();
 
         nextPlayerID = 0;
-        clientProxies = new Dictionary<int, ClientProxy>();
+        peerIDToClientInfo = new Dictionary<uint, ClientInfo>();
+        playerIDToClientInfo = new Dictionary<int, ClientInfo>();
+        playerIDToPlayerNetworkID = new Dictionary<int, int>();
+        playerIDToClientProxy = new Dictionary<int, ClientProxy>();
 
         packetHandlers = new Dictionary<PacketType, PacketHandlerServer>();
 
@@ -40,45 +46,14 @@ public class NetworkManagerServer : Manager<NetworkManagerServer>
         replicator = new NetworkReplicator();
     }
 
-    public bool HasPeerID(uint peerID)
-    {
-        foreach (var player in clientProxies.Values)
-        {
-            if (player.peerID == peerID)
-                return true;
-        }
-
-        return false;
-    }
-
-    public bool HasPlayerID(int playerID)
-    {
-        return clientProxies.ContainsKey(playerID);
-    }
-
-    public bool GetPlayerID(uint peerID, out int playerID)
-    {
-        foreach (var clientProxy in GetClientProxies())
-        {
-            if (clientProxy.peerID == peerID)
-            {
-                playerID = clientProxy.playerID;
-                return true;
-            }
-        }
-
-        playerID = -1;
-        return false;
-    }
-
     public ClientProxy GetClientProxy(int playerID)
     {
-        return clientProxies[playerID];
+        return playerIDToClientProxy[playerID];
     }
 
     public ClientProxy[] GetClientProxies()
     {
-        return clientProxies.Values.ToArray();
+        return playerIDToClientProxy.Values.ToArray();
     }
 
     public NetworkObject[] GetNetworkObjects()
@@ -102,17 +77,53 @@ public class NetworkManagerServer : Manager<NetworkManagerServer>
         server.LaunchServer(port);
     }
 
-    public ClientProxy RegisterNewPlayer(uint peerID)
+    public ClientInfo RegisterNewPlayer(uint peerID)
     {
-        int playerID = nextPlayerID++;
+        var clientInfo = new ClientInfo
+        {
+            playerID = nextPlayerID++,
+            peerID = peerID
+        };
 
-        var proxy = new ClientProxy();
-        proxy.state = WelcomeState.Uninitialized;
-        proxy.peerID = peerID;
-        proxy.playerID = playerID;
+        peerIDToClientInfo.Add(clientInfo.peerID, clientInfo);
+        playerIDToClientInfo.Add(clientInfo.playerID, clientInfo);
+        return clientInfo;
+    }
 
-        clientProxies.Add(playerID, proxy);
-        return proxy;
+    public void CreateClientProxy(uint peerID, int playerID)
+    {
+        var clientProxy = new ClientProxy
+        {
+            peerID = peerID,
+            playerID = playerID
+        };
+
+        playerIDToClientProxy[playerID] = clientProxy;
+    }
+
+    public bool GetClientInfo(int playerID, out ClientInfo clientInfo)
+    {
+        return playerIDToClientInfo.TryGetValue(playerID, out clientInfo);
+    }
+
+    public bool GetClientInfo(uint peerID, out ClientInfo clientInfo)
+    {
+        return peerIDToClientInfo.TryGetValue(peerID, out clientInfo);
+    }
+
+    public bool HasClient(int playerID)
+    {
+        return playerIDToClientInfo.ContainsKey(playerID);
+    }
+
+    public bool HasClient(uint peerID)
+    {
+        return peerIDToClientInfo.ContainsKey(peerID);
+    }
+
+    public void SetPlayerNetworkID(int playerID, int networkID)
+    {
+        playerIDToPlayerNetworkID[playerID] = networkID;
     }
 
     public T CreateNetworkObject<T>(int classID, out int networkID) where T : NetworkObject
@@ -141,11 +152,21 @@ public class NetworkManagerServer : Manager<NetworkManagerServer>
         {
             if (clientProxy.GetInputState(out InputState inputState))
             {
-                if (replicator.context.
-                TryGetNetworkObject(clientProxy.playerObjNetworkID, out var playerObj))
+                int playerNetworkID = playerIDToPlayerNetworkID[clientProxy.playerID];
+
+                if (replicator.context.TryGetNetworkObject(playerNetworkID, out var playerObj))
                 {
-                    if (inputState.move)
-                        playerObj.transform.position += new Vector3(1f, 0, 0);
+                    Player player = playerObj as Player; // Lol so bad.
+
+                    float x = 0;
+                    float z = 0;
+
+                    if (inputState.up) z = 1f;
+                    if (inputState.down) z = -1f;
+                    if (inputState.left) x = -1f;
+                    if (inputState.right) x = 1f;
+
+                    player.direction = new Vector3(x, 0, z);
                 }
             }
         }
@@ -160,9 +181,34 @@ public class NetworkManagerServer : Manager<NetworkManagerServer>
             SynchronizeClientProxyReplicators();
         }
 
+        if (Input.GetKeyDown(KeyCode.Alpha0))
+        {
+            SendCreate(1, 0, GetNetworkObjects()[0]);
+        }
+
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            SendCreate(1, 1, GetNetworkObjects()[1]);
+        }
+
+        if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            // The 1st Packet sent each frame is duplicated by the number of packets sent.
+            SendCreate(1, 1, GetNetworkObjects()[1]);
+            SendCreate(1, 0, GetNetworkObjects()[0]);
+
+            var welcome = PacketHelperClient.MakeWelcomePacket(WelcomeMessage.BeginPlaying);
+            SendPacket(1, welcome);
+            SendPacket(1, welcome);
+        }
+
         if (Input.GetKeyDown(KeyCode.U))
         {
-            SendCreateAllObjects(1);
+            var netObjs = GetNetworkObjects();
+            SendCreate(1, 0, netObjs[0]);
+            SendCreate(1, 1, netObjs[1]);
+
+            //SendCreateAllObjects(1);
         }
     }
 
@@ -170,28 +216,30 @@ public class NetworkManagerServer : Manager<NetworkManagerServer>
     {
         var networkObjects = GetNetworkObjects();
 
-        foreach (ClientProxy client in clientProxies.Values)
+        foreach (ClientProxy client in playerIDToClientProxy.Values)
         {
+            // Don't send Replication Data to Local Client.
+            if (client.peerID == 0)
+                continue;
+
             foreach (NetworkObject obj in networkObjects)
             {
+                // If Client has this Network ID, Update the existing object.
                 if (client.replicator.context.TryGetNetworkID(obj, out int networkID))
                 {
+                    Debug.Log("Sending Update to Player " + client.playerID + " Network ID" + networkID);
                     SendUpdate(client.playerID, networkID, obj);
                 }
+                // If Client does NOT have this Network ID, Create using existing Network ID.
                 else
                 {
+                    networkID = replicator.context.GetNetworkID(obj);
                     client.replicator.context.RegisterNetworkObject(networkID, obj);
+
                     SendCreate(client.playerID, networkID, obj);
                 }
             }
         }
-    }
-
-    private void HandlePacket(uint peerID, BinaryReader reader)
-    {
-        PacketType packetType = (PacketType)reader.ReadInt32();
-        Debug.Log("SERVER RECEIVES: " + packetType.ToString());
-        packetHandlers[packetType].HandlePacket(peerID, reader);
     }
 
     public void HandleIncomingPackets()
@@ -212,12 +260,20 @@ public class NetworkManagerServer : Manager<NetworkManagerServer>
         }
     }
 
-    public void SendPacket(int playerID, MemoryStream stream)
+    private void HandlePacket(uint peerID, BinaryReader reader)
     {
-        server.SendPacket(clientProxies[playerID].peerID, stream);
+        PacketType packetType = (PacketType)reader.ReadInt32();
+        Debug.Log("SERVER RECEIVES: " + packetType.ToString());
+        packetHandlers[packetType].HandlePacket(peerID, reader);
     }
 
-    public void SendWelcome(WelcomeState state, int playerID, int playerObjNetworkID)
+
+    public void SendPacket(int playerID, MemoryStream stream)
+    {
+        server.SendPacket(playerIDToClientInfo[playerID].peerID, stream);
+    }
+
+    public void SendWelcome(WelcomeMessage state, int playerID, int playerObjNetworkID)
     {
         using (MemoryStream stream = new MemoryStream())
         {
@@ -229,24 +285,26 @@ public class NetworkManagerServer : Manager<NetworkManagerServer>
                 writer.Write(playerObjNetworkID);
             }
 
-            server.SendPacket(clientProxies[playerID].peerID, stream);
+            server.SendPacket(playerIDToClientProxy[playerID].peerID, stream);
         }
     }
 
     private void SendCreate(int playerID, int networkID, NetworkObject obj)
     {
+        Debug.Log("Sending Create - ID " + networkID.ToString());
+
         using (MemoryStream stream = new MemoryStream())
         {
             using (BinaryWriter writer = new BinaryWriter(stream, Encoding.Default, true))
             {
                 writer.Write((int)PacketType.Replication);
                 writer.Write((int)ReplicationAction.Create);
-                writer.Write((int)obj.GetClassID());
+                writer.Write(obj.GetClassID());
                 writer.Write(networkID);
                 obj.Serialize(writer);
             }
 
-            server.SendPacket(clientProxies[playerID].peerID, stream);
+            server.SendPacket(playerIDToClientProxy[playerID].peerID, stream);
         }
     }
 
@@ -295,6 +353,8 @@ public class NetworkManagerServer : Manager<NetworkManagerServer>
 
     private void SendUpdate(int playerID, int networkID, NetworkObject obj)
     {
+        Debug.Log("Sending Update: ID " + networkID.ToString());
+
         using (MemoryStream stream = new MemoryStream())
         {
             using (BinaryWriter writer = new BinaryWriter(stream, Encoding.Default, true))
@@ -306,7 +366,7 @@ public class NetworkManagerServer : Manager<NetworkManagerServer>
                 obj.Serialize(writer);
             }
 
-            server.SendPacket(clientProxies[playerID].peerID, stream);
+            server.SendPacket(playerIDToClientProxy[playerID].peerID, stream);
         }
     }
 

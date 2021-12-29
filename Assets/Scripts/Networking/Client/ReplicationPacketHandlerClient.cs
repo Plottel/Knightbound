@@ -8,7 +8,6 @@ public class ReplicationPacketHandlerClient : PacketHandlerClient
 {
     public override void HandlePacket(string originIP, BinaryReader reader)
     {
-        NetworkManagerClient.Get.replicator.ProcessReplicationPacket(reader);
-        Debug.Log("CLIENT: Handling Replication Packet.");
+        NetworkManagerClient.Get.HandleReplicationPacket(originIP, reader);
     }
 }

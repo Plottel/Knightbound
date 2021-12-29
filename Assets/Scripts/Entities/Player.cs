@@ -1,18 +1,23 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.IO;
 using UnityEngine;
 using Deft.Networking;
+using System.IO;
 
-public class Tree : NetworkObject
+public class Player : NetworkObject
 {
-    public override int GetClassID() => (int)NetworkObjectType.Tree;
+    public override int GetClassID() => (int)NetworkObjectType.Player;
 
-    public string treeName;
+    public Vector3 direction;
+    private float speed = 2f;
 
-    public override void Serialize(BinaryWriter writer) 
+    private void Update()
     {
-        writer.Write(treeName);
+        transform.position += direction * speed * Time.deltaTime;
+    }
+
+    public override void Serialize(BinaryWriter writer)
+    {
         writer.Write(transform.position.x);
         writer.Write(transform.position.y);
         writer.Write(transform.position.z);
@@ -20,8 +25,6 @@ public class Tree : NetworkObject
 
     public override void Deserialize(BinaryReader reader)
     {
-        treeName = reader.ReadString();
-
         float x = reader.ReadSingle();
         float y = reader.ReadSingle();
         float z = reader.ReadSingle();

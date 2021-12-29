@@ -2,8 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum NetworkObjectType
+public class ClientInfo
 {
-    Player = 0,
-    Tree = 1
+    public uint peerID;
+    public int playerID;
 }

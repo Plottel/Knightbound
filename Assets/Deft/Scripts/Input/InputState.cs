@@ -7,17 +7,25 @@ namespace Deft
 {
     public class InputState
     {
-        public bool move;
+        public bool up;
+        public bool down;
+        public bool left;
+        public bool right;
 
         public void Serialize(BinaryWriter writer)
         {
-            writer.Write(move);
+            writer.Write(up);
+            writer.Write(down);
+            writer.Write(left);
+            writer.Write(right);
         }
 
         public void Deserialize(BinaryReader reader)
         {
-            move = reader.ReadBoolean();
+            up = reader.ReadBoolean();
+            down = reader.ReadBoolean();
+            left = reader.ReadBoolean();
+            right = reader.ReadBoolean();
         }
-
     }
 }

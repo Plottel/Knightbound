@@ -9,11 +9,15 @@ public class InputPacketHandlerServer : PacketHandlerServer
 {
     public override void HandlePacket(uint peerID, BinaryReader reader)
     {
-        int playerID = reader.ReadInt32();
-        var inputState = new InputState();
-        inputState.Deserialize(reader);
+        var nms = NetworkManagerServer.Get;
 
-        ClientProxy client = NetworkManagerServer.Get.GetClientProxy(playerID);
-        client.AddInputState(inputState);
+        if (nms.GetClientInfo(peerID, out ClientInfo clientInfo))
+        {
+            var inputState = new InputState();
+            inputState.Deserialize(reader);
+
+            var clientProxy = nms.GetClientProxy(clientInfo.playerID);
+            clientProxy.AddInputState(inputState);
+        }
     }
 }

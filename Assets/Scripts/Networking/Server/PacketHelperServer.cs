@@ -3,42 +3,44 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
 using System.Text;
-using Deft;
 using Deft.Networking;
 
-public static class PacketHelperClient
+public static class PacketHelperServer
 {
-    public static MemoryStream MakeWelcomePacket(WelcomeMessage message)
+    public static MemoryStream MakeConnectionApprovedPacket(int playerID)
     {
         MemoryStream stream = new MemoryStream();
         using (BinaryWriter writer = new BinaryWriter(stream, Encoding.Default, true))
         {
             writer.Write((int)PacketType.Welcome);
-            writer.Write((int)message);
+            writer.Write((int)WelcomeMessage.ConnectionApproved);
+            writer.Write(playerID);
         }
 
         return stream;
     }
 
-    public static MemoryStream MakeConsoleMessagePacket(string message)
+    public static MemoryStream MakeSpawnPacket(int playerID, int networkID)
     {
         MemoryStream stream = new MemoryStream();
         using (BinaryWriter writer = new BinaryWriter(stream, Encoding.Default, true))
         {
-            writer.Write((int)PacketType.ConsoleMessage);
-            writer.Write(message);
+            writer.Write((int)PacketType.Welcome);
+            writer.Write((int)WelcomeMessage.Spawn);
+            writer.Write(playerID);
+            writer.Write(networkID);
         }
 
         return stream;
     }
 
-    public static MemoryStream MakeInputPacket(InputState inputState)
+    public static MemoryStream MakeBeginPlayingPacket()
     {
         MemoryStream stream = new MemoryStream();
         using (BinaryWriter writer = new BinaryWriter(stream, Encoding.Default, true))
         {
-            writer.Write((int)PacketType.Input);
-            inputState.Serialize(writer);
+            writer.Write((int)PacketType.Welcome);
+            writer.Write((int)WelcomeMessage.BeginPlaying);
         }
 
         return stream;

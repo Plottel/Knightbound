@@ -31,13 +31,13 @@ namespace Deft.Networking
         {
             ENet.Event netEvent;
 
-            if (server.CheckEvents(out netEvent) <= 0)
-            {
+            //if (server.CheckEvents(out netEvent) <= 0)
+            //{
                 if (server.Service(0, out netEvent) <= 0)
                 {
                     return false;
                 }
-            }
+            //}
 
             switch (netEvent.Type)
             {

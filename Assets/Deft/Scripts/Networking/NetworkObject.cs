@@ -9,12 +9,7 @@ namespace Deft.Networking
     {
         public abstract int GetClassID();
 
-        public virtual void Serialize(BinaryWriter writer)
-        {
-        }
-
-        public virtual void Deserialize(BinaryReader reader)
-        {
-        }
+        public abstract void Serialize(BinaryWriter writer);
+        public abstract void Deserialize(BinaryReader reader);
     }
 }

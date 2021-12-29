@@ -7,10 +7,8 @@ namespace Deft.Networking
 {
     public class ClientProxy
     {
-        public WelcomeState state;
         public uint peerID;
         public int playerID;
-        public int playerObjNetworkID;
 
         public NetworkReplicator replicator = new NetworkReplicator();
 

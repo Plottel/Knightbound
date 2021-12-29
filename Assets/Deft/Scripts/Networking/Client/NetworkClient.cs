@@ -36,11 +36,11 @@ namespace Deft.Networking
         {
             ENet.Event netEvent;
 
-            if (client.CheckEvents(out netEvent) <= 0)
-            {
+            //if (client.CheckEvents(out netEvent) <= 0)
+            //{
                 if (client.Service(0, out netEvent) <= 0)
                     return false;
-            }
+            //}
 
             switch (netEvent.Type)
             {

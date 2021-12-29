@@ -17,12 +17,13 @@ public class NetworkManagerClient : Manager<NetworkManagerClient>
     private Dictionary<PacketType, PacketHandlerClient> packetHandlers;
 
     private PlayerControllerClient controller;
-    public int playerObjNetworkID;
 
     public override void OnAwake()
     {
         base.OnAwake();
 
+        state = NetworkState.Uninitialized;
+        playerID = -1;
         client = new NetworkClient();
         replicator = new NetworkReplicator();
         packetHandlers = new Dictionary<PacketType, PacketHandlerClient>();
@@ -38,9 +39,7 @@ public class NetworkManagerClient : Manager<NetworkManagerClient>
     {
         ProcessIncomingPackets();
 
-        // How to map Player ID to the Player Object network ID
-        // Welcome packet needs to send that network ID i think.
-        if (state == NetworkState.Welcomed)
+        if (state == NetworkState.Playing)
             controller.OnUpdate();
     }
 
@@ -51,26 +50,39 @@ public class NetworkManagerClient : Manager<NetworkManagerClient>
 
         using (MemoryStream stream = new MemoryStream())
         {
+            long streamPosition = stream.Position;
+
             while (client.PumpPacket(stream))
             {
-                stream.Position = 0;
+                // We're writing to the Memory Stream.
+                // When it finishes writing, its position will be at the end.
+                // We want to reset it to where it was before it started writing,
+                // so that we can read what it just wrote.
+                long tempStreamPosition = stream.Position;
+                stream.Position = streamPosition;
+                streamPosition = tempStreamPosition;
 
                 // Memory Stream containing PacketData
                 using (BinaryReader reader = new BinaryReader(stream, Encoding.Default, true))
                 {
-                    string ip = reader.ReadString();
+                    string originIP = reader.ReadString();
                     PacketType packetType = (PacketType)reader.ReadInt32();
 
-                    HandlePacket(ip, packetType, reader);
+                    HandlePacket(originIP, packetType, reader);
                 }
             }
         }
     }
 
-    private void HandlePacket(string ip, PacketType packetType, BinaryReader reader)
+    private void HandlePacket(string originIP, PacketType packetType, BinaryReader reader)
     {
-        Debug.Log("CLIENT: Packet Received. Type: " + packetType.ToString());
-        packetHandlers[packetType].HandlePacket(ip, reader);
+        Debug.Log("CLIENT RECEIVES: " + packetType.ToString());
+        packetHandlers[packetType].HandlePacket(originIP, reader);
+    }
+
+    public void HandleReplicationPacket(string originIP, BinaryReader reader)
+    {
+        replicator.ProcessReplicationPacket(reader);
     }
 
     public void SendPacket(MemoryStream stream)
@@ -87,8 +99,7 @@ public class NetworkManagerClient : Manager<NetworkManagerClient>
 
     private void OnServerConnectionEstablished()
     {
-        state = NetworkState.Connected;
-        SendPacket(PacketHelperClient.MakeWelcomePacket(WelcomeState.PlayerID));
+        SendPacket(PacketHelperClient.MakeWelcomePacket(WelcomeMessage.AttemptConnection));
     }
 
     public void SetPacketHandler<T>(PacketType packetType) where T : PacketHandlerClient
@@ -108,11 +119,8 @@ public class NetworkManagerClient : Manager<NetworkManagerClient>
         controller.playerID = playerID;
     }
     
-    public void SetPlayerObjNetworkID(int playerObjNetworkID)
+    public void SetPlayerNetworkID(int networkID)
     {
-        this.playerObjNetworkID = playerObjNetworkID;
-
-        if (replicator.context.TryGetNetworkObject(playerObjNetworkID, out var obj))
-            controller.player = obj as Tree;
+        controller.playerNetworkID = networkID;
     }
 }

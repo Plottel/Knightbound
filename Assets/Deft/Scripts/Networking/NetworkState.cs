@@ -10,5 +10,6 @@ namespace Deft.Networking
         Connecting,
         Connected,
         Welcomed,
+        Playing
     }
 }

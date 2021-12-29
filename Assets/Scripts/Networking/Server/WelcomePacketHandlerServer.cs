@@ -10,66 +10,52 @@ public class WelcomePacketHandlerServer : PacketHandlerServer
     public override void HandlePacket(uint peerID, BinaryReader reader)
     {
         NetworkManagerServer nms = NetworkManagerServer.Get;
-        var state = (WelcomeState)reader.ReadInt32();
+        var message = (WelcomeMessage)reader.ReadInt32();
 
-        int playerID = 0;
-
-        switch (state)
+        switch (message)
         {
-            // Generate a Client Proxy and send the Player ID back to the client.
-            case WelcomeState.PlayerID:
-                // Don't make duplicate client proxies
-                if (!nms.HasPeerID(peerID))
+            // Respond to New Players with their Player ID
+            case WelcomeMessage.AttemptConnection:
                 {
-                    // Don't make a client proxy for the local client
-                    if (peerID > 0)
+                    if (!nms.HasClient(peerID))
                     {
-                        // Need to decouple ClientProxy from Player ID
-                        ClientProxy client = nms.RegisterNewPlayer(peerID);
-                    }
+                        var clientInfo = nms.RegisterNewPlayer(peerID);
+                        var packet = PacketHelperServer.MakeConnectionApprovedPacket(clientInfo.playerID);
 
-
-
-                    using (MemoryStream stream = new MemoryStream())
-                    {
-                        using (BinaryWriter writer = new BinaryWriter(stream, Encoding.Default, true))
-                        {
-                            writer.Write((int)PacketType.Welcome);
-                            writer.Write((int)WelcomeState.PlayerID);
-                            //writer.Write(client.playerID);
-                        }
-
-                        //nms.SendPacket(client.playerID, stream);
+                        nms.SendPacket(clientInfo.playerID, packet);
                     }
                 }
-
                 break;
 
-            // Generate a Player Object and send the Network ID back to the client.
-            case WelcomeState.PlayerObjectID:
-                // How to prevent creating duplicate players.. is this even necessary?
-                if (nms.GetPlayerID(peerID, out playerID))
+            // Create Player object and send ID to Client
+            case WelcomeMessage.RequestSpawn:
                 {
-                    int playerObjNetworkID;
-                    nms.CreateNetworkObject<Tree>((int)NetworkObjectType.Tree, out playerObjNetworkID);
-
-                    using (MemoryStream stream = new MemoryStream())
+                    if (nms.GetClientInfo(peerID, out ClientInfo clientInfo))
                     {
-                        using (BinaryWriter writer = new BinaryWriter(stream, Encoding.Default, true))
-                        {
-                            writer.Write((int)PacketType.Welcome);
-                            writer.Write((int)WelcomeState.PlayerObjectID);
-                            writer.Write(playerObjNetworkID);
-                        }
+                        int networkID;
+                        var player = nms.CreateNetworkObject<Player>((int)NetworkObjectType.Player, out networkID);
+                        nms.SetPlayerNetworkID(clientInfo.playerID, networkID);
 
-                        nms.SendPacket(playerID, stream);
+                        var packet = PacketHelperServer.MakeSpawnPacket(clientInfo.playerID, networkID);
+                        nms.SendPacket(clientInfo.playerID, packet);
                     }
                 }
-
                 break;
 
+            // Create Client Proxy and Client becomes live!
+            case WelcomeMessage.RequestBeginPlaying:
+                {
+                    if (nms.GetClientInfo(peerID, out ClientInfo clientInfo))
+                    {
+                        nms.CreateClientProxy(peerID, clientInfo.playerID);
+
+                        var packet = PacketHelperServer.MakeBeginPlayingPacket();
+                        nms.SendPacket(clientInfo.playerID, packet);
+                    }
+                }
+                break;
         }
 
-        Debug.Log("SERVER: Welcome Packet. Message: " + state.ToString());
+        Debug.Log("SERVER RECEIVES WELCOME. MESSAGE: " + message.ToString());
     }
 }

@@ -37,6 +37,8 @@ namespace Deft.Networking
             var classID = reader.ReadInt32();
             int networkID = reader.ReadInt32();
 
+            Debug.Log("Receiving Create - ID " + networkID.ToString());
+
             NetworkObject obj;
             if (!context.TryGetNetworkObject(networkID, out obj))
             {
@@ -52,6 +54,8 @@ namespace Deft.Networking
         {
             var classID = reader.ReadInt32();
             int networkID = reader.ReadInt32();
+
+            Debug.Log("Receiving Update - ID " + networkID.ToString());
 
             NetworkObject obj;
             if (!context.TryGetNetworkObject(networkID, out obj))
