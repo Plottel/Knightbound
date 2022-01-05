@@ -2,17 +2,22 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GameManagerServer : MonoBehaviour
+public class GameManagerServer : GameManager<GameManagerServer>
 {
-    // Start is called before the first frame update
-    void Start()
+    private ushort port = 6005;
+
+    public override void OnAwake()
     {
-        
+        base.OnAwake();
+
+        AddManager<NetworkManagerServer>();
     }
 
-    // Update is called once per frame
-    void Update()
+    public override void OnStart()
     {
-        
+        base.OnStart();
+
+        NetworkManagerServer.Get.LaunchServer(port);
+        NetworkManagerClient.Get.SetContext(NetworkManagerServer.Get.GetContext());
     }
 }

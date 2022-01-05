@@ -6,6 +6,8 @@ using Deft;
 
 public class PlayerControllerClient
 {
+    public float cameraYSpeed = 1f;
+
     public int playerID;
     public int playerNetworkID; // For fetching the Player object
 
@@ -23,6 +25,14 @@ public class PlayerControllerClient
             NetworkManagerClient.Get.SendPacket(consolePacket);
         }
 
+        // Rotate Camera Left
+        if (Input.GetKey(KeyCode.Q))
+            CameraManager.Get.RotateY(-cameraYSpeed);
+
+        // Rotate Camera Right
+        if (Input.GetKey(KeyCode.E))
+            CameraManager.Get.RotateY(cameraYSpeed);
+
         // Input Packets
         timeSinceLastInputPacket += Time.deltaTime;
         if (timeSinceLastInputPacket > kInputPacketSendInterval)
@@ -30,6 +40,7 @@ public class PlayerControllerClient
             timeSinceLastInputPacket = 0f;
             SendInputPacket();
         }
+
     }
 
     private void SendInputPacket()

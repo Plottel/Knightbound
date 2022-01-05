@@ -24,8 +24,6 @@ namespace Deft
                 if (_instance == null)
                     Debug.Log("Instance doesnt exist");
             }
-
-
             else
                 Debug.LogError("Instance already set. Whoops.");
         }
