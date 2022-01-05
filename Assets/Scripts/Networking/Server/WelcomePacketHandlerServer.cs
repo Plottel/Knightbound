@@ -47,6 +47,7 @@ public class WelcomePacketHandlerServer : PacketHandlerServer
                 {
                     if (nms.GetClientInfo(peerID, out ClientInfo clientInfo))
                     {
+                        Debug.Log("Creating Client Proxy Peer ID " + peerID + " Player ID " + clientInfo.playerID);
                         nms.CreateClientProxy(peerID, clientInfo.playerID);
 
                         var packet = PacketHelperServer.MakeBeginPlayingPacket();

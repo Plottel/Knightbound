@@ -6,71 +6,59 @@ using Deft;
 using Deft.Networking;
 using ParrelSync;
 
-public class GameManager : MonoBehaviour
+public class GameManager<T_DerivedGM> : Manager<T_DerivedGM> where T_DerivedGM : Singleton
 {
-    public NetworkObjectMap NetworkPrefabs;
-
-    private string hostName = "127.0.0.1";
-    private ushort port = 6005;
-
     private List<Singleton> managers;
 
     void Awake()
     {
-        // Setup Game Resources
-        var prefabs = NetworkPrefabs.prefabs;
-        NetworkPrefabRegistry.SetPrefabCount(prefabs.Length);
-
-        // Register Netowrk Prefabs
-        for (int i = 0; i < prefabs.Length; i++)
-            NetworkPrefabRegistry.Register(i, prefabs[i]);
-
-        // Setup Networking
-        ENet.Library.Initialize();
-
-        // Create Managers
         managers = new List<Singleton>();
 
-        AddManager<NetworkManagerClient>();
+        OnAwake();
+        NotifyManagersAwake();
+    }
 
-        if (!ClonesManager.IsClone())
-            AddManager<NetworkManagerServer>();
+    void Start()
+    {
+        OnStart();
+        NotifyManagersStart();
+    }
 
+    void Update()
+    {
+        OnUpdate();
+        NotifyManagersUpdate();
+    }
+
+    void LateUpdate()
+    {
+        OnLateUpdate();
+        NotifyManagersLateUpdate();
+    }
+
+    protected void NotifyManagersAwake()
+    {
         foreach (var manager in managers)
             manager.OnAwake();
     }
 
-    private void Start()
+    protected void NotifyManagersStart()
     {
-        // The original makes the server.
-        if (!ClonesManager.IsClone())
-        {
-            NetworkManagerServer.Get.LaunchServer(port);
-            NetworkManagerClient.Get.SetContext(NetworkManagerServer.Get.GetContext());
-        }
-
-        NetworkManagerClient.Get.JoinServer(hostName, port);
-
         foreach (var manager in managers)
             manager.OnStart();
     }
 
-    void Update()
+    protected void NotifyManagersUpdate()
     {
         foreach (var manager in managers)
             manager.OnUpdate();
     }
 
-    void LateUpdate()
+    protected void NotifyManagersLateUpdate()
     {
         foreach (var manager in managers)
             manager.OnLateUpdate();
-    }
-
-    private void OnDestroy()
-    {
-        ENet.Library.Deinitialize();
-    }
+    }    
 
     protected void AddManager<T>() where T : Singleton
     {
