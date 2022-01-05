@@ -40,6 +40,7 @@ public class WelcomePacketHandlerClient : PacketHandlerClient
                     if (playerID == nmc.playerID)
                         nmc.SetPlayerNetworkID(networkID);
 
+                    Debug.Log("Client Player ID " + playerID + " Requesting Client Proxy");
                     var packet = PacketHelperClient.MakeWelcomePacket(WelcomeMessage.RequestBeginPlaying);
                     nmc.SendPacket(packet);
                 }

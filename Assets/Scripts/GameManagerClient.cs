@@ -18,6 +18,12 @@ public class GameManagerClient : GameManager<GameManagerClient>
     public override void OnStart()
     {
         base.OnStart();
+        StartCoroutine(JoinServer());
+    }
+
+    IEnumerator JoinServer()
+    {
+        yield return new WaitForSeconds(0.5f);
         NetworkManagerClient.Get.JoinServer(hostName, port);
     }
 }
