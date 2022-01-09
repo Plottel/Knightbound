@@ -18,6 +18,6 @@ public class GameManagerServer : GameManager<GameManagerServer>
         base.OnStart();
 
         NetworkManagerServer.Get.LaunchServer(port);
-        NetworkManagerClient.Get.SetContext(NetworkManagerServer.Get.GetContext());
+        ReplicationManagerClient.Get.SetNetworkContext(NetworkManagerServer.Get.GetContext());
     }
 }

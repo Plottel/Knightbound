@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 
 public class GameManagerClient : GameManager<GameManagerClient>
 {
@@ -12,6 +11,7 @@ public class GameManagerClient : GameManager<GameManagerClient>
         base.OnAwake();
 
         AddManager<NetworkManagerClient>();
+        AddManager<ReplicationManagerClient>();
         AddManager<CameraManager>();
     }
 
@@ -23,7 +23,8 @@ public class GameManagerClient : GameManager<GameManagerClient>
 
     IEnumerator JoinServer()
     {
-        yield return new WaitForSeconds(0.5f);
+        //yield return new WaitForSeconds(0.5f);
+        yield return null;
         NetworkManagerClient.Get.JoinServer(hostName, port);
     }
 }

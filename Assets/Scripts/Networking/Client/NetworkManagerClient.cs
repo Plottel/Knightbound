@@ -13,7 +13,6 @@ public class NetworkManagerClient : Manager<NetworkManagerClient>
     public int playerID;
 
     protected NetworkClient client;
-    public NetworkReplicator replicator;
     private Dictionary<PacketType, PacketHandlerClient> packetHandlers;
 
     private PlayerControllerClient controller;
@@ -25,7 +24,6 @@ public class NetworkManagerClient : Manager<NetworkManagerClient>
         state = NetworkState.Uninitialized;
         playerID = -1;
         client = new NetworkClient();
-        replicator = new NetworkReplicator();
         packetHandlers = new Dictionary<PacketType, PacketHandlerClient>();
 
         SetPacketHandler<WelcomePacketHandlerClient>(PacketType.Welcome);
@@ -80,11 +78,6 @@ public class NetworkManagerClient : Manager<NetworkManagerClient>
         packetHandlers[packetType].HandlePacket(originIP, reader);
     }
 
-    public void HandleReplicationPacket(string originIP, BinaryReader reader)
-    {
-        replicator.ProcessReplicationPacket(reader);
-    }
-
     public void SendPacket(MemoryStream stream)
     {
         client.SendPacket(stream);
@@ -106,11 +99,6 @@ public class NetworkManagerClient : Manager<NetworkManagerClient>
     {
         T packetHandler = Activator.CreateInstance<T>();
         packetHandlers[packetType] = packetHandler;
-    }
-
-    public void SetContext(NetworkContext context)
-    {
-        replicator.context = context;
     }
 
     public void SetPlayerID(int playerID)

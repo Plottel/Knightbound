@@ -14,71 +14,62 @@ namespace Deft.Networking
             context = new NetworkContext();
         }
 
-        public void ProcessReplicationPacket(BinaryReader reader)
-        {
-            var action = (ReplicationAction)reader.ReadInt32();
-
-            switch (action)
-            {
-                case ReplicationAction.Create: OnCreateActionReceived(reader); break;
-                case ReplicationAction.Update: OnUpdateActionReceived(reader); break;
-                case ReplicationAction.Destroy: OnDestroyActionReceived(reader); break;
-            }
-        }
-
         public NetworkObject[] GetNetworkObjects()
         {
             return context.GetNetworkObjects();
         }
 
-        // Create the object if it doesn't exist, and update it.
-        private void OnCreateActionReceived(BinaryReader reader)
+        public void ProcessReplicationCommand(ReplicationCommand command)
         {
-            var classID = reader.ReadInt32();
-            int networkID = reader.ReadInt32();
+            ReplicationAction action = command.action;
 
-            Debug.Log("Receiving Create - ID " + networkID.ToString());
+            switch (command.action)
+            {
+                case ReplicationAction.Create: ProcessCreate(command); break;
+                case ReplicationAction.Update: ProcessUpdate(command); break;
+                case ReplicationAction.Destroy: ProcessDestroy(command); break;
+            }
+        }
+
+        // Create the object if it doesn't exist, and update it.
+        private void ProcessCreate(ReplicationCommand command)
+        {
+            Debug.Log("Receiving Create - ID " + command.networkID.ToString());
 
             NetworkObject obj;
-            if (!context.TryGetNetworkObject(networkID, out obj))
+            if (!context.TryGetNetworkObject(command.networkID, out obj))
             {
-                obj = NetworkPrefabRegistry.Create(classID);
-                context.RegisterNetworkObject(networkID, obj);
+                obj = NetworkPrefabRegistry.Create(command.classID);
+                context.RegisterNetworkObject(command.networkID, obj);
             }
 
-            obj.Deserialize(reader); // Deserialize object.
+            obj.Deserialize(command.reader); // Deserialize object.
         }
 
         // Try to get the object and update it if it exists
-        private void OnUpdateActionReceived(BinaryReader reader)
+        private void ProcessUpdate(ReplicationCommand command)
         {
-            var classID = reader.ReadInt32();
-            int networkID = reader.ReadInt32();
-
-            Debug.Log("Receiving Update - ID " + networkID.ToString());
+            Debug.Log("Receiving Update - ID " + command.networkID.ToString());
 
             NetworkObject obj;
-            if (!context.TryGetNetworkObject(networkID, out obj))
+            if (!context.TryGetNetworkObject(command.networkID, out obj))
             {
-                obj = NetworkPrefabRegistry.Create(classID); // DON'T register dummy.
-                obj.Deserialize(reader); // Advance stream regardless of if we have the object.
+                obj = NetworkPrefabRegistry.Create(command.classID); // DON'T register dummy.
+                obj.Deserialize(command.reader); // Advance stream regardless of if we have the object.
                 Object.Destroy(obj.gameObject);
             }
             else // Object already exists
             {
-                obj.Deserialize(reader);
+                obj.Deserialize(command.reader);
             }
-
         }
 
         // Try to get the object and destroy it if it exists
-        private void OnDestroyActionReceived(BinaryReader reader)
+        private void ProcessDestroy(ReplicationCommand command)
         {
-            int networkID = reader.ReadInt32();
-
-            if (context.TryGetNetworkObject(networkID, out NetworkObject obj))
+            if (context.TryGetNetworkObject(command.networkID, out NetworkObject obj))
             {
-                context.DeregisterNetworkObject(networkID);
+                context.DeregisterNetworkObject(command.networkID);
                 Object.Destroy(obj.gameObject);
             }
         }
