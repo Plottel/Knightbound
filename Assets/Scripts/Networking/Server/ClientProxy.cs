@@ -9,20 +9,5 @@ namespace Deft.Networking
     {
         public uint peerID;
         public int playerID;
-
-        public NetworkReplicator replicator = new NetworkReplicator();
-
-        private InputState inputState;
-
-        public void AddInputState(InputState inputState)
-        {
-            this.inputState = inputState;
-        }
-
-        public bool GetInputState(out InputState state)
-        {
-            state = inputState;
-            return state != null;
-        }
     }
 }

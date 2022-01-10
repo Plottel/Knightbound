@@ -11,6 +11,8 @@ public class GameManagerServer : GameManager<GameManagerServer>
         base.OnAwake();
 
         AddManager<NetworkManagerServer>();
+        AddManager<InputManagerServer>();
+        AddManager<ReplicationManagerServer>();
     }
 
     public override void OnStart()
@@ -18,6 +20,6 @@ public class GameManagerServer : GameManager<GameManagerServer>
         base.OnStart();
 
         NetworkManagerServer.Get.LaunchServer(port);
-        ReplicationManagerClient.Get.SetNetworkContext(NetworkManagerServer.Get.GetContext());
+        ReplicationManagerClient.Get.SetNetworkContext(ReplicationManagerServer.Get.NetworkContext);
     }
 }

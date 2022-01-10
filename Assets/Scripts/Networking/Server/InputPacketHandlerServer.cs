@@ -11,13 +11,12 @@ public class InputPacketHandlerServer : PacketHandlerServer
     {
         var nms = NetworkManagerServer.Get;
 
-        if (nms.GetClientInfo(peerID, out ClientInfo clientInfo))
+        if (nms.GetPlayerInfo(peerID, out PlayerInfo playerInfo))
         {
             var inputState = new InputState();
             inputState.Deserialize(reader);
 
-            var clientProxy = nms.GetClientProxy(clientInfo.playerID);
-            clientProxy.AddInputState(inputState);
+            InputManagerServer.Get.AddInputState(playerInfo, inputState);
         }
     }
 }

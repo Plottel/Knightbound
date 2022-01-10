@@ -10,6 +10,7 @@ public class WelcomePacketHandlerServer : PacketHandlerServer
     public override void HandlePacket(uint peerID, BinaryReader reader)
     {
         NetworkManagerServer nms = NetworkManagerServer.Get;
+        ReplicationManagerServer rms = ReplicationManagerServer.Get;
         var message = (WelcomeMessage)reader.ReadInt32();
 
         switch (message)
@@ -19,7 +20,7 @@ public class WelcomePacketHandlerServer : PacketHandlerServer
                 {
                     if (!nms.HasClient(peerID))
                     {
-                        var clientInfo = nms.RegisterNewPlayer(peerID);
+                        var clientInfo = nms.RegisterNewClient(peerID);
                         var packet = PacketHelperServer.MakeConnectionApprovedPacket(clientInfo.playerID);
 
                         nms.SendPacket(clientInfo.playerID, packet);
@@ -33,8 +34,8 @@ public class WelcomePacketHandlerServer : PacketHandlerServer
                     if (nms.GetClientInfo(peerID, out ClientInfo clientInfo))
                     {
                         int networkID;
-                        var player = nms.CreateNetworkObject<Player>((int)NetworkObjectType.Player, out networkID);
-                        nms.SetPlayerNetworkID(clientInfo.playerID, networkID);
+                        var player = rms.CreateNetworkObject<Player>((int)NetworkObjectType.Player, out networkID);
+                        nms.RegisterNewPlayer(clientInfo, networkID);
 
                         var packet = PacketHelperServer.MakeSpawnPacket(clientInfo.playerID, networkID);
                         nms.SendPacket(clientInfo.playerID, packet);
@@ -42,16 +43,15 @@ public class WelcomePacketHandlerServer : PacketHandlerServer
                 }
                 break;
 
-            // Create Client Proxy and Client becomes live!
+            // Upgrade Client to Player and it becomes live!
             case WelcomeMessage.RequestBeginPlaying:
                 {
-                    if (nms.GetClientInfo(peerID, out ClientInfo clientInfo))
+                    if (nms.GetPlayerInfo(peerID, out PlayerInfo playerInfo))
                     {
-                        Debug.Log("Creating Client Proxy Peer ID " + peerID + " Player ID " + clientInfo.playerID);
-                        nms.CreateClientProxy(peerID, clientInfo.playerID);
+                        nms.WelcomeRegisteredPlayer(playerInfo);
 
                         var packet = PacketHelperServer.MakeBeginPlayingPacket();
-                        nms.SendPacket(clientInfo.playerID, packet);
+                        nms.SendPacket(playerInfo.clientInfo.playerID, packet);
                     }
                 }
                 break;
