@@ -5,33 +5,48 @@ using UnityEngine;
 public class CharacterRig : MonoBehaviour
 {
     public string meshPrefix;
-    public TransformCache meshData;
 
-    [HideInInspector]
-    public List<Transform> meshes;
+    private List<Transform> meshInstances;
 
-    private void OnDrawGizmos()
+    void Awake()
     {
-        //var children = GetComponentsInChildren<Transform>();
+        meshInstances = new List<Transform>();
+    }
 
-        //for (int i = 0; i < children.Length; ++i)
+    void OnReset()
+    {
+        meshInstances = new List<Transform>();
+    }
+
+    public void AttachMeshes(Transform[] meshAssets)
+    {
+        DestroyMeshes();
+
+        // Try to find a matching Bone for each Mesh via name substitution:
+        // e.g. Mesh "Character_Torso" -> "Torso" Bone
+        foreach (Transform meshPrefab in meshAssets)
         {
-            //Vector3 pos = children[i].position;
+            string boneName = meshPrefab.name.Replace(meshPrefix, "");
+            boneName = boneName.Replace('_', '.');
 
-            Vector3 pos = Vector3.zero;
-            Debug.Log("Drawing Pos" + pos.ToString());
+            if (transform.TryFindTransform(boneName, out Transform bone))
+            {
+                Transform meshInstance = Instantiate(meshPrefab);
+                meshInstance.parent = bone.transform;
+                meshInstance.position = bone.position;
 
-            var oldColor = Gizmos.color;
-            Gizmos.color = Color.red;
-            Gizmos.DrawSphere(transform.FindTransform("Upper.Arm.L").position, 0.025f);
-            Gizmos.DrawSphere(transform.FindTransform("Lower.Arm.L").position, 0.025f);
-            Gizmos.DrawSphere(transform.FindTransform("Lower.Arm.L.end").position, 0.025f);
-
-            Gizmos.DrawSphere(transform.FindTransform("Upper.Arm.R").position, 0.025f);
-            Gizmos.DrawSphere(transform.FindTransform("Lower.Arm.R").position, 0.025f);
-            Gizmos.DrawSphere(transform.FindTransform("Lower.Arm.R.end").position, 0.025f);
-
-            Gizmos.color = oldColor;
+                meshInstances.Add(meshInstance);
+            }
+            else
+                Debug.Log("Cannot find bone called " + boneName);
         }
+    }
+
+    public void DestroyMeshes()
+    {
+        for (int i = meshInstances.Count - 1; i >= 0; --i)
+            DestroyImmediate(meshInstances[i].gameObject);
+
+        meshInstances.Clear();
     }
 }
