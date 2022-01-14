@@ -37,21 +37,21 @@ public class CharacterEditor : Editor
 
     void GenerateSkeleton(Character character)
     {
-        var characterData = character.characterData;
+        var characterData = character.data;
         Transform rootBone = Instantiate(characterData.armature);
 
-        character.characterMesh.SetBoneData(rootBone, characterData.armatureData.boneNames);
+        character.mesh.SetBoneData(rootBone, characterData.armatureData.boneNames);
     }
 
     void GenerateDefaultMeshes(Character character)
     {
-        character.characterMesh.GenerateMesh(character.characterData.defaultMeshPieces);
+        character.mesh.GenerateMesh(character.data.defaultMeshPieces);
     }
 
     void PrepareAnimator(Character character)
     {
-        CharacterAnimator animator = character.characterAnimator;
-        AnimatorData animatorData = character.characterData.animatorData;
+        CharacterAnimator animator = character.animator;
+        AnimatorData animatorData = character.data.animatorData;
 
         animator.SetAnimatorController(animatorData.animatorController);
         animator.SetAvatar(animatorData.avatar);
@@ -60,6 +60,6 @@ public class CharacterEditor : Editor
 
     void ResetCharacter(Character character)
     {
-        character.characterMesh.DestroyMeshes();
+        character.mesh.DestroyMeshes();
     }
 }

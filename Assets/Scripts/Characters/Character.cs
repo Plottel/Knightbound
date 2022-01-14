@@ -9,48 +9,35 @@ using Animancer;
 public class Character : MonoBehaviour
 {
     // Data
-    public CharacterData characterData;
+    public CharacterData data;
 
     // Components
-    [HideInInspector] public CharacterMesh characterMesh;
-    [HideInInspector] public CharacterAnimator characterAnimator;
+    [HideInInspector] public CharacterMesh mesh;
+    [HideInInspector] public CharacterAnimator animator;
 
     private void FetchReferences()
     {
-        characterMesh = GetComponent<CharacterMesh>();
-        characterAnimator = GetComponent<CharacterAnimator>();
+        mesh = GetComponent<CharacterMesh>();
+        animator = GetComponent<CharacterAnimator>();
     }
 
     void Awake()
     {
         FetchReferences();
-    }
-
-    void Start()
-    {
-        characterAnimator.Play(0);
-    }
-
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Alpha1))
-            characterAnimator.Play(0);
-        if (Input.GetKeyDown(KeyCode.Alpha2))
-            characterAnimator.Play(1);
-    }
+    }    
 
     void OnValidate() 
         => FetchReferences();
 
     void OnDrawGizmos()
     {
-        if (characterData != null && characterData.armatureData != null)
+        if (data != null && data.armatureData != null)
         {
-            string[] boneNames = characterData.armatureData.boneNames;
+            string[] boneNames = data.armatureData.boneNames;
 
             foreach (string boneName in boneNames)
             {
-                if (characterMesh.transform.TryFindTransform(boneName, out Transform bone))
+                if (mesh.transform.TryFindTransform(boneName, out Transform bone))
                 {
                     Gizmos.DrawSphere(bone.position, 0.1f);
                 }

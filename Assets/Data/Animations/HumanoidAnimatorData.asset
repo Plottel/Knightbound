@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e86e7952da7dfe646aac41699ac98658, type: 3}
   m_Name: HumanoidAnimatorData
   m_EditorClassIdentifier: 
-  animatorController: {fileID: 9100000, guid: e33123f308101dc46bfaf0a0df25cdb8, type: 2}
+  animatorController: {fileID: 9100000, guid: b2fbcb879dc9cfa439758aaf5b1bccfa, type: 2}
   avatar: {fileID: 9000000, guid: a55a39c5004963a4e9a18152b6322411, type: 3}
   animations:
   - {fileID: 7400000, guid: f9f4d7e1c0a45d24db67c341277ac8df, type: 2}
