@@ -13,5 +13,7 @@ MonoBehaviour:
   m_Name: HumanoidAnimatorData
   m_EditorClassIdentifier: 
   animatorController: {fileID: 9100000, guid: e33123f308101dc46bfaf0a0df25cdb8, type: 2}
+  avatar: {fileID: 9000000, guid: a55a39c5004963a4e9a18152b6322411, type: 3}
   animations:
   - {fileID: 7400000, guid: f9f4d7e1c0a45d24db67c341277ac8df, type: 2}
+  - {fileID: 7400000, guid: e126d5951c36af342b3980ea36b33e17, type: 2}

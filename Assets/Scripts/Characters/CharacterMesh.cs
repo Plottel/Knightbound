@@ -39,7 +39,7 @@ public class CharacterMesh : MonoBehaviour
             Debug.Log("Cannot find bone named " + boneName);
     }
 
-    public void AttachMeshes(CharacterMeshPiece[] meshPieces)
+    public void GenerateMesh(CharacterMeshPiece[] meshPieces)
     {
         DestroyMeshes();
 

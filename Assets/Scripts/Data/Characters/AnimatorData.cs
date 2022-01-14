@@ -6,5 +6,6 @@ using UnityEngine;
 public class AnimatorData : ScriptableObject
 {
     public RuntimeAnimatorController animatorController;
+    public Avatar avatar;
     public AnimationClip[] animations;
 }

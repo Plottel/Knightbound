@@ -4,29 +4,45 @@ using UnityEngine;
 using Animancer;
 
 [RequireComponent(typeof(AnimancerComponent))]
+[RequireComponent(typeof(Animator))]
 public class CharacterAnimator : MonoBehaviour
 {
-    private AnimancerComponent animator;
+    // Data
+    [SerializeField]
+    [HideInInspector]
     private AnimationClip[] animations;
+
+    // Components
+    private AnimancerComponent animancer;
+    private Animator animator;
+    
+    private void FetchReferences()
+    {
+        animancer = GetComponent<AnimancerComponent>();
+        animator = GetComponent<Animator>();
+
+        animancer.Animator = animator;
+    }
 
     void Awake()
     {
-        animator = GetComponent<AnimancerComponent>();
+        FetchReferences();
     }
+
+    private void OnValidate()
+        => FetchReferences();
 
     public void Play(int animationID)
     {
-        animator.Play(animations[0]);
+        animancer.Play(animations[animationID]);
     }
 
     public void SetAnimatorController(RuntimeAnimatorController animatorController)
-    {
-        // TODO: Fix - properly define relationship between FBX Bones and Armature
-        GetComponentInChildren<Animator>().runtimeAnimatorController = animatorController;
-    }
+        => animator.runtimeAnimatorController = animatorController;
+
+    public void SetAvatar(Avatar avatar)
+    => animator.avatar = avatar;
 
     public void SetAnimations(AnimationClip[] newAnimations)
-    {
-        animations = newAnimations;
-    }
+        => animations = newAnimations;
 }

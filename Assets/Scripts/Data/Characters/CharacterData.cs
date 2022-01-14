@@ -11,5 +11,6 @@ public class CharacterData : ScriptableObject
     [Header("Armature")]
     public ArmatureData armatureData;
     public Transform armature;
+    public Avatar avatar;
     public CharacterMeshPiece[] defaultMeshPieces;
 }

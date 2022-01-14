@@ -12,35 +12,8 @@ public class Character : MonoBehaviour
     public CharacterData characterData;
 
     // Components
-    private CharacterMesh characterMesh;
-    private CharacterAnimator characterAnimator;
-
-    void Awake()
-    {
-        FetchReferences();
-        SetupAnimator();
-    }
-
-    void Start()
-    {
-        characterAnimator.Play(0);
-    }
-
-    void OnValidate() 
-        => FetchReferences();
-
-    void OnDrawGizmos()
-    {
-        string[] boneNames = characterData.armatureData.boneNames;
-
-        foreach (string boneName in boneNames)
-        {
-            if (characterMesh.transform.TryFindTransform(boneName, out Transform bone))
-            {
-                Gizmos.DrawSphere(bone.position, 0.1f);
-            }
-        }
-    }
+    [HideInInspector] public CharacterMesh characterMesh;
+    [HideInInspector] public CharacterAnimator characterAnimator;
 
     private void FetchReferences()
     {
@@ -48,26 +21,40 @@ public class Character : MonoBehaviour
         characterAnimator = GetComponent<CharacterAnimator>();
     }
 
-    public void AttachMeshes()
+    void Awake()
     {
-        ArmatureData armatureData = characterData.armatureData;
-        Transform rootBone = Instantiate(characterData.armature);
-
-        characterMesh.SetBoneData(rootBone, armatureData.boneNames);
-        characterMesh.AttachMeshes(characterData.defaultMeshPieces);
+        FetchReferences();
     }
 
-    public void DestroyMeshes()
+    void Start()
     {
-        characterMesh.DestroyMeshes();
+        characterAnimator.Play(0);
     }
 
-    public void SetupAnimator()
+    void Update()
     {
-        AnimatorData animatorData = characterData.animatorData;
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+            characterAnimator.Play(0);
+        if (Input.GetKeyDown(KeyCode.Alpha2))
+            characterAnimator.Play(1);
+    }
 
-        characterAnimator.SetAnimatorController(animatorData.animatorController);
-        // Does it matter that Animator is referencing array from Animation asset?
-        characterAnimator.SetAnimations(characterData.animatorData.animations);
+    void OnValidate() 
+        => FetchReferences();
+
+    void OnDrawGizmos()
+    {
+        if (characterData != null && characterData.armatureData != null)
+        {
+            string[] boneNames = characterData.armatureData.boneNames;
+
+            foreach (string boneName in boneNames)
+            {
+                if (characterMesh.transform.TryFindTransform(boneName, out Transform bone))
+                {
+                    Gizmos.DrawSphere(bone.position, 0.1f);
+                }
+            }
+        }
     }
 }
