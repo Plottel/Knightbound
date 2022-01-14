@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SkeletonRender : MonoBehaviour
+public class BoneDebugRenderer : MonoBehaviour
 {
     public Transform rootNode;
     public Transform[] childNodes;
