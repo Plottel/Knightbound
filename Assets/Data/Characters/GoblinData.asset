@@ -1,0 +1,47 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 80176b3aef60716439fd05e909460126, type: 3}
+  m_Name: GoblinData
+  m_EditorClassIdentifier: 
+  animatorData: {fileID: 11400000, guid: ec902d4a1336a3940a6e822bac3d96ad, type: 2}
+  armatureData: {fileID: 11400000, guid: c2e795d862cb2c74fbb18c198c3e096f, type: 2}
+  armature: {fileID: -8679921383154817045, guid: 64635319b459a604cb52ae787fd02810, type: 3}
+  avatar: {fileID: 9000000, guid: a55a39c5004963a4e9a18152b6322411, type: 3}
+  defaultMeshPieces:
+  - mesh: {fileID: -8679921383154817045, guid: bd16729e750b44941921389f0f62f8f1, type: 3}
+    boneID: 4
+  - mesh: {fileID: -8679921383154817045, guid: bd4b5c3fd319dbe4394d172c028ad225, type: 3}
+    boneID: 8
+  - mesh: {fileID: -8679921383154817045, guid: 9827964497b69e44f942848f4aca2eb9, type: 3}
+    boneID: 15
+  - mesh: {fileID: -8679921383154817045, guid: fbb12ea2cc42890448e453a7620437e3, type: 3}
+    boneID: 19
+  - mesh: {fileID: -8679921383154817045, guid: b9a21297316e32e4bbefc960aa3ab17c, type: 3}
+    boneID: 11
+  - mesh: {fileID: -8679921383154817045, guid: 215f71ccf78ba6f4eacb00ee8bd9c342, type: 3}
+    boneID: 14
+  - mesh: {fileID: -8679921383154817045, guid: 0d2b1530a11cc7f4397bed07a6bb3ae2, type: 3}
+    boneID: 18
+  - mesh: {fileID: -8679921383154817045, guid: ac9bc50ce9b9184498759ca96813bd44, type: 3}
+    boneID: 3
+  - mesh: {fileID: -8679921383154817045, guid: 5b20de3a240f5aa4eb11fb3f5c24dda3, type: 3}
+    boneID: 7
+  - mesh: {fileID: -8679921383154817045, guid: 0a8928800db9c6541ac51b956eda3ecf, type: 3}
+    boneID: 2
+  - mesh: {fileID: -8679921383154817045, guid: bf48082bd18533343ba74e74af0aa053, type: 3}
+    boneID: 6
+  - mesh: {fileID: -8679921383154817045, guid: 13b35297e1244e548ac32cbd755811ac, type: 3}
+    boneID: 10
+  - mesh: {fileID: -8679921383154817045, guid: 216ed870981e48d45b96ac102b3b0086, type: 3}
+    boneID: 13
+  - mesh: {fileID: -8679921383154817045, guid: fa467cd51e1348c42aa341d875c318e7, type: 3}
+    boneID: 17

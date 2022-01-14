@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e86e7952da7dfe646aac41699ac98658, type: 3}
+  m_Name: HumanoidAnimatorData
+  m_EditorClassIdentifier: 
+  animatorController: {fileID: 9100000, guid: b2fbcb879dc9cfa439758aaf5b1bccfa, type: 2}
+  avatar: {fileID: 9000000, guid: a55a39c5004963a4e9a18152b6322411, type: 3}
+  animations:
+  - {fileID: 7400000, guid: f9f4d7e1c0a45d24db67c341277ac8df, type: 2}
+  - {fileID: 7400000, guid: e126d5951c36af342b3980ea36b33e17, type: 2}
