@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 80176b3aef60716439fd05e909460126, type: 3}
   m_Name: PlayerData
   m_EditorClassIdentifier: 
+  animatorData: {fileID: 11400000, guid: ec902d4a1336a3940a6e822bac3d96ad, type: 2}
   armatureData: {fileID: 11400000, guid: c2e795d862cb2c74fbb18c198c3e096f, type: 2}
   armature: {fileID: -8679921383154817045, guid: a55a39c5004963a4e9a18152b6322411, type: 3}
   defaultMeshPieces:

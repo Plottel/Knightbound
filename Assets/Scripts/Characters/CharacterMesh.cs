@@ -5,6 +5,7 @@ using UnityEngine;
 public class CharacterMesh : MonoBehaviour
 {
     private Transform rootBone;
+    private string[] boneNames;
 
     [SerializeField][HideInInspector]
     private List<Transform> meshPieces;
@@ -14,11 +15,15 @@ public class CharacterMesh : MonoBehaviour
         meshPieces = new List<Transform>();
     }
 
-    public void SetRootBone(Transform root)
+    public void SetBoneData(Transform newRootBone, string[] newBoneNames)
     {
-        rootBone = root;
+        DestroyRootBone();
+
+        rootBone = newRootBone;
         rootBone.parent = transform;
         rootBone.position = transform.position;
+
+        boneNames = newBoneNames;
     }
 
     public void AttachMeshPiece(Transform mesh, string boneName)
@@ -34,13 +39,49 @@ public class CharacterMesh : MonoBehaviour
             Debug.Log("Cannot find bone named " + boneName);
     }
 
+    public void AttachMeshes(CharacterMeshPiece[] meshPieces)
+    {
+        DestroyMeshes();
+
+        foreach (CharacterMeshPiece meshPiece in meshPieces)
+        {
+            Transform mesh = Instantiate(meshPiece.mesh);
+
+            if (TryGetBoneName(meshPiece.boneID, out string boneName))
+                AttachMeshPiece(mesh, boneName);
+            else
+                Debug.Log("Invalid Bone ID " + meshPiece.boneID);
+        }
+    }
+
+    private bool TryGetBoneName(int boneID, out string boneName)
+    {
+        if (boneNames == null || boneID < 0 || boneID >= boneNames.Length)
+        {
+            Debug.Log("Failed to find Bone Name for ID " + boneID);
+            Debug.Log("Bone Names Count" + boneNames[boneID]);
+            boneName = "";
+            return false;
+        }
+
+        boneName = boneNames[boneID];
+        return true;
+    }
+
+    public void DestroyRootBone()
+    {
+        if (rootBone == null)
+            return;
+
+        DestroyImmediate(rootBone.gameObject);
+        rootBone = null;
+    }
+
     public void DestroyMeshes()
     {
-        DestroyImmediate(rootBone.gameObject);
-        meshPieces.Clear();
-        //for (int i = meshPieces.Count - 1; i >= 0; --i)
-        //    DestroyImmediate(meshPieces[i].gameObject);
+        for (int i = meshPieces.Count - 1; i >= 0; --i)
+            DestroyImmediate(meshPieces[i].gameObject);
 
-        //meshPieces.Clear();
+        meshPieces.Clear();
     }
 }

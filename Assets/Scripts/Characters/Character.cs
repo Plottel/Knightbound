@@ -1,37 +1,35 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Animancer;
 
+[RequireComponent(typeof(CharacterMesh))]
+[RequireComponent(typeof(CharacterAnimator))]
 public class Character : MonoBehaviour
 {
+    // Data
     public CharacterData characterData;
-    public CharacterMesh characterMesh;
 
-    public void AttachMeshes()
+    // Components
+    private CharacterMesh characterMesh;
+    private CharacterAnimator characterAnimator;
+
+    void Awake()
     {
-        ArmatureData armatureData = characterData.armatureData;
-        Transform rootBone = Instantiate(characterData.armature);
-        CharacterMeshPiece[] meshPieces = characterData.defaultMeshPieces;
-
-        characterMesh.SetRootBone(rootBone);
-
-        foreach (CharacterMeshPiece meshPiece in meshPieces)
-        {
-            Transform mesh = Instantiate(meshPiece.mesh);
-
-            if (armatureData.TryGetBoneName(meshPiece.boneID, out string boneName))
-                characterMesh.AttachMeshPiece(mesh, boneName);
-            else
-                Debug.Log("Invalid Bone ID " + meshPiece.boneID);
-        }
+        FetchReferences();
+        SetupAnimator();
     }
 
-    public void DestroyMeshes()
+    void Start()
     {
-        characterMesh.DestroyMeshes();
+        characterAnimator.Play(0);
     }
 
-    private void OnDrawGizmos()
+    void OnValidate() 
+        => FetchReferences();
+
+    void OnDrawGizmos()
     {
         string[] boneNames = characterData.armatureData.boneNames;
 
@@ -42,5 +40,34 @@ public class Character : MonoBehaviour
                 Gizmos.DrawSphere(bone.position, 0.1f);
             }
         }
+    }
+
+    private void FetchReferences()
+    {
+        characterMesh = GetComponent<CharacterMesh>();
+        characterAnimator = GetComponent<CharacterAnimator>();
+    }
+
+    public void AttachMeshes()
+    {
+        ArmatureData armatureData = characterData.armatureData;
+        Transform rootBone = Instantiate(characterData.armature);
+
+        characterMesh.SetBoneData(rootBone, armatureData.boneNames);
+        characterMesh.AttachMeshes(characterData.defaultMeshPieces);
+    }
+
+    public void DestroyMeshes()
+    {
+        characterMesh.DestroyMeshes();
+    }
+
+    public void SetupAnimator()
+    {
+        AnimatorData animatorData = characterData.animatorData;
+
+        characterAnimator.SetAnimatorController(animatorData.animatorController);
+        // Does it matter that Animator is referencing array from Animation asset?
+        characterAnimator.SetAnimations(characterData.animatorData.animations);
     }
 }
