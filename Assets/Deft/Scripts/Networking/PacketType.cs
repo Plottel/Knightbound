@@ -9,6 +9,7 @@ namespace Deft.Networking
         Welcome = 0,
         ConsoleMessage = 1,
         Replication = 2,
-        Input = 3
+        Input = 3,
+        SetPlayerInfo = 4
     }
 }

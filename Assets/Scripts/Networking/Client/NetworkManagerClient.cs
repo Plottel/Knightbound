@@ -29,6 +29,7 @@ public class NetworkManagerClient : Manager<NetworkManagerClient>
         SetPacketHandler<WelcomePacketHandlerClient>(PacketType.Welcome);
         SetPacketHandler<ConsoleMessagePacketHandlerClient>(PacketType.ConsoleMessage);
         SetPacketHandler<ReplicationPacketHandlerClient>(PacketType.Replication);
+        SetPacketHandler<SetPlayerInfoPacketHandlerClient>(PacketType.SetPlayerInfo);
 
         controller = new PlayerControllerClient();
     }
@@ -92,7 +93,7 @@ public class NetworkManagerClient : Manager<NetworkManagerClient>
 
     private void OnServerConnectionEstablished()
     {
-        SendPacket(PacketHelperClient.MakeWelcomePacket(WelcomeMessage.AttemptConnection));
+        SendPacket(PacketHelperClient.MakeRequestConnectionPacket());
     }
 
     public void SetPacketHandler<T>(PacketType packetType) where T : PacketHandlerClient

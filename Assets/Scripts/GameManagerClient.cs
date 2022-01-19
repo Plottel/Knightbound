@@ -11,6 +11,7 @@ public class GameManagerClient : GameManager<GameManagerClient>
         base.OnAwake();
 
         AddManager<NetworkManagerClient>();
+        AddManager<PlayerManagerClient>();
         AddManager<ReplicationManagerClient>();
         AddManager<CameraManager>();
     }

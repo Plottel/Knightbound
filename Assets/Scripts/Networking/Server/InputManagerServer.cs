@@ -6,53 +6,54 @@ using Deft.Networking;
 
 public class InputManagerServer : Manager<InputManagerServer>
 {
-    private Dictionary<PlayerInfo, InputState> clientInputStates;
+    private Dictionary<int, InputState> playerIDToInputState;
 
     public override void OnAwake()
     {
         base.OnAwake();
-        clientInputStates = new Dictionary<PlayerInfo, InputState>();
+        playerIDToInputState = new Dictionary<int, InputState>();
 
-        NetworkManagerServer.Get.eventPlayerJoined += OnPlayerJoined;
+        PlayerManagerServer.Get.eventPlayerJoined += OnPlayerJoined;
     }
+
+    void OnDestroy() => PlayerManagerServer.Get.eventPlayerJoined -= OnPlayerJoined;
 
     private void OnPlayerJoined(PlayerInfo playerInfo)
     {
-        clientInputStates.Add(playerInfo, null);
+        playerIDToInputState[playerInfo.playerID] = null;
     }
 
-    void OnDestroy() => NetworkManagerServer.Get.eventPlayerJoined -= OnPlayerJoined;
-
-    public void AddInputState(PlayerInfo playerInfo, InputState inputState)
-        => clientInputStates[playerInfo] = inputState;
+    public void AddInputState(int playerID, InputState inputState)
+        => playerIDToInputState[playerID] = inputState;
 
     public override void OnUpdate()
     {
-        ProcessClientInputStates();
+        ProcessPlayerInputStates();
     }
 
-    void ProcessClientInputStates()
+    void ProcessPlayerInputStates()
     {
         var rms = ReplicationManagerServer.Get;
 
-        foreach (var clientInputInfo in clientInputStates)
+        foreach (var playerInputInfo in playerIDToInputState)
         {
-            PlayerInfo playerInfo = clientInputInfo.Key;
-            InputState inputState = clientInputInfo.Value;
+            int playerID = playerInputInfo.Key;
+            InputState inputState = playerInputInfo.Value;
 
             if (inputState == null)
                 continue;
 
-            if (rms.TryGetNetworkObject(playerInfo.networkID, out var playerNetworkObject))
+            int characterID = PlayerManagerServer.Get.GetPlayerInfo(playerID).characterID;
+            if (ReplicationManagerServer.Get.TryGetNetworkObject(characterID, out var playerBase))
             {
-                var player = playerNetworkObject as Player; // Lol so bad - find a T solution.
+                Player player = playerBase as Player; // Lol so bad - find a T solution
                 ApplyInputState(player, inputState);
             }
         }
 
         // Once Input States have been processed, clear them to avoid duplication.
         // Later, we will store them in a buffer.
-        clientInputStates.Clear();
+        playerIDToInputState.Clear();
     }
 
     void ApplyInputState(Player player, InputState inputState)

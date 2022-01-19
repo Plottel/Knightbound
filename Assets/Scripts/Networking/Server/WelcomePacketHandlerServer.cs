@@ -10,20 +10,22 @@ public class WelcomePacketHandlerServer : PacketHandlerServer
     public override void HandlePacket(uint peerID, BinaryReader reader)
     {
         NetworkManagerServer nms = NetworkManagerServer.Get;
+        PlayerManagerServer pms = PlayerManagerServer.Get;
         ReplicationManagerServer rms = ReplicationManagerServer.Get;
         var message = (WelcomeMessage)reader.ReadInt32();
 
         switch (message)
         {
             // Respond to New Players with their Player ID
-            case WelcomeMessage.AttemptConnection:
+            case WelcomeMessage.RequestConnection:
                 {
-                    if (!nms.HasClient(peerID))
+                    if (!nms.HasPeer(peerID))
                     {
-                        var clientInfo = nms.RegisterNewClient(peerID);
-                        var packet = PacketHelperServer.MakeConnectionApprovedPacket(clientInfo.playerID);
+                        int playerID = nms.RegisterNewPeer(peerID);
+                        pms.RegisterNewPlayer(playerID);
 
-                        nms.SendPacket(clientInfo.playerID, packet);
+                        var packet = PacketHelperServer.MakeConnectionApprovedPacket(playerID);
+                        nms.SendPacket(playerID, packet);
                     }
                 }
                 break;
@@ -31,28 +33,25 @@ public class WelcomePacketHandlerServer : PacketHandlerServer
             // Create Player object and send ID to Client
             case WelcomeMessage.RequestSpawn:
                 {
-                    if (nms.GetClientInfo(peerID, out ClientInfo clientInfo))
-                    {
-                        int networkID;
-                        var player = rms.CreateNetworkObject<Player>((int)NetworkObjectType.Player, out networkID);
-                        nms.RegisterNewPlayer(clientInfo, networkID);
+                    int playerID = reader.ReadInt32();
+                    PlayerInfo playerInfo = pms.SpawnPlayer(playerID);
 
-                        var packet = PacketHelperServer.MakeSpawnPacket(clientInfo.playerID, networkID);
-                        nms.SendPacket(clientInfo.playerID, packet);
-                    }
+                    var playerInfoPacket = PacketHelperServer.MakeSetPlayerInfoPacket(playerID, playerInfo.characterID);
+                    var spawnApprovedPacket = PacketHelperServer.MakeSpawnApprovedPacket();
+
+                    nms.TrueBroadcastPacket(playerInfoPacket);
+                    nms.SendPacket(playerID, spawnApprovedPacket);
                 }
                 break;
 
             // Upgrade Client to Player and it becomes live!
             case WelcomeMessage.RequestBeginPlaying:
                 {
-                    if (nms.GetPlayerInfo(peerID, out PlayerInfo playerInfo))
-                    {
-                        nms.WelcomeRegisteredPlayer(playerInfo);
+                    int playerID = reader.ReadInt32();
+                    pms.FinalizePlayerWelcome(playerID);
 
-                        var packet = PacketHelperServer.MakeBeginPlayingPacket();
-                        nms.SendPacket(playerInfo.clientInfo.playerID, packet);
-                    }
+                    var packet = PacketHelperServer.MakeBeginPlayingApprovedPacket();
+                    nms.SendPacket(playerID, packet);
                 }
                 break;
         }

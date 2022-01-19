@@ -53,7 +53,7 @@ public class PlayerControllerClient
             right = Input.GetKey(KeyCode.D)
         };
 
-        var inputPacket = PacketHelperClient.MakeInputPacket(inputState);
+        var inputPacket = PacketHelperClient.MakeInputPacket(playerID, inputState);
         NetworkManagerClient.Get.SendPacket(inputPacket);
     }
 }

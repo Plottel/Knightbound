@@ -20,27 +20,38 @@ public static class PacketHelperServer
         return stream;
     }
 
-    public static MemoryStream MakeSpawnPacket(int playerID, int networkID)
+    public static MemoryStream MakeSpawnApprovedPacket()
     {
         MemoryStream stream = new MemoryStream();
         using (BinaryWriter writer = new BinaryWriter(stream, Encoding.Default, true))
         {
             writer.Write((int)PacketType.Welcome);
-            writer.Write((int)WelcomeMessage.Spawn);
-            writer.Write(playerID);
-            writer.Write(networkID);
+            writer.Write((int)WelcomeMessage.SpawnApproved);
         }
 
         return stream;
     }
 
-    public static MemoryStream MakeBeginPlayingPacket()
+    public static MemoryStream MakeBeginPlayingApprovedPacket()
     {
         MemoryStream stream = new MemoryStream();
         using (BinaryWriter writer = new BinaryWriter(stream, Encoding.Default, true))
         {
             writer.Write((int)PacketType.Welcome);
-            writer.Write((int)WelcomeMessage.BeginPlaying);
+            writer.Write((int)WelcomeMessage.BeginPlayingApproved);
+        }
+
+        return stream;
+    }
+
+    public static MemoryStream MakeSetPlayerInfoPacket(int playerID, int characterID)
+    {
+        MemoryStream stream = new MemoryStream();
+        using (BinaryWriter writer = new BinaryWriter(stream, Encoding.Default, true))
+        {
+            writer.Write((int)PacketType.SetPlayerInfo);
+            writer.Write(playerID);
+            writer.Write(characterID);
         }
 
         return stream;
