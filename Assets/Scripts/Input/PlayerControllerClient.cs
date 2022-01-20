@@ -8,9 +8,6 @@ public class PlayerControllerClient
 {
     public float cameraYSpeed = 1f;
 
-    public int playerID;
-    public int playerNetworkID; // For fetching the Player object
-
     private const float kInputPacketSendInterval = 0.033f;
     private float timeSinceLastInputPacket;
 
@@ -40,11 +37,12 @@ public class PlayerControllerClient
             timeSinceLastInputPacket = 0f;
             SendInputPacket();
         }
-
     }
 
     private void SendInputPacket()
     {
+        var nmc = NetworkManagerClient.Get;
+
         var inputState = new InputState
         {
             up = Input.GetKey(KeyCode.W),
@@ -53,7 +51,7 @@ public class PlayerControllerClient
             right = Input.GetKey(KeyCode.D)
         };
 
-        var inputPacket = PacketHelperClient.MakeInputPacket(playerID, inputState);
-        NetworkManagerClient.Get.SendPacket(inputPacket);
+        var inputPacket = PacketHelperClient.MakeInputPacket(nmc.playerID, inputState);
+        nmc.SendPacket(inputPacket);
     }
 }

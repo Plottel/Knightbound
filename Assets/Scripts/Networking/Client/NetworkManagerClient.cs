@@ -15,8 +15,6 @@ public class NetworkManagerClient : Manager<NetworkManagerClient>
     protected NetworkClient client;
     private Dictionary<PacketType, PacketHandlerClient> packetHandlers;
 
-    private PlayerControllerClient controller;
-
     public override void OnAwake()
     {
         base.OnAwake();
@@ -30,16 +28,11 @@ public class NetworkManagerClient : Manager<NetworkManagerClient>
         SetPacketHandler<ConsoleMessagePacketHandlerClient>(PacketType.ConsoleMessage);
         SetPacketHandler<ReplicationPacketHandlerClient>(PacketType.Replication);
         SetPacketHandler<SetPlayerInfoPacketHandlerClient>(PacketType.SetPlayerInfo);
-
-        controller = new PlayerControllerClient();
     }
 
     public override void OnUpdate()
     {
         ProcessIncomingPackets();
-
-        if (state == NetworkState.Playing)
-            controller.OnUpdate();
     }
 
     public void ProcessIncomingPackets()
@@ -100,16 +93,5 @@ public class NetworkManagerClient : Manager<NetworkManagerClient>
     {
         T packetHandler = Activator.CreateInstance<T>();
         packetHandlers[packetType] = packetHandler;
-    }
-
-    public void SetPlayerID(int playerID)
-    {
-        this.playerID = playerID;
-        controller.playerID = playerID;
-    }
-    
-    public void SetPlayerNetworkID(int networkID)
-    {
-        controller.playerNetworkID = networkID;
     }
 }

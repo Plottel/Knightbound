@@ -20,7 +20,7 @@ public class WelcomePacketHandlerClient : PacketHandlerClient
                     int playerID = reader.ReadInt32();
 
                     nmc.state = NetworkState.Connected;
-                    nmc.SetPlayerID(playerID);
+                    nmc.playerID = playerID;
 
                     var packet = PacketHelperClient.MakeWelcomePacket(WelcomeMessage.RequestSpawn, playerID);
                     nmc.SendPacket(packet);
