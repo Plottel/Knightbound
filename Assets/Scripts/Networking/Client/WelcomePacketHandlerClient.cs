@@ -14,7 +14,6 @@ public class WelcomePacketHandlerClient : PacketHandlerClient
 
         switch (message)
         {
-            // Set Player ID and Request Spawn from server.
             case WelcomeMessage.ConnectionApproved:
                 {
                     int playerID = reader.ReadInt32();
@@ -27,7 +26,6 @@ public class WelcomePacketHandlerClient : PacketHandlerClient
                 }
                 break;
 
-            // Set Player Network ID and Request Start
             case WelcomeMessage.SpawnApproved:
                 {
                     nmc.state = NetworkState.Welcomed;
@@ -38,11 +36,11 @@ public class WelcomePacketHandlerClient : PacketHandlerClient
                 }
                 break;
 
-            // Ready to Play!
             case WelcomeMessage.BeginPlayingApproved:
                 {
                     // Begin Playing! ....
                     nmc.state = NetworkState.Playing;
+                    GameManagerClient.Get.BeginSimulation();
                 }
                 break;
         }

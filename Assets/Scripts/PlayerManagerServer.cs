@@ -29,7 +29,7 @@ public class PlayerManagerServer : Manager<PlayerManagerServer>
         playerIDToPlayerInfo.Add(playerID, playerInfo);
     }
 
-    public PlayerInfo SpawnPlayer(int playerID)
+    public PlayerInfo InitialSpawnPlayer(int playerID)
     {
         int characterID;
         ReplicationManagerServer.Get.CreateNetworkObject<Player>((int)NetworkObjectType.Player, out characterID);

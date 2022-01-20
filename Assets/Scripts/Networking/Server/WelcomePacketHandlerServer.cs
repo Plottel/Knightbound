@@ -16,7 +16,6 @@ public class WelcomePacketHandlerServer : PacketHandlerServer
 
         switch (message)
         {
-            // Respond to New Players with their Player ID
             case WelcomeMessage.RequestConnection:
                 {
                     if (!nms.HasPeer(peerID))
@@ -30,11 +29,14 @@ public class WelcomePacketHandlerServer : PacketHandlerServer
                 }
                 break;
 
-            // Create Player object and send ID to Client
             case WelcomeMessage.RequestSpawn:
                 {
                     int playerID = reader.ReadInt32();
-                    PlayerInfo playerInfo = pms.SpawnPlayer(playerID);
+                    PlayerInfo playerInfo = pms.InitialSpawnPlayer(playerID);
+
+                    // Send Objects to new Player
+                    rms.RegisterPlayer(playerID);
+                    rms.SendFullSync(playerID);
 
                     var playerInfoPacket = PacketHelperServer.MakeSetPlayerInfoPacket(playerID, playerInfo.characterID);
                     var spawnApprovedPacket = PacketHelperServer.MakeSpawnApprovedPacket();
@@ -44,10 +46,11 @@ public class WelcomePacketHandlerServer : PacketHandlerServer
                 }
                 break;
 
-            // Upgrade Client to Player and it becomes live!
             case WelcomeMessage.RequestBeginPlaying:
                 {
                     int playerID = reader.ReadInt32();
+
+                    // Fires eventPlayerJoined
                     pms.FinalizePlayerWelcome(playerID);
 
                     var packet = PacketHelperServer.MakeBeginPlayingApprovedPacket();

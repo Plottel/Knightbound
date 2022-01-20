@@ -11,8 +11,6 @@ public class ReplicationManagerServer : Manager<ReplicationManagerServer>
     private NetworkReplicator serverReplicator; 
     private Dictionary<int, NetworkReplicator> playerIDToReplicator;
 
-    private Dictionary<int, ClientInfo> playerIDToClientInfo;
-
     private const float kUpdateSendInterval = 0.033f;
     private float timeSinceLastUpdate;
 
@@ -26,17 +24,6 @@ public class ReplicationManagerServer : Manager<ReplicationManagerServer>
         base.OnAwake();
         serverReplicator = new NetworkReplicator();
         playerIDToReplicator = new Dictionary<int, NetworkReplicator>();
-
-        playerIDToClientInfo = new Dictionary<int, ClientInfo>();
-
-        PlayerManagerServer.Get.eventPlayerJoined += OnPlayerJoined;
-    }
-
-    void OnDestroy() => PlayerManagerServer.Get.eventPlayerJoined -= OnPlayerJoined;
-
-    private void OnPlayerJoined(PlayerInfo playerInfo)
-    {
-        playerIDToReplicator[playerInfo.playerID] = new NetworkReplicator();
     }
 
     public override void OnLateUpdate()
@@ -46,6 +33,29 @@ public class ReplicationManagerServer : Manager<ReplicationManagerServer>
         {
             timeSinceLastUpdate = 0f;
             SynchronizeClientReplicators();
+        }
+    }
+
+    public void RegisterPlayer(int playerID)
+    {
+        playerIDToReplicator[playerID] = new NetworkReplicator();
+    }
+
+    public void SendFullSync(int playerID)
+    {
+        NetworkReplicator playerReplicator = playerIDToReplicator[playerID];
+
+        foreach (NetworkObject serverObject in serverReplicator.GetNetworkObjects())
+        {
+            if (playerReplicator.context.TryGetNetworkID(serverObject, out int networkID))
+                SendUpdate(playerID, networkID, serverObject);
+            else
+            {
+                networkID = serverReplicator.context.GetNetworkID(serverObject);
+                playerReplicator.context.RegisterNetworkObject(networkID, serverObject);
+
+                SendCreate(playerID, networkID, serverObject);
+            }
         }
     }
 
