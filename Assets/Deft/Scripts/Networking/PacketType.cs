@@ -10,6 +10,7 @@ namespace Deft.Networking
         ConsoleMessage = 1,
         Replication = 2,
         Input = 3,
-        SetPlayerInfo = 4
+        SetPlayerInfo = 4,
+        SetVoxelData = 5
     }
 }

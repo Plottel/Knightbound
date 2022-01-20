@@ -34,9 +34,14 @@ public class WelcomePacketHandlerServer : PacketHandlerServer
                     int playerID = reader.ReadInt32();
                     PlayerInfo playerInfo = pms.InitialSpawnPlayer(playerID);
 
-                    // Send Objects to new Player
                     rms.RegisterPlayer(playerID);
-                    rms.SendFullSync(playerID);
+
+                    // Don't duplicate Server objects on Local Client
+                    if (playerID != 0)
+                    {
+                        rms.SendFullSync(playerID);
+                        VoxelManagerServer.Get.SendVoxelData(playerID);
+                    }
 
                     var playerInfoPacket = PacketHelperServer.MakeSetPlayerInfoPacket(playerID, playerInfo.characterID);
                     var spawnApprovedPacket = PacketHelperServer.MakeSpawnApprovedPacket();
