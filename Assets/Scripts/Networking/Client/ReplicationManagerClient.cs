@@ -20,4 +20,9 @@ public class ReplicationManagerClient : Manager<ReplicationManagerClient>
 
     public void ProcessReplicationCommand(ReplicationCommand command)
         => replicator.ProcessReplicationCommand(command);
+
+    public bool TryGetNetworkObject(int networkID, out NetworkObject networkObject)
+    {
+        return replicator.context.TryGetNetworkObject(networkID, out networkObject);
+    }
 }

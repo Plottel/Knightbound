@@ -14,42 +14,33 @@ public class WelcomePacketHandlerClient : PacketHandlerClient
 
         switch (message)
         {
-            // Set Player ID and Request Spawn from server.
             case WelcomeMessage.ConnectionApproved:
                 {
-                    nmc.state = NetworkState.Connected;
-
                     int playerID = reader.ReadInt32();
-                    nmc.SetPlayerID(playerID);
 
-                    Debug.Log("Setting Player ID to " + playerID.ToString());
+                    nmc.state = NetworkState.Connected;
+                    nmc.playerID = playerID;
 
-                    var packet = PacketHelperClient.MakeWelcomePacket(WelcomeMessage.RequestSpawn);
+                    var packet = PacketHelperClient.MakeWelcomePacket(WelcomeMessage.RequestSpawn, playerID);
                     nmc.SendPacket(packet);
                 }
                 break;
 
-            // Set Player Network ID and Request Start
-            case WelcomeMessage.Spawn:
+            case WelcomeMessage.SpawnApproved:
                 {
                     nmc.state = NetworkState.Welcomed;
 
-                    int playerID = reader.ReadInt32();
-                    int networkID = reader.ReadInt32();
-
-                    if (playerID == nmc.playerID)
-                        nmc.SetPlayerNetworkID(networkID);
-
-                    Debug.Log("Client Player ID " + playerID + " Requesting Client Proxy");
-                    var packet = PacketHelperClient.MakeWelcomePacket(WelcomeMessage.RequestBeginPlaying);
+                    int playerID = nmc.playerID;
+                    var packet = PacketHelperClient.MakeWelcomePacket(WelcomeMessage.RequestBeginPlaying, playerID);
                     nmc.SendPacket(packet);
                 }
                 break;
 
-            // Ready to Play!
-            case WelcomeMessage.BeginPlaying:
+            case WelcomeMessage.BeginPlayingApproved:
                 {
+                    // Begin Playing! ....
                     nmc.state = NetworkState.Playing;
+                    GameManagerClient.Get.BeginSimulation();
                 }
                 break;
         }

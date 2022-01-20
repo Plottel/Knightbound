@@ -4,10 +4,10 @@ using UnityEngine;
 
 public enum WelcomeMessage
 {
-    AttemptConnection,
+    RequestConnection,
     ConnectionApproved,
     RequestSpawn,
-    Spawn,
+    SpawnApproved,
     RequestBeginPlaying,
-    BeginPlaying,
+    BeginPlayingApproved,
 }

@@ -8,13 +8,26 @@ using Deft.Networking;
 
 public static class PacketHelperClient
 {
-    public static MemoryStream MakeWelcomePacket(WelcomeMessage message)
+    public static MemoryStream MakeWelcomePacket(WelcomeMessage message, int playerID)
     {
         MemoryStream stream = new MemoryStream();
         using (BinaryWriter writer = new BinaryWriter(stream, Encoding.Default, true))
         {
             writer.Write((int)PacketType.Welcome);
             writer.Write((int)message);
+            writer.Write(playerID);
+        }
+
+        return stream;
+    }
+
+    public static MemoryStream MakeRequestConnectionPacket()
+    {
+        MemoryStream stream = new MemoryStream();
+        using (BinaryWriter writer = new BinaryWriter(stream, Encoding.Default, true))
+        {
+            writer.Write((int)PacketType.Welcome);
+            writer.Write((int)WelcomeMessage.RequestConnection);
         }
 
         return stream;
@@ -32,12 +45,13 @@ public static class PacketHelperClient
         return stream;
     }
 
-    public static MemoryStream MakeInputPacket(InputState inputState)
+    public static MemoryStream MakeInputPacket(int playerID, InputState inputState)
     {
         MemoryStream stream = new MemoryStream();
         using (BinaryWriter writer = new BinaryWriter(stream, Encoding.Default, true))
         {
             writer.Write((int)PacketType.Input);
+            writer.Write(playerID);
             inputState.Serialize(writer);
         }
 

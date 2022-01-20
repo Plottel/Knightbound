@@ -9,9 +9,7 @@ using Deft.Networking;
 public class ReplicationManagerServer : Manager<ReplicationManagerServer>
 {
     private NetworkReplicator serverReplicator; 
-    private Dictionary<ClientInfo, NetworkReplicator> clientReplicators;
-
-    private Dictionary<int, ClientInfo> playerIDToClientInfo;
+    private Dictionary<int, NetworkReplicator> playerIDToReplicator;
 
     private const float kUpdateSendInterval = 0.033f;
     private float timeSinceLastUpdate;
@@ -25,19 +23,7 @@ public class ReplicationManagerServer : Manager<ReplicationManagerServer>
     {
         base.OnAwake();
         serverReplicator = new NetworkReplicator();
-        clientReplicators = new Dictionary<ClientInfo, NetworkReplicator>();
-
-        playerIDToClientInfo = new Dictionary<int, ClientInfo>();
-
-        NetworkManagerServer.Get.eventPlayerJoined += OnPlayerJoined;
-    }
-
-    void OnDestroy() => NetworkManagerServer.Get.eventPlayerJoined -= OnPlayerJoined;
-
-    private void OnPlayerJoined(PlayerInfo playerInfo)
-    {
-        clientReplicators.Add(playerInfo.clientInfo, new NetworkReplicator());
-        playerIDToClientInfo.Add(playerInfo.clientInfo.playerID, playerInfo.clientInfo);
+        playerIDToReplicator = new Dictionary<int, NetworkReplicator>();
     }
 
     public override void OnLateUpdate()
@@ -50,35 +36,58 @@ public class ReplicationManagerServer : Manager<ReplicationManagerServer>
         }
     }
 
+    public void RegisterPlayer(int playerID)
+    {
+        playerIDToReplicator[playerID] = new NetworkReplicator();
+    }
+
+    public void SendFullSync(int playerID)
+    {
+        NetworkReplicator playerReplicator = playerIDToReplicator[playerID];
+
+        foreach (NetworkObject serverObject in serverReplicator.GetNetworkObjects())
+        {
+            if (playerReplicator.context.TryGetNetworkID(serverObject, out int networkID))
+                SendUpdate(playerID, networkID, serverObject);
+            else
+            {
+                networkID = serverReplicator.context.GetNetworkID(serverObject);
+                playerReplicator.context.RegisterNetworkObject(networkID, serverObject);
+
+                SendCreate(playerID, networkID, serverObject);
+            }
+        }
+    }
+
     private void SynchronizeClientReplicators()
     {
         var serverObjects = serverReplicator.GetNetworkObjects();
 
-        foreach (var clientReplicationInfo in clientReplicators)
+        foreach (var playerReplicationInfo in playerIDToReplicator)
         {
-            ClientInfo client = clientReplicationInfo.Key;
-            NetworkReplicator clientReplicator = clientReplicationInfo.Value;
+            int playerID = playerReplicationInfo.Key;
+            NetworkReplicator playerReplicator = playerReplicationInfo.Value;
 
             foreach (NetworkObject serverObject in serverObjects)
             {
                 // If Client has this Network ID, Update the existing object
-                if (clientReplicator.context.TryGetNetworkID(serverObject, out int networkID))
+                if (playerReplicator.context.TryGetNetworkID(serverObject, out int networkID))
                 {
-                    SendUpdate(client, networkID, serverObject);
+                    SendUpdate(playerID, networkID, serverObject);
                 }
                 // Client does not have Network ID, Create new obj using existing Network ID.
                 else
                 {
                     networkID = serverReplicator.context.GetNetworkID(serverObject);
-                    clientReplicator.context.RegisterNetworkObject(networkID, serverObject);
+                    playerReplicator.context.RegisterNetworkObject(networkID, serverObject);
 
-                    SendCreate(client, networkID, serverObject);
+                    SendCreate(playerID, networkID, serverObject);
                 }
             }
         }
     }
 
-    private void SendCreate(ClientInfo client, int networkID, NetworkObject obj)
+    private void SendCreate(int playerID, int networkID, NetworkObject obj)
     {
         using (MemoryStream stream = new MemoryStream())
         {
@@ -91,11 +100,11 @@ public class ReplicationManagerServer : Manager<ReplicationManagerServer>
                 obj.Serialize(writer);
             }
 
-            NetworkManagerServer.Get.SendPacket(client.peerID, stream);
+            NetworkManagerServer.Get.SendPacket(playerID, stream);
         }
     }
 
-    private void SendUpdate(ClientInfo client, int networkID, NetworkObject obj)
+    private void SendUpdate(int playerID, int networkID, NetworkObject obj)
     {
         using (MemoryStream stream = new MemoryStream())
         {
@@ -108,7 +117,7 @@ public class ReplicationManagerServer : Manager<ReplicationManagerServer>
                 obj.Serialize(writer);
             }
 
-            NetworkManagerServer.Get.SendPacket(client.peerID, stream);
+            NetworkManagerServer.Get.SendPacket(playerID, stream);
         }
     }
 

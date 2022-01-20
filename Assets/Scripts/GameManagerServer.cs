@@ -11,6 +11,7 @@ public class GameManagerServer : GameManager<GameManagerServer>
         base.OnAwake();
 
         AddManager<NetworkManagerServer>();
+        AddManager<PlayerManagerServer>();
         AddManager<InputManagerServer>();
         AddManager<ReplicationManagerServer>();
     }

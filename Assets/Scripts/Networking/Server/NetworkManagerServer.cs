@@ -10,18 +10,12 @@ using Deft.Networking;
 
 public class NetworkManagerServer : Manager<NetworkManagerServer>
 {
-    public delegate void PlayerJoinedHandler(PlayerInfo clientInfo);
-    public event PlayerJoinedHandler eventPlayerJoined;
-
     private NetworkServer server;
 
     private int nextPlayerID;
 
-    private Dictionary<uint, ClientInfo> peerIDToClientInfo;
-    private Dictionary<int, ClientInfo> playerIDToClientInfo;
-
-    private Dictionary<int, PlayerInfo> playerIDToPlayerInfo;
-    private Dictionary<uint, PlayerInfo> peerIDToPlayerInfo;
+    private Dictionary<uint, int> peerIDToPlayerID;
+    private Dictionary<int, uint> playerIDToPeerID;
 
     private Dictionary<PacketType, PacketHandlerServer> packetHandlers;
 
@@ -33,11 +27,8 @@ public class NetworkManagerServer : Manager<NetworkManagerServer>
 
         nextPlayerID = 0;
 
-        peerIDToClientInfo = new Dictionary<uint, ClientInfo>();
-        playerIDToClientInfo = new Dictionary<int, ClientInfo>();
-
-        playerIDToPlayerInfo = new Dictionary<int, PlayerInfo>();
-        peerIDToPlayerInfo = new Dictionary<uint, PlayerInfo>();
+        peerIDToPlayerID = new Dictionary<uint, int>();
+        playerIDToPeerID = new Dictionary<int, uint>();
 
         packetHandlers = new Dictionary<PacketType, PacketHandlerServer>();
 
@@ -57,64 +48,23 @@ public class NetworkManagerServer : Manager<NetworkManagerServer>
         server.LaunchServer(port);
     }
 
-    public ClientInfo RegisterNewClient(uint peerID)
+    public int RegisterNewPeer(uint peerID)
     {
-        var clientInfo = new ClientInfo
-        {
-            playerID = nextPlayerID++,
-            peerID = peerID
-        };
+        int playerID = nextPlayerID++;
 
-        peerIDToClientInfo.Add(clientInfo.peerID, clientInfo);
-        playerIDToClientInfo.Add(clientInfo.playerID, clientInfo);
-        return clientInfo;
+        peerIDToPlayerID.Add(peerID, playerID);
+        playerIDToPeerID.Add(playerID, peerID);
+        return playerID;
     }
 
-    public void RegisterNewPlayer(ClientInfo client, int networkID)
+    public bool HasPeer(int playerID)
     {
-        var playerInfo = new PlayerInfo
-        {
-            clientInfo = client,
-            networkID = networkID
-        };
-
-        peerIDToPlayerInfo.Add(client.peerID, playerInfo);
-        playerIDToPlayerInfo.Add(client.playerID, playerInfo);
+        return playerIDToPeerID.ContainsKey(playerID);
     }
 
-    public void WelcomeRegisteredPlayer(PlayerInfo player)
+    public bool HasPeer(uint peerID)
     {
-        eventPlayerJoined?.Invoke(player);
-    }
-
-    public bool GetClientInfo(int playerID, out ClientInfo clientInfo)
-    {
-        return playerIDToClientInfo.TryGetValue(playerID, out clientInfo);
-    }
-
-    public bool GetClientInfo(uint peerID, out ClientInfo clientInfo)
-    {
-        return peerIDToClientInfo.TryGetValue(peerID, out clientInfo);
-    }
-
-    public bool GetPlayerInfo(int playerID, out PlayerInfo playerInfo)
-    {
-        return playerIDToPlayerInfo.TryGetValue(playerID, out playerInfo);
-    }
-
-    public bool GetPlayerInfo(uint peerID, out PlayerInfo playerInfo)
-    {
-        return peerIDToPlayerInfo.TryGetValue(peerID, out playerInfo);
-    }
-
-    public bool HasClient(int playerID)
-    {
-        return playerIDToClientInfo.ContainsKey(playerID);
-    }
-
-    public bool HasClient(uint peerID)
-    {
-        return peerIDToClientInfo.ContainsKey(peerID);
+        return peerIDToPlayerID.ContainsKey(peerID);
     }
 
     public override void OnUpdate()
@@ -149,12 +99,7 @@ public class NetworkManagerServer : Manager<NetworkManagerServer>
 
     public void SendPacket(int playerID, MemoryStream stream)
     {
-        server.SendPacket(playerIDToClientInfo[playerID].peerID, stream);
-    }
-
-    public void SendPacket(uint peerID, MemoryStream stream)
-    {
-        server.SendPacket(peerID, stream);
+        server.SendPacket(playerIDToPeerID[playerID], stream);
     }
 
     public void TrueBroadcastPacket(MemoryStream stream)
