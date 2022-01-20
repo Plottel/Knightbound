@@ -7,6 +7,7 @@ using Deft.Networking;
 public class GameResources : Manager<GameResources>
 {
     public NetworkObjectMap NetworkPrefabs;
+    public Texture2D[] BlockTextures;
 
     public override void OnAwake()
     {

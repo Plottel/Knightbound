@@ -1,56 +1,41 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.U2D;
 using Deft;
 
-[RequireComponent(typeof(MeshFilter), typeof(MeshRenderer), typeof(MeshCollider))]
-public class VoxelWorld : MonoBehaviour
+public static class VoxelMeshGenerator
 {
-    public Texture2D[] textures;
-    private TextureAtlas atlas;
+    static Mesh mesh;
+    static List<Vector3> vertices;
+    static List<int> triangles;
+    static List<Vector2> uvs;
+    static TextureAtlas atlas;
 
-    public Vector3 worldOrigin;
-
-    VoxelWorldData worldData;
-    Mesh mesh;
-    MeshCollider meshCollider;
-
-    List<Vector3> vertices;
-    List<int> triangles;
-    List<Vector2> uvs;
-
-    private void Awake()
+    public static VoxelMesh GenerateMesh(VoxelWorldData data, TextureAtlas textures)
     {
-        atlas = new TextureAtlas(textures);
-        mesh = GetComponent<MeshFilter>().mesh;
-        meshCollider = GetComponent<MeshCollider>();
-        GetComponent<MeshRenderer>().sharedMaterial.mainTexture = atlas.GetTexture();
-    }
-
-    private void Start()
-    {
-        int[,] voxels = new int[,]
-        {
-            {0, 1, 1, 1, 1, 0},
-            {1, 2, 2, 2, 2, 1},
-            {1, 2, 2, 2, 2, 1},
-            {1, 2, 2, 2, 2, 1},
-            {1, 2, 2, 2, 2, 1},
-            {0, 1, 1, 1, 1, 0},
-        };
-
-        worldData = new VoxelWorldData();
-        worldData.voxelData = voxels;
+        // Init Data
+        mesh = new Mesh();
         vertices = new List<Vector3>();
         triangles = new List<int>();
         uvs = new List<Vector2>();
+        atlas = textures;
 
-        GenerateMeshData(worldData);
-        FinalizeMesh();
+        GenerateMeshData(data);
+        ApplyMeshData();
+        
+        VoxelMesh result = CreateMeshObject();
+
+        // Clear Data
+        vertices.Clear(); 
+        triangles.Clear();
+        uvs.Clear();
+        atlas = null;
+        mesh = null;
+
+        return result;
     }
 
-    void GenerateMeshData(VoxelWorldData data)
+    static void GenerateMeshData(VoxelWorldData data)
     {
         for (int x = 0; x < data.Width; ++x)
         {
@@ -58,26 +43,40 @@ public class VoxelWorld : MonoBehaviour
             {
                 if (data.GetBlockType(x, z) != BlockType.Air)
                 {
-                    var blockPosition = worldOrigin + new Vector3(x, 0, z);
+                    var blockPosition = new Vector3(x, 0, z);
                     AddCubeMesh(blockPosition, x, z, data);
                 }
             }
         }
     }
 
-    void AddCubeMesh(Vector3 position, int x, int z, VoxelWorldData data)
+    static void ApplyMeshData()
+    {
+        mesh.Clear();
+
+        mesh.vertices = vertices.ToArray();
+        mesh.triangles = triangles.ToArray();
+        mesh.uv = uvs.ToArray();
+
+        mesh.RecalculateNormals();
+        mesh.RecalculateBounds();
+    }
+
+    static void AddCubeMesh(Vector3 position, int x, int z, VoxelWorldData data)
     {
         for (int i = 0; i < 6; ++i)
         {
             var direction = (VoxelDirection)i;
 
             // Only draw faces facing Air.
+            // To decouple, this should simply be fetching an indexed texture
+            // If there is no texture (i.e. air), then we don't AddCubeFaceMesh
             if (data.GetNeighborBlockType(x, z, direction) == BlockType.Air)
                 AddCubeFaceMesh((VoxelDirection)i, position, data.GetBlockType(x, z));
         }
     }
 
-    void AddCubeFaceMesh(VoxelDirection direction, Vector3 position, int blockType)
+    static void AddCubeFaceMesh(VoxelDirection direction, Vector3 position, int blockType)
     {
         Vector3[] faceVertices = VoxelMeshUtils.GetFaceVertices6Verts(direction, position);
 
@@ -117,17 +116,11 @@ public class VoxelWorld : MonoBehaviour
         uvs.Add(bottomRight);
     }
 
-    void FinalizeMesh()
+    static VoxelMesh CreateMeshObject()
     {
-        mesh.Clear();
+        VoxelMesh result = new GameObject("VoxelMesh").AddComponent<VoxelMesh>();
+        result.SetMesh(mesh, atlas.GetTexture());
 
-        mesh.vertices = vertices.ToArray();
-        mesh.triangles = triangles.ToArray();
-        mesh.uv = uvs.ToArray();
-
-        mesh.RecalculateNormals();
-        mesh.RecalculateBounds();
-
-        meshCollider.sharedMesh = mesh;
+        return result;
     }
 }

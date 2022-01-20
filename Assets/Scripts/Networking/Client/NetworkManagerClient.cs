@@ -28,6 +28,7 @@ public class NetworkManagerClient : Manager<NetworkManagerClient>
         SetPacketHandler<ConsoleMessagePacketHandlerClient>(PacketType.ConsoleMessage);
         SetPacketHandler<ReplicationPacketHandlerClient>(PacketType.Replication);
         SetPacketHandler<SetPlayerInfoPacketHandlerClient>(PacketType.SetPlayerInfo);
+        SetPacketHandler<SetVoxelDataPacketHandlerClient>(PacketType.SetVoxelData);
     }
 
     public override void OnUpdate()

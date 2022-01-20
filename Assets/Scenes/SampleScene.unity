@@ -279,7 +279,7 @@ Camera:
   m_TargetDisplay: 0
   m_TargetEye: 3
   m_HDR: 1
-  m_AllowMSAA: 1
+  m_AllowMSAA: 0
   m_AllowDynamicResolution: 0
   m_ForceIntoRT: 0
   m_OcclusionCulling: 1
@@ -357,6 +357,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   NetworkPrefabs: {fileID: 11400000, guid: 4ba9771519d43e642839ac154b6ef791, type: 2}
+  BlockTextures:
+  - {fileID: 2800000, guid: cfc9c463368365c4e9c0bc7f053c1f30, type: 3}
+  - {fileID: 2800000, guid: 8c59967034a21f44ba6b47e445edfd12, type: 3}
 --- !u!1 &1970128588
 GameObject:
   m_ObjectHideFlags: 0

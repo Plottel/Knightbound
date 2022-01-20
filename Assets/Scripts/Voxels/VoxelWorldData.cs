@@ -1,21 +1,14 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 
 public class VoxelWorldData
 {
     private static Vector3Int[] kNeighbourOffsets;
 
-    public int[,] voxelData = new int[,]
-    {
-        {0, 1, 1, 1, 1, 0},
-        {1, 2, 2, 2, 2, 1},
-        {1, 2, 2, 2, 2, 1},
-        {1, 2, 2, 2, 2, 1},
-        {1, 2, 2, 2, 2, 1},
-        {0, 1, 1, 1, 1, 0},
-    };
+    public int[,] voxelData;
 
     public int Width => voxelData.GetLength(0);
     public int Depth => voxelData.GetLength(1);
@@ -49,5 +42,31 @@ public class VoxelWorldData
     {
         Vector3Int neighbourOffset = kNeighbourOffsets[(int)direction];
         return GetBlockType(new Vector3Int(x, 0, z) + neighbourOffset);
+    }
+
+    public void Serialize(BinaryWriter writer)
+    {
+        writer.Write(Width);
+        writer.Write(Depth);
+
+        for (int x = 0; x < Width; ++x)
+        {
+            for (int z = 0; z < Depth; ++z)
+                writer.Write(voxelData[x, z]);
+        }
+    }
+
+    public void Deserialize(BinaryReader reader)
+    {
+        int width = reader.ReadInt32();
+        int depth = reader.ReadInt32();
+
+        voxelData = new int[width, depth];
+
+        for (int x = 0; x < Width; ++x)
+        {
+            for (int z = 0; z < Depth; ++z)
+                voxelData[x, z] = reader.ReadInt32();
+        }
     }
 }
