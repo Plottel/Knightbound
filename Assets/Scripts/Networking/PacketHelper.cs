@@ -8,13 +8,12 @@ using Deft.Networking;
 
 public static class PacketHelper
 {
-    public static MemoryStream MakeInputPacket(int playerID, InputState inputState)
+    public static MemoryStream MakeInputPacket(InputState inputState)
     {
         MemoryStream stream = new MemoryStream();
         using (BinaryWriter writer = new BinaryWriter(stream, Encoding.Default, true))
         {
             writer.Write((int)PacketType.Input);
-            writer.Write(playerID);
             inputState.Serialize(writer);
         }
 

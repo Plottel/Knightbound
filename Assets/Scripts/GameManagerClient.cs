@@ -13,12 +13,20 @@ public class GameManagerClient : GameManager<GameManagerClient>
     {
         base.OnAwake();
 
+        // Data Singletons
+        AddManager<UserInputSettings>();
+        AddManager<InputBufferClient>();
+
+        // Managers
         AddManager<NetworkManagerClient>();
         AddManager<PlayerManagerClient>();
-        AddManager<InputManagerClient>();
+        AddManager<InputGeneratorClient>();
+        AddManager<LocalInputProcessor>();
         AddManager<InputDispatcherClient>();
+        AddManager<ReceivedInputProcessorClient>();
         AddManager<ReplicationManagerClient>();
-        AddManager<InputProcessorClient>();
+
+        // "Nothing to do with Networking"-Managers
         AddManager<VoxelManagerClient>();
         AddManager<CameraManager>();
     }

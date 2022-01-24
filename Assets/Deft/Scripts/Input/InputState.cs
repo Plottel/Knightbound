@@ -5,6 +5,7 @@ using UnityEngine;
 
 namespace Deft
 {
+    // TODO: Should be a struct
     public class InputState
     {
         public int playerID;
@@ -12,6 +13,8 @@ namespace Deft
         public bool down;
         public bool left;
         public bool right;
+        public bool cameraLeft;
+        public bool cameraRight;
 
         public void Serialize(BinaryWriter writer)
         {
@@ -20,6 +23,8 @@ namespace Deft
             writer.Write(down);
             writer.Write(left);
             writer.Write(right);
+            writer.Write(cameraLeft);
+            writer.Write(cameraRight);
         }
 
         public void Deserialize(BinaryReader reader)
@@ -29,6 +34,8 @@ namespace Deft
             down = reader.ReadBoolean();
             left = reader.ReadBoolean();
             right = reader.ReadBoolean();
+            cameraLeft = reader.ReadBoolean();
+            cameraRight = reader.ReadBoolean();
         }
     }
 }

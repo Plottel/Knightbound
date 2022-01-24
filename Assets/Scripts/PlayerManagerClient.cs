@@ -23,5 +23,13 @@ public class PlayerManagerClient : Manager<PlayerManagerClient>
     }
 
     public int GetCharacterID(int playerID)
-        => playerIDToCharacterID[playerID];
+    {
+        if (playerIDToCharacterID.ContainsKey(playerID))
+            return playerIDToCharacterID[playerID];
+        else
+        {
+            Debug.LogWarning("Cannot find Character ID for Player ID " + playerID.ToString());
+            return -1;
+        }
+    }
 }

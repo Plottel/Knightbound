@@ -4,24 +4,26 @@ using UnityEngine;
 using Deft;
 using Deft.Networking;
 
-// Dispatches Input received from all Clients to all Clients
-// We no longer send Player transform state via default ReplicationManager.
-// We use a specialized system of serializing inputs and applying them.
 public class InputDispatcherServer : Manager<InputDispatcherServer>
 {
     public override void OnUpdate()
     {
-        DispatchPlayerInputStates();
+        DispatchClientInputStates();
     }
 
-    void DispatchPlayerInputStates()
+    public override void OnLateUpdate()
     {
-        var inputStates = InputProcessorServer.Get.InputStates;
+        InputBufferServer.Get.ClearBuffer();
+    }
 
-        foreach (InputState input in inputStates)
+    void DispatchClientInputStates()
+    {
+        var inputBuffer = InputBufferServer.Get.GetBuffer();
+
+        foreach (InputState input in inputBuffer)
         {
-            var packet = PacketHelper.MakeInputPacket(input.playerID, input);
-            NetworkManagerServer.Get.BroadcastPacket(packet);
+            var packet = PacketHelper.MakeInputPacket(input);
+            NetworkManagerServer.Get.TrueBroadcastPacket(packet);
         }
     }
 }
