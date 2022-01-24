@@ -16,7 +16,9 @@ public class GameManagerClient : GameManager<GameManagerClient>
         AddManager<NetworkManagerClient>();
         AddManager<PlayerManagerClient>();
         AddManager<InputManagerClient>();
+        AddManager<InputDispatcherClient>();
         AddManager<ReplicationManagerClient>();
+        AddManager<InputProcessorClient>();
         AddManager<VoxelManagerClient>();
         AddManager<CameraManager>();
     }

@@ -8,11 +8,6 @@ public class PlayerControllerClient
 {
     public float cameraYSpeed = 1f;
 
-    private const float kInputPacketSendInterval = 0.033f;
-    private float timeSinceLastInputPacket;
-
-    private InputState inputState;
-
     public void OnUpdate()
     {
         // Console Message
@@ -29,29 +24,7 @@ public class PlayerControllerClient
         // Rotate Camera Right
         if (Input.GetKey(KeyCode.E))
             CameraManager.Get.RotateY(cameraYSpeed);
-
-        // Input Packets
-        timeSinceLastInputPacket += Time.deltaTime;
-        if (timeSinceLastInputPacket > kInputPacketSendInterval)
-        {
-            timeSinceLastInputPacket = 0f;
-            SendInputPacket();
-        }
     }
 
-    private void SendInputPacket()
-    {
-        var nmc = NetworkManagerClient.Get;
-
-        var inputState = new InputState
-        {
-            up = Input.GetKey(KeyCode.W),
-            down = Input.GetKey(KeyCode.S),
-            left = Input.GetKey(KeyCode.A),
-            right = Input.GetKey(KeyCode.D)
-        };
-
-        var inputPacket = PacketHelperClient.MakeInputPacket(nmc.playerID, inputState);
-        nmc.SendPacket(inputPacket);
-    }
+    
 }

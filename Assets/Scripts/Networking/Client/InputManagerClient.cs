@@ -5,18 +5,15 @@ using Deft;
 
 public class InputManagerClient : Manager<InputManagerClient>
 {
-    private PlayerControllerClient controller;
-
-    public override void OnAwake()
+    public InputState GenerateInputState()
     {
-        base.OnAwake();
-        controller = new PlayerControllerClient();
-    }
-
-    public override void OnUpdate()
-    {
-        // TODO: Initialize these Managers in response to NetworkState becoming Playing?
-        if (NetworkManagerClient.Get.state == NetworkState.Playing)
-            controller.OnUpdate();
+        return new InputState
+        {
+            playerID = NetworkManagerClient.Get.playerID, // TODO: Data Singleton ConnectionInfo something?
+            up = Input.GetKey(KeyCode.W),
+            down = Input.GetKey(KeyCode.S),
+            left = Input.GetKey(KeyCode.A),
+            right = Input.GetKey(KeyCode.D)
+        };
     }
 }

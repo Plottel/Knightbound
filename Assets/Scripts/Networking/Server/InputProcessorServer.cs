@@ -1,10 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using Deft;
 using Deft.Networking;
 
-public class InputManagerServer : Manager<InputManagerServer>
+public class InputProcessorServer : Manager<InputProcessorServer>
 {
     private Dictionary<int, InputState> playerIDToInputState;
 
@@ -17,6 +18,12 @@ public class InputManagerServer : Manager<InputManagerServer>
     }
 
     void OnDestroy() => PlayerManagerServer.Get.eventPlayerJoined -= OnPlayerJoined;
+
+    // TODO: Factor out into Data Singleton storing all Inputs of all Clients
+    public InputState[] InputStates
+    {
+        get => playerIDToInputState.Values.ToArray();
+    }
 
     private void OnPlayerJoined(PlayerInfo playerInfo)
     {

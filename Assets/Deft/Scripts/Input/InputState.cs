@@ -7,6 +7,7 @@ namespace Deft
 {
     public class InputState
     {
+        public int playerID;
         public bool up;
         public bool down;
         public bool left;
@@ -14,6 +15,7 @@ namespace Deft
 
         public void Serialize(BinaryWriter writer)
         {
+            writer.Write(playerID);
             writer.Write(up);
             writer.Write(down);
             writer.Write(left);
@@ -22,6 +24,7 @@ namespace Deft
 
         public void Deserialize(BinaryReader reader)
         {
+            playerID = reader.ReadInt32();
             up = reader.ReadBoolean();
             down = reader.ReadBoolean();
             left = reader.ReadBoolean();

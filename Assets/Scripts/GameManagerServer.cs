@@ -14,7 +14,7 @@ public class GameManagerServer : GameManager<GameManagerServer>
 
         AddManager<NetworkManagerServer>();
         AddManager<PlayerManagerServer>();
-        AddManager<InputManagerServer>();
+        AddManager<InputProcessorServer>();
         AddManager<ReplicationManagerServer>();
         AddManager<VoxelManagerServer>();
     }

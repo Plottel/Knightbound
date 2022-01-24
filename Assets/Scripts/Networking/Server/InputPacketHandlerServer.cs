@@ -14,6 +14,6 @@ public class InputPacketHandlerServer : PacketHandlerServer
         var inputState = new InputState();
         inputState.Deserialize(reader);
 
-        InputManagerServer.Get.AddInputState(playerID, inputState);
+        InputProcessorServer.Get.AddInputState(playerID, inputState);
     }
 }
