@@ -45,16 +45,5 @@ public static class PacketHelperClient
         return stream;
     }
 
-    public static MemoryStream MakeInputPacket(int playerID, InputState inputState)
-    {
-        MemoryStream stream = new MemoryStream();
-        using (BinaryWriter writer = new BinaryWriter(stream, Encoding.Default, true))
-        {
-            writer.Write((int)PacketType.Input);
-            writer.Write(playerID);
-            inputState.Serialize(writer);
-        }
-
-        return stream;
-    }
+    
 }
