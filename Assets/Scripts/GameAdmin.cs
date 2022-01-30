@@ -1,70 +1,52 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.IO;
 using UnityEngine;
 using Deft;
-using Deft.Networking;
-using ParrelSync;
 
-public class GameManager<T_DerivedGM> : Manager<T_DerivedGM> where T_DerivedGM : Singleton
+
+public class GameAdmin : MonoBehaviour
 {
     private List<Singleton> managers;
 
     void Awake()
     {
         managers = new List<Singleton>();
-
-        OnAwake();
-        NotifyManagersAwake();
     }
 
-    void Start()
-    {
-        OnStart();
-        NotifyManagersStart();
-    }
+    void Start()        => NotifyManagersStart();
+    void Update()       => NotifyManagersUpdate();
+    void LateUpdate()   => NotifyManagersLateUpdate();
 
-    void Update()
-    {
-        OnUpdate();
-        NotifyManagersUpdate();
-    }
-
-    void LateUpdate()
-    {
-        OnLateUpdate();
-        NotifyManagersLateUpdate();
-    }
-
-    protected void NotifyManagersAwake()
+    public void NotifyManagersAwake()
     {
         foreach (var manager in managers)
             manager.OnAwake();
     }
 
-    protected void NotifyManagersStart()
+    public void NotifyManagersStart()
     {
         foreach (var manager in managers)
             manager.OnStart();
     }
 
-    protected void NotifyManagersUpdate()
+    public void NotifyManagersUpdate()
     {
         foreach (var manager in managers)
             manager.OnUpdate();
     }
 
-    protected void NotifyManagersLateUpdate()
+    public void NotifyManagersLateUpdate()
     {
         foreach (var manager in managers)
             manager.OnLateUpdate();
-    }    
+    }
 
-    protected void AddManager<T>() where T : Singleton
+    public void AddManager<T>() where T : Singleton
     {
         var manager = new GameObject().AddComponent<T>();
         manager.name = typeof(T).Name;
         manager.transform.parent = transform;
+        manager.EnsureInstance();
 
         managers.Add(manager);
     }

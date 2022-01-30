@@ -1,30 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Deft;
 
-public class GameManagerServer : GameManager<GameManagerServer>
+public class GameManagerServer : Manager<GameManagerServer>
 {
     private ushort port = 6005;
 
     private VoxelWorldData worldData;
-
-    public override void OnAwake()
-    {
-        base.OnAwake();
-
-        // Data Singletons
-        AddManager<InputBufferServer>();
-
-        // Managers
-        AddManager<NetworkManagerServer>();
-        AddManager<PlayerManagerServer>();
-        AddManager<ReceivedInputProcessorServer>();
-        AddManager<InputDispatcherServer>();
-        AddManager<ReplicationManagerServer>();
-
-        // Nothing-to-do-with-Networking
-        AddManager<VoxelManagerServer>();
-    }
 
     public override void OnStart()
     {

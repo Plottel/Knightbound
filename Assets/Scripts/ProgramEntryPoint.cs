@@ -11,6 +11,7 @@ public class ProgramEntryPoint : MonoBehaviour
     void Awake()
     {
         // Setup Game Resources
+        GameResources.EnsureInstance();
         GameResources.OnAwake();
 
         if (ClonesManager.IsClone())
@@ -27,21 +28,59 @@ public class ProgramEntryPoint : MonoBehaviour
         Destroy(gameObject);
     }
 
-    void InitializeClient()
-    {
-        SpawnManager<GameManagerClient>();
-    }
-
     void InitializeServer()
     {
-        SpawnManager<GameManagerServer>();
+        GameAdmin server = SpawnGameAdmin("Server");
+
+        // Data Singletons
+        server.AddManager<InputBufferServer>();
+
+        // Managers
+        server.AddManager<GameManagerServer>();
+        server.AddManager<NetworkManagerServer>();
+        server.AddManager<PlayerManagerServer>();
+        server.AddManager<ReceivedInputProcessorServer>();
+        server.AddManager<InputDispatcherServer>();
+        server.AddManager<ReplicationManagerServer>();
+        
+        // Nothing-to-do-with-Networking
+        server.AddManager<VoxelManagerServer>();
+
+        // Finalize
+        server.NotifyManagersAwake();
     }
 
-    protected T SpawnManager<T>() where T : Singleton
+    void InitializeClient()
     {
-        var manager = new GameObject().AddComponent<T>();
-        manager.name = typeof(T).Name;
+        GameAdmin client = SpawnGameAdmin("Client");
 
-        return manager;
+        // Data Singletons
+        client.AddManager<UserInputSettings>();
+        client.AddManager<InputBufferClient>();
+
+        // Managers
+        client.AddManager<GameManagerClient>();
+        client.AddManager<NetworkManagerClient>();
+        client.AddManager<PlayerManagerClient>();
+        client.AddManager<InputGeneratorClient>();
+        client.AddManager<LocalInputProcessor>();
+        client.AddManager<InputDispatcherClient>();
+        client.AddManager<ReceivedInputProcessorClient>();
+        client.AddManager<ReplicationManagerClient>();
+
+        // "Nothing to do with Networking"-Managers
+        client.AddManager<VoxelManagerClient>();
+        client.AddManager<CameraManager>();
+
+        // Finalize
+        client.NotifyManagersAwake();
+    }
+
+    GameAdmin SpawnGameAdmin(string name)
+    {
+        var admin = new GameObject().AddComponent<GameAdmin>();
+        admin.name = name;
+
+        return admin;
     }
 }

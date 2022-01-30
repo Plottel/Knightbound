@@ -15,17 +15,13 @@ namespace Deft
             }
         }
 
-        public override void OnAwake()
+        public override void EnsureInstance()
         {
             if (_instance == null)
-            {
-                _instance = FindObjectOfType<T>();
+                _instance = this as T;
 
-                if (_instance == null)
-                    Debug.Log("Instance doesnt exist");
-            }
-            else
-                Debug.LogError("Instance already set. Whoops.");
+            if (_instance == null)
+                Debug.Log("Failed to set Singleton Instance: " + GetType().Name);
         }
     }
 }
