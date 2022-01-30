@@ -27,6 +27,7 @@ public class NetworkManagerClient : Manager<NetworkManagerClient>
         SetPacketHandler<WelcomePacketHandlerClient>(PacketType.Welcome);
         SetPacketHandler<ConsoleMessagePacketHandlerClient>(PacketType.ConsoleMessage);
         SetPacketHandler<ReplicationPacketHandlerClient>(PacketType.Replication);
+        SetPacketHandler<InputPacketHandlerClient>(PacketType.Input);
         SetPacketHandler<SetPlayerInfoPacketHandlerClient>(PacketType.SetPlayerInfo);
         SetPacketHandler<SetVoxelDataPacketHandlerClient>(PacketType.SetVoxelData);
     }

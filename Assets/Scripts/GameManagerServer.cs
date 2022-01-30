@@ -12,10 +12,17 @@ public class GameManagerServer : GameManager<GameManagerServer>
     {
         base.OnAwake();
 
+        // Data Singletons
+        AddManager<InputBufferServer>();
+
+        // Managers
         AddManager<NetworkManagerServer>();
         AddManager<PlayerManagerServer>();
-        AddManager<InputManagerServer>();
+        AddManager<ReceivedInputProcessorServer>();
+        AddManager<InputDispatcherServer>();
         AddManager<ReplicationManagerServer>();
+
+        // Nothing-to-do-with-Networking
         AddManager<VoxelManagerServer>();
     }
 

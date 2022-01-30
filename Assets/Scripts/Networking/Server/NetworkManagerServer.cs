@@ -102,6 +102,11 @@ public class NetworkManagerServer : Manager<NetworkManagerServer>
         server.SendPacket(playerIDToPeerID[playerID], stream);
     }
 
+    public void BroadcastPacket(MemoryStream stream)
+    {
+        server.BroadcastPacket(stream);
+    }
+
     public void TrueBroadcastPacket(MemoryStream stream)
     {
         server.TrueBroadcastPacket(stream);

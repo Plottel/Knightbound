@@ -4,6 +4,7 @@ using UnityEngine;
 using Deft;
 using Deft.Networking;
 
+// TODO: Should be "Nothing-to-do-with-Networking"
 public class CameraManager : Manager<CameraManager>
 {
     private CharacterCamera characterCamera;
