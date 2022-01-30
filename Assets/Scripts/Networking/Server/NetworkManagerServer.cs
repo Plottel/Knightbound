@@ -107,6 +107,11 @@ public class NetworkManagerServer : Manager<NetworkManagerServer>
         server.BroadcastPacket(stream);
     }
 
+    public void BroadcastPacket(MemoryStream stream, int excludedPlayerID)
+    {
+        server.BroadcastPacket(stream, playerIDToPeerID[excludedPlayerID]);
+    }
+
     public void TrueBroadcastPacket(MemoryStream stream)
     {
         server.TrueBroadcastPacket(stream);

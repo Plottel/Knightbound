@@ -97,6 +97,14 @@ namespace Deft.Networking
             server.Broadcast(0, ref packet, localClient);
         }
 
+        public void BroadcastPacket(MemoryStream stream, uint excludedPeerID)
+        {
+            Packet packet = new Packet();
+            packet.Create(stream.GetBuffer(), (int)stream.Length, PacketFlags.Reliable);
+
+            server.Broadcast(0, ref packet, clients[excludedPeerID]);
+        }
+
         public void TrueBroadcastPacket(MemoryStream stream)
         {
             Packet packet = new Packet();

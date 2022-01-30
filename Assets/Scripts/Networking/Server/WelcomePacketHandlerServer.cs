@@ -31,23 +31,33 @@ public class WelcomePacketHandlerServer : PacketHandlerServer
 
             case WelcomeMessage.RequestSpawn:
                 {
-                    int playerID = reader.ReadInt32();
-                    PlayerInfo playerInfo = pms.InitialSpawnPlayer(playerID);
+                    int newPlayerID = reader.ReadInt32();
+                    PlayerInfo newPlayerInfo = pms.InitialSpawnPlayer(newPlayerID);
+                    PlayerInfo[] playerList = pms.GetPlayerList();
 
-                    rms.RegisterPlayer(playerID);
+                    rms.RegisterPlayer(newPlayerID);
 
                     // Don't duplicate Server objects on Local Client
-                    if (playerID != 0)
+                    if (newPlayerID != 0)
                     {
-                        rms.SendFullSync(playerID);
-                        VoxelManagerServer.Get.SendVoxelData(playerID);
+                        rms.SendFullSync(newPlayerID);
+                        VoxelManagerServer.Get.SendVoxelData(newPlayerID);
                     }
 
-                    var playerInfoPacket = PacketHelperServer.MakeSetPlayerInfoPacket(playerID, playerInfo.characterID);
-                    var spawnApprovedPacket = PacketHelperServer.MakeSpawnApprovedPacket();
+                    // Tell new player about all Players (including themselves)
+                    foreach (PlayerInfo playerInfo in playerList)
+                    {
+                        var playerInfoPacket = PacketHelperServer.MakeSetPlayerInfoPacket(playerInfo.playerID, playerInfo.characterID);
+                        nms.SendPacket(newPlayerID, playerInfoPacket);
+                    }
 
-                    nms.TrueBroadcastPacket(playerInfoPacket);
-                    nms.SendPacket(playerID, spawnApprovedPacket);
+                    // Tell all OTHER Players about new player
+                    var newPlayerInfoPacket = PacketHelperServer.MakeSetPlayerInfoPacket(newPlayerID, newPlayerInfo.characterID);
+                    nms.BroadcastPacket(newPlayerInfoPacket, newPlayerID);
+
+                    // Approve spawn for new player
+                    var spawnApprovedPacket = PacketHelperServer.MakeSpawnApprovedPacket();
+                    nms.SendPacket(newPlayerID, spawnApprovedPacket);            
                 }
                 break;
 

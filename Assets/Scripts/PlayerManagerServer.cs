@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using Deft;
 
@@ -51,4 +53,7 @@ public class PlayerManagerServer : Manager<PlayerManagerServer>
 
     public PlayerInfo GetPlayerInfo(int playerID)
         => playerIDToPlayerInfo[playerID];
+
+    public PlayerInfo[] GetPlayerList()
+        => playerIDToPlayerInfo.Values.ToArray();
 }
