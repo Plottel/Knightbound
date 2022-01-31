@@ -6,6 +6,10 @@ using Deft.Networking;
 
 public class GameResources : Manager<GameResources>
 {
+    // TODO: Move out of here. Consider ConnectionSettings like UserInputSettings ... ?
+    public const string hostName = "127.0.0.1";
+    public const ushort port = 6005;
+
     public NetworkObjectMap NetworkPrefabs;
     public Texture2D[] BlockTextures;
 

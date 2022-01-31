@@ -16,6 +16,8 @@ namespace Deft.Networking
         private Dictionary<uint, Peer> clients;
         private Peer localClient;
 
+        public bool IsActive { get; private set; } = false;
+
         public void LaunchServer(ushort port)
         {
             var address = new Address();
@@ -25,6 +27,8 @@ namespace Deft.Networking
             server.Create(address, 8);
 
             clients = new Dictionary<uint, Peer>();
+
+            IsActive = true;
         }
 
         public bool PumpPacket(MemoryStream packetStream)

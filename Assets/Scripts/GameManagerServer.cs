@@ -5,8 +5,6 @@ using Deft;
 
 public class GameManagerServer : Manager<GameManagerServer>
 {
-    private ushort port = 6005;
-
     private VoxelWorldData worldData;
 
     public override void OnStart()
@@ -29,8 +27,5 @@ public class GameManagerServer : Manager<GameManagerServer>
         };
 
         VoxelManagerServer.Get.GenerateWorld(worldData, GameResources.Get.BlockTextures);
-
-        // Launch Server
-        NetworkManagerServer.Get.LaunchServer(port);
     }
 }

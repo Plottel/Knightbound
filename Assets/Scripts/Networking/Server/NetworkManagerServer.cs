@@ -69,7 +69,8 @@ public class NetworkManagerServer : Manager<NetworkManagerServer>
 
     public override void OnUpdate()
     {
-        HandleIncomingPackets();
+        if (server.IsActive)
+            HandleIncomingPackets();
     }
 
     public void HandleIncomingPackets()
