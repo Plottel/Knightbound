@@ -10,6 +10,9 @@ public class GameResources : Manager<GameResources>
     public const string hostName = "127.0.0.1";
     public const ushort port = 6005;
 
+    public Canvas CanvasTemplate;
+    public UIPanelCache GamePanels;
+
     public NetworkObjectMap NetworkPrefabs;
     public Texture2D[] BlockTextures;
 
@@ -17,6 +20,7 @@ public class GameResources : Manager<GameResources>
     {
         base.OnAwake();
 
+        // TODO: Refactor to common NetworkManager class that initializes this.
         // Setup Networking
         ENet.Library.Initialize();
 

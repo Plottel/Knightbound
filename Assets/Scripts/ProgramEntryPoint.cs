@@ -57,6 +57,7 @@ public class ProgramEntryPoint : MonoBehaviour
         // Data Singletons
         client.AddManager<UserInputSettings>();
         client.AddManager<InputBufferClient>();
+        client.AddManager<UIView>();
 
         // Managers
         client.AddManager<GameManagerClient>();
@@ -68,7 +69,9 @@ public class ProgramEntryPoint : MonoBehaviour
         client.AddManager<ReceivedInputProcessorClient>();
         client.AddManager<ReplicationManagerClient>();
 
+
         // "Nothing to do with Networking"-Managers
+        client.AddManager<UIController>();
         client.AddManager<VoxelManagerClient>();
         client.AddManager<CameraManager>();
 
