@@ -8,12 +8,12 @@ using Deft.Networking;
 
 public class VoxelManagerServer : Manager<VoxelManagerServer>
 {
-    private VoxelWorldData worldData;
+    private WorldData worldData;
     private TextureAtlas atlas;
 
-    private VoxelMesh voxelMesh;
+    private WorldMesh voxelMesh;
 
-    public void GenerateWorld(VoxelWorldData newWorldData, Texture2D[] textures)
+    public void GenerateWorld(WorldData newWorldData, Texture2D[] textures)
     {
         // Set Data
         worldData = newWorldData;

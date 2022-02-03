@@ -5,7 +5,7 @@ using Deft;
 
 public class GameManagerServer : Manager<GameManagerServer>
 {
-    private VoxelWorldData worldData;
+    private WorldData worldData;
 
     public override void OnStart()
     {
@@ -15,8 +15,8 @@ public class GameManagerServer : Manager<GameManagerServer>
         ReplicationManagerClient.Get.SetNetworkContext(ReplicationManagerServer.Get.NetworkContext);
 
         // Setup Server Simulation
-        worldData = new VoxelWorldData();
-        worldData.voxelData = new int[,]
+        worldData = new WorldData();
+        worldData.blocks = new int[,]
         {
             {0, 1, 1, 1, 1, 0},
             {1, 2, 2, 2, 2, 1},

@@ -11,7 +11,7 @@ public static class VoxelMeshGenerator
     static List<Vector2> uvs;
     static TextureAtlas atlas;
 
-    public static VoxelMesh GenerateMesh(VoxelWorldData data, TextureAtlas textures)
+    public static WorldMesh GenerateMesh(WorldData data, TextureAtlas textures)
     {
         // Init Data
         mesh = new Mesh();
@@ -23,7 +23,7 @@ public static class VoxelMeshGenerator
         GenerateMeshData(data);
         ApplyMeshData();
         
-        VoxelMesh result = CreateMeshObject();
+        WorldMesh result = CreateMeshObject();
 
         // Clear Data
         vertices.Clear(); 
@@ -35,13 +35,13 @@ public static class VoxelMeshGenerator
         return result;
     }
 
-    static void GenerateMeshData(VoxelWorldData data)
+    static void GenerateMeshData(WorldData data)
     {
         for (int x = 0; x < data.Width; ++x)
         {
             for (int z = 0; z < data.Depth; ++z)
             {
-                if (data.GetBlockType(x, z) != BlockType.Air)
+                if (WorldUtils.GetBlockType(data, x, 0, z) != BlockType.Air)
                 {
                     var blockPosition = new Vector3(x, 0, z);
                     AddCubeMesh(blockPosition, x, z, data);
@@ -62,23 +62,23 @@ public static class VoxelMeshGenerator
         mesh.RecalculateBounds();
     }
 
-    static void AddCubeMesh(Vector3 position, int x, int z, VoxelWorldData data)
+    static void AddCubeMesh(Vector3 position, int x, int z, WorldData data)
     {
         for (int i = 0; i < 6; ++i)
         {
-            var direction = (VoxelDirection)i;
+            var direction = (GridDirection)i;
+            int blockType = WorldUtils.GetBlockType(data, x, 0, z);
+            int neighbourBlockType = WorldUtils.GetNeighborBlockType(data, x, 0, z, direction);
 
             // Only draw faces facing Air.
-            // To decouple, this should simply be fetching an indexed texture
-            // If there is no texture (i.e. air), then we don't AddCubeFaceMesh
-            if (data.GetNeighborBlockType(x, z, direction) == BlockType.Air)
-                AddCubeFaceMesh((VoxelDirection)i, position, data.GetBlockType(x, z));
+            if (neighbourBlockType == BlockType.Air)
+                AddCubeFaceMesh(direction, position, blockType);
         }
     }
 
-    static void AddCubeFaceMesh(VoxelDirection direction, Vector3 position, int blockType)
+    static void AddCubeFaceMesh(GridDirection direction, Vector3 position, int blockType)
     {
-        Vector3[] faceVertices = VoxelMeshUtils.GetFaceVertices6Verts(direction, position);
+        Vector3[] faceVertices = WorldMeshUtils.GetFaceVertices6Verts(direction, position);
 
         // Fetch 6 vertices and 6 Triangles
         vertices.AddRange(faceVertices);
@@ -116,9 +116,9 @@ public static class VoxelMeshGenerator
         uvs.Add(bottomRight);
     }
 
-    static VoxelMesh CreateMeshObject()
+    static WorldMesh CreateMeshObject()
     {
-        VoxelMesh result = new GameObject("VoxelMesh").AddComponent<VoxelMesh>();
+        WorldMesh result = new GameObject("VoxelMesh").AddComponent<WorldMesh>();
         result.SetMesh(mesh, atlas.GetTexture());
 
         return result;

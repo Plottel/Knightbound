@@ -9,7 +9,7 @@ public class SetVoxelDataPacketHandlerClient : PacketHandlerClient
 {
     public override void HandlePacket(string originIP, BinaryReader reader)
     {
-        VoxelWorldData worldData = new VoxelWorldData();
+        WorldData worldData = new WorldData();
         Texture2D[] textures = GameResources.Get.BlockTextures;
 
         worldData.Deserialize(reader);

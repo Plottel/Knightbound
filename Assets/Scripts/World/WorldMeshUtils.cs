@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public static class VoxelMeshUtils
+public static class WorldMeshUtils
 {
     private static Vector3[] cubeVertexOffsets = new Vector3[]
     {
@@ -47,7 +47,7 @@ public static class VoxelMeshUtils
         return result;
     }
 
-    public static Vector3[] GetFaceVertices4Verts(VoxelDirection direction, Vector3 position)
+    public static Vector3[] GetFaceVertices4Verts(GridDirection direction, Vector3 position)
     {
         Vector3[] result = new Vector3[4];
         for (int i = 0; i < 4; ++i)
@@ -56,7 +56,7 @@ public static class VoxelMeshUtils
         return result;
     }
 
-    public static Vector3[] GetFaceVertices6Verts(VoxelDirection direction, Vector3 position)
+    public static Vector3[] GetFaceVertices6Verts(GridDirection direction, Vector3 position)
     {
         Vector3[] result = new Vector3[6];
         for (int i = 0; i < 6; ++i)
