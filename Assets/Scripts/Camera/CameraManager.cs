@@ -22,14 +22,17 @@ public class CameraManager : Manager<CameraManager>
 
     public override void OnStart()
     {
-        GameManagerClient.Get.eventBeginSimulation += OnBeginSimulation;
+        GameStateManager.Get.eventEnterGameState += OnEnterGameState;
     }
 
     private void OnDestroy()
-        => GameManagerClient.Get.eventBeginSimulation -= OnBeginSimulation;
+        => GameStateManager.Get.eventEnterGameState -= OnEnterGameState;
 
-    private void OnBeginSimulation()
+    private void OnEnterGameState(GameState state)
     {
+        if (state != GameState.InGame)
+            return;
+
         int characterID = PlayerManagerClient.Get.GetCharacterID(NetworkManagerClient.Get.playerID);
 
         if (ReplicationManagerClient.Get.TryGetNetworkObject(characterID, out var player))

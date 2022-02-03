@@ -60,7 +60,7 @@ public class ProgramEntryPoint : MonoBehaviour
         client.AddManager<UIView>();
 
         // Managers
-        client.AddManager<GameManagerClient>();
+        client.AddManager<GameStateManager>();
         client.AddManager<NetworkManagerClient>();
         client.AddManager<PlayerManagerClient>();
         client.AddManager<InputGeneratorClient>();

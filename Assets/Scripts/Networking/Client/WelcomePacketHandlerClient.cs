@@ -40,7 +40,7 @@ public class WelcomePacketHandlerClient : PacketHandlerClient
                 {
                     // Begin Playing! ....
                     nmc.state = NetworkState.Playing;
-                    GameManagerClient.Get.BeginSimulation();
+                    GameStateManager.Get.SetState(GameState.InGame);
                 }
                 break;
         }
