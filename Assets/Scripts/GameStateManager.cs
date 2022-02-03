@@ -30,19 +30,4 @@ public class GameStateManager : Manager<GameStateManager>
             eventEnterGameState?.Invoke(newState);
         }
     }
-
-
-
-    //public override void OnStart()
-    //{
-    //    base.OnStart();
-    //    StartCoroutine(JoinServer());
-    //}
-
-    //IEnumerator JoinServer()
-    //{
-    //    //yield return new WaitForSeconds(0.5f);
-    //    yield return null;
-    //    NetworkManagerClient.Get.JoinServer(hostName, port);
-    //}
 }
