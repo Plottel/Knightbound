@@ -17,7 +17,7 @@ public class GameManagerServer : Manager<GameManagerServer>
         // Setup Server Simulation
         worldData = new WorldData();
 
-        int worldSize = 64;
+        int worldSize = 16;
         worldData.blocks = new int[worldSize, worldSize];
 
         for (int x = 0; x < worldSize; ++x)
