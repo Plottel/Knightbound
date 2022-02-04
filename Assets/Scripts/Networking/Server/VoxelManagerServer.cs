@@ -13,11 +13,11 @@ public class VoxelManagerServer : Manager<VoxelManagerServer>
 
     private WorldMesh voxelMesh;
 
-    public void GenerateWorld(WorldData newWorldData, Texture2D[] textures)
+    public void GenerateWorld(WorldData newWorldData, TextureAtlas newAtlas)
     {
         // Set Data
         worldData = newWorldData;
-        atlas = new TextureAtlas(textures); // TODO: BAD! Don't create Atlas here!
+        atlas = newAtlas;
 
         // Generate Mesh Game Object
         voxelMesh = VoxelMeshGenerator.GenerateMesh(worldData, atlas);

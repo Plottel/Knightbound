@@ -16,16 +16,18 @@ public class GameManagerServer : Manager<GameManagerServer>
 
         // Setup Server Simulation
         worldData = new WorldData();
-        worldData.blocks = new int[,]
-        {
-            {0, 1, 1, 1, 1, 0},
-            {1, 2, 2, 2, 2, 1},
-            {1, 2, 2, 2, 2, 1},
-            {1, 2, 2, 2, 2, 1},
-            {1, 2, 2, 2, 2, 1},
-            {0, 1, 1, 1, 1, 0},
-        };
 
-        VoxelManagerServer.Get.GenerateWorld(worldData, GameResources.Get.BlockTextures);
+        int worldSize = 64;
+        worldData.blocks = new int[worldSize, worldSize];
+
+        for (int x = 0; x < worldSize; ++x)
+        {
+            for (int z = 0; z < worldSize; ++z)
+            {
+                worldData.blocks[x, z] = Random.Range(1, 3);
+            }
+        }
+
+        VoxelManagerServer.Get.GenerateWorld(worldData, GameResources.Get.BlockAtlas);
     }
 }

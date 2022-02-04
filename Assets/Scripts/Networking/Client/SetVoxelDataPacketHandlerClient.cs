@@ -10,10 +10,10 @@ public class SetVoxelDataPacketHandlerClient : PacketHandlerClient
     public override void HandlePacket(string originIP, BinaryReader reader)
     {
         WorldData worldData = new WorldData();
-        Texture2D[] textures = GameResources.Get.BlockTextures;
+        TextureAtlas atlas = GameResources.Get.BlockAtlas;
 
         worldData.Deserialize(reader);
 
-        VoxelManagerClient.Get.GenerateWorld(worldData, textures);
+        VoxelManagerClient.Get.GenerateWorld(worldData, atlas);
     }
 }

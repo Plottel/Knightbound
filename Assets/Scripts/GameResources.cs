@@ -15,6 +15,7 @@ public class GameResources : Manager<GameResources>
 
     public NetworkObjectMap NetworkPrefabs;
     public Texture2D[] BlockTextures;
+    [HideInInspector] public TextureAtlas BlockAtlas;
 
     public override void OnAwake()
     {
@@ -31,6 +32,10 @@ public class GameResources : Manager<GameResources>
         // Register Netowrk Prefabs
         for (int i = 0; i < prefabs.Length; i++)
             NetworkPrefabRegistry.Register(i, prefabs[i]);
+
+        // TODO: Clean this up with a custom editor to pack the textures in Edit Mode.
+        // Create Block Atlas
+        BlockAtlas = new TextureAtlas(BlockTextures);
     }
 
     private void OnDestroy()

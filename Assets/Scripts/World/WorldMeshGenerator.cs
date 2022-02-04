@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering;
 using Deft;
 
 public static class VoxelMeshGenerator
@@ -15,6 +16,7 @@ public static class VoxelMeshGenerator
     {
         // Init Data
         mesh = new Mesh();
+        mesh.indexFormat = IndexFormat.UInt32;
         vertices = new List<Vector3>();
         triangles = new List<int>();
         uvs = new List<Vector2>();
