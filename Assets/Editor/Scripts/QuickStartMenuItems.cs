@@ -2,7 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
+
+#if UNITY_EDITOR
 using ParrelSync;
+#endif
 
 public static class QuickStartMenuItems
 {
@@ -10,6 +13,7 @@ public static class QuickStartMenuItems
     const string AUTO_HOST_JOIN = "AutoHostJoin";
     const string CLEAR = "Clear";
 
+#if UNITY_EDITOR
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
     public static void OnStart()
     {
@@ -30,6 +34,7 @@ public static class QuickStartMenuItems
             return; // Prevent other QuickStarts executing.
         }
     }
+#endif
 
     [MenuItem(MENU + AUTO_HOST_JOIN)]
     public static void EnableAutoHostJoin()

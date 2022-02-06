@@ -9,7 +9,7 @@ public class Player : NetworkObject
     public override int GetClassID() => (int)NetworkObjectType.Player;
 
     public Vector3 direction;
-    private float speed = 2f;
+    private float speed = 5f;
 
     private void Update()
     {

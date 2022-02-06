@@ -1,19 +1,25 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using ParrelSync;
 using Deft;
 
-public class ProgramEntryPoint : MonoBehaviour
+#if UNITY_EDITOR
+using ParrelSync;
+#endif
+
+public class ProgramEntryPoint : Manager<ProgramEntryPoint>
 {
     public GameResources GameResources;
 
     void Awake()
     {
+        EnsureInstance();
+
         // Setup Game Resources
         GameResources.EnsureInstance();
         GameResources.OnAwake();
 
+#if UNITY_EDITOR
         if (ClonesManager.IsClone())
             InitializeClient();
         else
@@ -21,6 +27,9 @@ public class ProgramEntryPoint : MonoBehaviour
             InitializeServer();
             InitializeClient();
         }
+#else // In a Build...
+        InitializeClient();
+#endif
     }
 
     private void Start()
@@ -28,7 +37,7 @@ public class ProgramEntryPoint : MonoBehaviour
         Destroy(gameObject);
     }
 
-    void InitializeServer()
+    public void InitializeServer()
     {
         GameAdmin server = SpawnGameAdmin("Server");
 
@@ -50,7 +59,7 @@ public class ProgramEntryPoint : MonoBehaviour
         server.NotifyManagersAwake();
     }
 
-    void InitializeClient()
+    public void InitializeClient()
     {
         GameAdmin client = SpawnGameAdmin("Client");
 

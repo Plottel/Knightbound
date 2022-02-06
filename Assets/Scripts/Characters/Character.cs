@@ -29,6 +29,7 @@ public class Character : MonoBehaviour
     void OnValidate() 
         => FetchReferences();
 
+    #region GIZMOS
     void OnDrawGizmos()
     {
         if (data != null && data.armatureData != null)
@@ -44,4 +45,5 @@ public class Character : MonoBehaviour
             }
         }
     }
+    #endregion
 }
