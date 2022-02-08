@@ -8,7 +8,7 @@ using NativeWebSocket;
 public class NetworkTest : MonoBehaviour
 {
     const string wwwURI = "https://izo74v7osh.execute-api.us-east-1.amazonaws.com/default/HelloWorld";
-    const string webSocketURI = "wss://b1y9fhlqtj.execute-api.us-east-1.amazonaws.com/production";
+    const string webSocketURI = "wss://4ta53xkcra.execute-api.us-east-1.amazonaws.com/dev";
 
     private WebSocket natSocket;
 
