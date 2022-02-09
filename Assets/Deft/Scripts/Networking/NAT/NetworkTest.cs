@@ -8,7 +8,7 @@ using NativeWebSocket;
 public class NetworkTest : MonoBehaviour
 {
     const string wwwURI = "https://izo74v7osh.execute-api.us-east-1.amazonaws.com/default/HelloWorld";
-    const string webSocketURI = "wss://4ta53xkcra.execute-api.us-east-1.amazonaws.com/dev";
+    const string webSocketURI = "wss://2r9nszqos1.execute-api.us-east-1.amazonaws.com/dev";
 
     private WebSocket natSocket;
 
@@ -30,14 +30,17 @@ public class NetworkTest : MonoBehaviour
 
     private void Update()
     {
+        Debug.Log("Updating");
         if (Input.GetKeyDown(KeyCode.Space))
             SendSocketMessage("Ping");
 
         Debug.Log("Socket State: " + natSocket.State.ToString());
+        natSocket.DispatchMessageQueue();
     }
 
     async void SendSocketMessage(string message)
     {
+        Debug.Log("Sending Msg");
         await natSocket.SendText(message);
     }
 
