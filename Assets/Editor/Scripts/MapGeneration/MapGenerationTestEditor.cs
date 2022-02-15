@@ -13,6 +13,6 @@ public class MapGenerationTestEditor : Editor
         var tester = target as MapGenerationTest;
 
         if (GUILayout.Button("Generate Map"))
-            tester.GenerateMap();
+            tester.UpdateMap();
     }
 }

@@ -4,6 +4,7 @@ using UnityEngine;
 
 [RequireComponent(typeof(MapGenerator), typeof(MapRenderer), typeof(MeshFilter))]
 [RequireComponent(typeof(MeshRenderer))]
+[ExecuteInEditMode]
 public class MapGenerationTest : MonoBehaviour
 {
     public MapGenerator mapGenerator;
@@ -11,24 +12,32 @@ public class MapGenerationTest : MonoBehaviour
 
     private MeshRenderer unityRenderer;
 
-    private void OnValidate()
-    {
-        GenerateMap();
-    }
-
-    public void GenerateMap()
+    void Awake()
     {
         FetchComponentReferences();
+    }
 
+    private void OnValidate()
+    {
+        FetchComponentReferences();
+    }
+
+    [ExecuteInEditMode]
+    private void Update()
+    {
+        UpdateMap();
+    }
+
+    public void UpdateMap()
+    {
         MapData mapData = mapGenerator.GenerateMapData();
         Texture2D mapTexture = mapRenderer.GenerateMapTexture(mapData);
 
         unityRenderer.sharedMaterial.mainTexture = mapTexture;
         transform.localScale = new Vector3(mapData.width, 0, mapData.depth);
-        Debug.Log("Generating!");
     }
 
-    void FetchComponentReferences()
+    public void FetchComponentReferences()
     {
         if (mapGenerator == null) mapGenerator = GetComponent<MapGenerator>();
         if (mapRenderer == null) mapRenderer = GetComponent<MapRenderer>();

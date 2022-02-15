@@ -308,11 +308,17 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1702390973}
-  - component: {fileID: 1702390972}
-  - component: {fileID: 1702390971}
   - component: {fileID: 1702390970}
   - component: {fileID: 1702390969}
+  - component: {fileID: 1702390971}
+  - component: {fileID: 1702390972}
   - component: {fileID: 1702390968}
+  - component: {fileID: 1702390974}
+  - component: {fileID: 1702390975}
+  - component: {fileID: 1702390979}
+  - component: {fileID: 1702390978}
+  - component: {fileID: 1702390977}
+  - component: {fileID: 1702390976}
   m_Layer: 0
   m_Name: MapGenerationTest
   m_TagString: Untagged
@@ -396,13 +402,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4324a1c869efa214bb57b6c89f2270ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  passes:
+  - {fileID: 1702390977}
+  - {fileID: 1702390976}
   errorColor: {r: 1, g: 0, b: 1, a: 0}
-  heightThresholds:
-  - 0.5
-  - 1
-  heightColors:
-  - {r: 0.5849056, g: 0.31820607, b: 0.1682983, a: 0}
-  - {r: 0.11226347, g: 0.6886792, b: 0.068218224, a: 0}
+  roadColor: {r: 0, g: 0, b: 0, a: 0}
 --- !u!114 &1702390972
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -415,13 +419,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0eb4af1943ab77f4ea32f551147f324f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  passes:
+  - {fileID: 1702390974}
+  - {fileID: 1702390975}
+  - {fileID: 1702390979}
+  - {fileID: 1702390978}
   size: 512
-  seed: 33
-  NoiseScale: 43.6
-  Octaves: 3
-  Persistance: 0.181
-  Lacunarity: 2.11
-  Offset: {x: 2.39, y: 0}
+  seed: 206
 --- !u!4 &1702390973
 Transform:
   m_ObjectHideFlags: 0
@@ -436,3 +440,94 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1702390974
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1702390967}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bc757a97f31f917439454526f239f290, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  NoiseScale: 150
+  Octaves: 5
+  Persistance: 0.5
+  Lacunarity: 2
+  Offset: {x: 1.36, y: 0.69}
+--- !u!114 &1702390975
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1702390967}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e4d49c2f1b96bb34d937bdbc7c217e83, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TerrainHeightThresholds:
+  - 0.3
+  - 0.35
+  - 0.7
+  - 0.8
+  - 1
+--- !u!114 &1702390976
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1702390967}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 04f56a6578cc20b438552c8bf209c77b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  roadColor: {r: 0.8773585, g: 0.6287507, b: 0.22761661, a: 0}
+--- !u!114 &1702390977
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1702390967}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a392481b7cd23ab4e9ea8ca3c00c547a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  terrainColors:
+  - {r: 0, g: 0.5425916, b: 1, a: 0}
+  - {r: 0.9150943, g: 0.8532977, b: 0.3237362, a: 0}
+  - {r: 0.15217929, g: 0.5849056, b: 0.1517444, a: 0}
+  - {r: 0.654902, g: 0.7337488, b: 0.77254903, a: 0}
+  - {r: 0.9716981, g: 0.9716981, b: 0.9716981, a: 0}
+--- !u!114 &1702390978
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1702390967}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ec46d578ac51aff42a5858cebf955c71, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  RoadCount: 3
+--- !u!114 &1702390979
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1702390967}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 09f57aec67069e04c85beecc7ec030a7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
