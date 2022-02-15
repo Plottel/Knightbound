@@ -45,7 +45,7 @@ public class ProgramEntryPoint : Manager<ProgramEntryPoint>
         server.AddManager<InputBufferServer>();
 
         // Managers
-        server.AddManager<GameManagerServer>();
+        server.AddManager<ServerEntryPoint>();
         server.AddManager<NetworkManagerServer>();
         server.AddManager<PlayerManagerServer>();
         server.AddManager<ReceivedInputProcessorServer>();
