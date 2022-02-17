@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
-public abstract class MapGenerationPass
+public abstract class MapRenderPass
 {
-    public abstract void Execute(MapData data);
+    public abstract void Execute(MapData data, Color[] pixels);
 }

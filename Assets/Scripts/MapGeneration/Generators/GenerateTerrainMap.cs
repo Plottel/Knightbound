@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class GenerateTerrainMap : MapGenerationPass
 {
-    public float[] TerrainHeightThresholds;
+    public float[] TerrainHeightThresholds = new float[0];
 
     public override void Execute(MapData data)
     {

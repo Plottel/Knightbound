@@ -4,20 +4,11 @@ using UnityEngine;
 
 public class MapGenerator : MonoBehaviour
 {
-    public MapGenerationPass[] passes;
+    [SerializeReference]
+    public List<MapGenerationPass> passes = new List<MapGenerationPass>();
 
     public int size = 1;
     public int seed = 1;
-
-    void Awake()
-    {
-        passes = GetComponentsInChildren<MapGenerationPass>();
-    }
-
-    void OnValidate()
-    {
-        passes = GetComponentsInChildren<MapGenerationPass>();
-    }
 
     public MapData GenerateMapData()
     {

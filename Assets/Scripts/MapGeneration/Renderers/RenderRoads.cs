@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class RenderRoads : MapFabricationPass
+public class RenderRoads : MapRenderPass
 {
     public Color roadColor;
 
@@ -20,6 +20,7 @@ public class RenderRoads : MapFabricationPass
     }
 
     // Bresenham Line Traversal
+    // TODO: WRONG.
     List<Vector2> PointsOnLine(Vector2 start, Vector2 end)
     {
         var result = new List<Vector2>();

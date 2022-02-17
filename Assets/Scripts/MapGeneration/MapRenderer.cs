@@ -4,27 +4,15 @@ using UnityEngine;
 
 public class MapRenderer : MonoBehaviour
 {
-    public MapFabricationPass[] passes;
-
-    public Color errorColor;
-    public Color roadColor;
-
-    void Awake()
-    {
-        passes = GetComponentsInChildren<MapFabricationPass>();
-    }
-
-    void OnValidate()
-    {
-        passes = GetComponentsInChildren<MapFabricationPass>();
-    }
+    [SerializeReference]
+    public List<MapRenderPass> passes = new List<MapRenderPass>();
 
     public Texture2D GenerateMapTexture(MapData data)
     {
         var result = new Texture2D(data.width, data.depth);
         var pixels = new Color[data.width * data.depth];
 
-        foreach (MapFabricationPass pass in passes)
+        foreach (MapRenderPass pass in passes)
             pass.Execute(data, pixels);
 
         // Finalize Texture
