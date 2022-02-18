@@ -5,5 +5,5 @@ using UnityEngine;
 [System.Serializable]
 public abstract class MapFabricationPass
 {
-    public abstract void Execute(MapData data, Color[] pixels);
+    public abstract void Execute(MapData data, GameObject root);
 }

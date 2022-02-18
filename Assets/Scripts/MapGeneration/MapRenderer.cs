@@ -2,17 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MapRenderer : MonoBehaviour
+public static class MapRenderer
 {
-    [SerializeReference]
-    public List<MapRenderPass> passes = new List<MapRenderPass>();
-
-    public Texture2D GenerateMapTexture(MapData data)
+    public static Texture2D GenerateMapTexture(MapData data, MapRenderSettings settings)
     {
+        if (settings == null)
+            return new Texture2D(0, 0);
+
         var result = new Texture2D(data.width, data.depth);
         var pixels = new Color[data.width * data.depth];
 
-        foreach (MapRenderPass pass in passes)
+        foreach (MapRenderPass pass in settings.passes)
             pass.Execute(data, pixels);
 
         // Finalize Texture

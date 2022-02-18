@@ -6,16 +6,13 @@ using UnityEngine;
 using UnityEditor;
 using Sirenix.OdinInspector;
 
-[CustomEditor(typeof(MapGenerationTest))]
+[CustomEditor(typeof(MapGenerationEditorSceneControls))]
 public class MapGenerationTestEditor : Editor
 {
     public override void OnInspectorGUI()
     {
         DrawDefaultInspector();
 
-        var tester = target as MapGenerationTest;
-
-        if (GUILayout.Button("Generate Map"))
-            tester.UpdateMap();
+        var tester = target as MapGenerationEditorSceneControls;
     }
 }

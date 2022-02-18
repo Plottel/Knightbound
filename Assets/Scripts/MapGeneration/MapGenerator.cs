@@ -2,25 +2,22 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MapGenerator : MonoBehaviour
+public static class MapGenerator
 {
-    [SerializeReference]
-    public List<MapGenerationPass> passes = new List<MapGenerationPass>();
-
-    public int size = 1;
-    public int seed = 1;
-
-    public MapData GenerateMapData()
+    public static MapData GenerateMapData(int seed, MapGenerationSettings settings)
     {
+        if (settings == null)
+            return new MapData();
+
         var result = new MapData();
 
         Random.InitState(seed);
 
         result.seed = seed;
-        result.width = size;
-        result.depth = size;
+        result.width = settings.size;
+        result.depth = settings.size;
 
-        foreach (MapGenerationPass pass in passes)
+        foreach (MapGenerationPass pass in settings.passes)
             pass.Execute(result);
 
         return result;
