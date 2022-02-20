@@ -8,21 +8,14 @@ using Deft.Networking;
 
 public class VoxelManagerServer : Manager<VoxelManagerServer>
 {
-    private WorldData worldData;
-    private TextureAtlas atlas;
+    MapData mapData;
+    GameObject mapObject;
 
-    private WorldMesh voxelMesh;
-
-    public void GenerateWorld(WorldData newWorldData, TextureAtlas newAtlas)
+    public void GenerateWorld(int seed)
     {
-        // Set Data
-        worldData = newWorldData;
-        atlas = newAtlas;
-
-        // Generate Mesh Game Object
-        voxelMesh = VoxelMeshGenerator.GenerateMesh(worldData, atlas);
-        voxelMesh.transform.parent = transform;
-        voxelMesh.transform.position = new Vector3(0, -0.5f, 0);
+        mapData = MapGenerator.GenerateMapData(seed, GameResources.Get.MapGenerationSettings);
+        mapObject = MapFabricator.FabricateMap(mapData, GameResources.Get.MapFabricationSettings);
+        mapObject.name = "Map";
     }
 
     public void SendVoxelData(int playerID)
@@ -32,9 +25,10 @@ public class VoxelManagerServer : Manager<VoxelManagerServer>
             using (BinaryWriter writer = new BinaryWriter(stream, Encoding.Default, true))
             {
                 writer.Write((int)PacketType.SetVoxelData);
-                worldData.Serialize(writer);
+                mapData.Serialize(writer);
             }
 
+            Debug.Log("Sending Map Data - Width: " + mapData.width + " Depth: " + mapData.depth);
             NetworkManagerServer.Get.SendPacket(playerID, stream);
         }
     }

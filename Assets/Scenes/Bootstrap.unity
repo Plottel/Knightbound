@@ -584,6 +584,8 @@ MonoBehaviour:
   BlockTextures:
   - {fileID: 2800000, guid: cfc9c463368365c4e9c0bc7f053c1f30, type: 3}
   - {fileID: 2800000, guid: 8c59967034a21f44ba6b47e445edfd12, type: 3}
+  MapGenerationSettings: {fileID: 11400000, guid: 6156413d6a720b7469c76aff8f438623, type: 2}
+  MapFabricationSettings: {fileID: 11400000, guid: 46e30678a7421ee41b6ec9ec3b3d2ec9, type: 2}
 --- !u!1 &1970128588
 GameObject:
   m_ObjectHideFlags: 0

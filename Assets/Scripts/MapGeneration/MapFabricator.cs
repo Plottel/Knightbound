@@ -2,17 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MapFabricator : MonoBehaviour
+public static class MapFabricator
 {
-    public List<MapFabricationPass> passes = new List<MapFabricationPass>();
-
-    public GameObject FabricateMap(MapData mapData)
+    public static GameObject FabricateMap(MapData mapData, MapFabricationSettings settings)
     {
         var map = new GameObject("Map");
 
-        foreach (MapFabricationPass pass in passes)
+        foreach (MapFabricationPass pass in settings.passes)
             pass.Execute(mapData, map);
 
         return map;
     }
+
+
 }

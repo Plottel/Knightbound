@@ -9,11 +9,12 @@ public class SetVoxelDataPacketHandlerClient : PacketHandlerClient
 {
     public override void HandlePacket(string originIP, BinaryReader reader)
     {
-        WorldData worldData = new WorldData();
+        MapData mapData = new MapData();
         TextureAtlas atlas = GameResources.Get.BlockAtlas;
 
-        worldData.Deserialize(reader);
+        mapData.Deserialize(reader);
+        Debug.Log("Deserializing MapData!" + "Width: " + mapData.width + " Depth: " + mapData.depth);
 
-        VoxelManagerClient.Get.GenerateWorld(worldData, atlas);
+        VoxelManagerClient.Get.GenerateWorld(mapData);
     }
 }

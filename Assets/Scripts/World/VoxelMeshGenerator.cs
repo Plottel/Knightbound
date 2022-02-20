@@ -12,7 +12,7 @@ public static class VoxelMeshGenerator
     static List<Vector2> uvs;
     static TextureAtlas atlas;
 
-    public static WorldMesh GenerateMesh(WorldData data, TextureAtlas textures)
+    public static WorldMesh GenerateMesh(MapData data, TextureAtlas textures)
     {
         // Init Data
         mesh = new Mesh();
@@ -37,11 +37,11 @@ public static class VoxelMeshGenerator
         return result;
     }
 
-    static void GenerateMeshData(WorldData data)
+    static void GenerateMeshData(MapData data)
     {
-        for (int x = 0; x < data.Width; ++x)
+        for (int x = 0; x < data.width; ++x)
         {
-            for (int z = 0; z < data.Depth; ++z)
+            for (int z = 0; z < data.depth; ++z)
             {
                 if (WorldUtils.GetBlockType(data, x, 0, z) != BlockType.Air)
                 {
@@ -64,7 +64,7 @@ public static class VoxelMeshGenerator
         mesh.RecalculateBounds();
     }
 
-    static void AddCubeMesh(Vector3 position, int x, int z, WorldData data)
+    static void AddCubeMesh(Vector3 position, int x, int z, MapData data)
     {
         for (int i = 0; i < 6; ++i)
         {

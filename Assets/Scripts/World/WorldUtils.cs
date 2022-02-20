@@ -18,17 +18,17 @@ public static class WorldUtils
         kNeighbourOffsets[(int)GridDirection.Back] = new Vector3Int(0, 0, -1);
     }
 
-    public static int GetBlockType(WorldData data, Vector3Int index)
+    public static int GetBlockType(MapData data, Vector3Int index)
         => GetBlockType(data, index.x, index.y, index.z);
 
-    public static int GetBlockType(WorldData data, int x, int y, int z)
+    public static int GetBlockType(MapData data, int x, int y, int z)
     {
-        if (x < 0 || x >= data.Width || z < 0 || z >= data.Depth || y != 0)
+        if (x < 0 || x >= data.width || z < 0 || z >= data.depth || y != 0)
             return 0;
-        return data.blocks[x, z];
+        return data.terrainMap[x, z];
     }
 
-    public static int GetNeighborBlockType(WorldData data, int x, int y, int z, GridDirection direction)
+    public static int GetNeighborBlockType(MapData data, int x, int y, int z, GridDirection direction)
     {
         Vector3Int neighbourOffset = kNeighbourOffsets[(int)direction];
         return GetBlockType(data, new Vector3Int(x, y, z) + neighbourOffset);

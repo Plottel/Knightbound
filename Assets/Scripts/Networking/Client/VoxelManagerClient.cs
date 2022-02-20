@@ -5,20 +5,13 @@ using Deft;
 
 public class VoxelManagerClient : Manager<VoxelManagerClient>
 {
-    private WorldData worldData;
-    private TextureAtlas atlas;
+    MapData mapData;
+    GameObject mapObject;
 
-    private WorldMesh voxelMesh;
-
-    public void GenerateWorld(WorldData newWorldData, TextureAtlas newAtlas)
+    public void GenerateWorld(MapData data)
     {
-        // Set Data
-        worldData = newWorldData;
-        atlas = newAtlas;
-
-        // Generate Mesh Game Object
-        voxelMesh = VoxelMeshGenerator.GenerateMesh(worldData, atlas);
-        voxelMesh.transform.parent = transform;
-        voxelMesh.transform.position = new Vector3(0, -0.5f, 0);
+        mapData = data;
+        mapObject = MapFabricator.FabricateMap(mapData, GameResources.Get.MapFabricationSettings);
+        mapObject.name = "Map";
     }
 }

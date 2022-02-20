@@ -17,6 +17,9 @@ public class GameResources : Manager<GameResources>
     public Texture2D[] BlockTextures;
     [HideInInspector] public TextureAtlas BlockAtlas;
 
+    public MapGenerationSettings MapGenerationSettings;
+    public MapFabricationSettings MapFabricationSettings;
+
     public override void OnAwake()
     {
         base.OnAwake();
