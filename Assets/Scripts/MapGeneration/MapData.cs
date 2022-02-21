@@ -22,8 +22,6 @@ public class MapData
 
     public void Serialize(BinaryWriter writer)
     {
-        Debug.Log("~~~~~ Serialize - W: " + width + " D: " + depth);
-
         writer.Write(width);
         writer.Write(depth);
 
@@ -46,7 +44,5 @@ public class MapData
             for (int z = 0; z < depth; ++z)
                 terrainMap[x, z] = reader.ReadInt32();
         }
-
-        Debug.Log("~~~~~ Deserialize - W: " + width + " D: " + depth);
     }
 }

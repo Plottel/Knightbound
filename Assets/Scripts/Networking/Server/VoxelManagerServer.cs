@@ -20,15 +20,19 @@ public class VoxelManagerServer : Manager<VoxelManagerServer>
 
     public void SendVoxelData(int playerID)
     {
+        var message = new GenerateMapMessage
+        {
+            seed = mapData.seed,
+        };
+
         using (MemoryStream stream = new MemoryStream())
         {
             using (BinaryWriter writer = new BinaryWriter(stream, Encoding.Default, true))
             {
                 writer.Write((int)PacketType.SetVoxelData);
-                mapData.Serialize(writer);
+                message.Serialize(writer);
             }
 
-            Debug.Log("Sending Map Data - Width: " + mapData.width + " Depth: " + mapData.depth);
             NetworkManagerServer.Get.SendPacket(playerID, stream);
         }
     }
