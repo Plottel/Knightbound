@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public static class WorldMeshUtils
+public static class VoxelMeshUtils
 {
     private static Vector3[] cubeVertexOffsets = new Vector3[]
     {

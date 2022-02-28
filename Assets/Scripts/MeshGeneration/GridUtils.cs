@@ -3,11 +3,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public static class WorldUtils
+public static class GridUtils
 {
     private static Vector3Int[] kNeighbourOffsets;
 
-    static WorldUtils()
+    static GridUtils()
     {
         kNeighbourOffsets = new Vector3Int[Enum.GetValues(typeof(GridDirection)).Length];
         kNeighbourOffsets[(int)GridDirection.Up] = new Vector3Int(0, 1, 0);
@@ -18,19 +18,24 @@ public static class WorldUtils
         kNeighbourOffsets[(int)GridDirection.Back] = new Vector3Int(0, 0, -1);
     }
 
-    public static int GetBlockType(MapData data, Vector3Int index)
-        => GetBlockType(data, index.x, index.y, index.z);
-
-    public static int GetBlockType(MapData data, int x, int y, int z)
+    public static int GetValue(int[,] data, int x, int y, int z)
     {
-        if (x < 0 || x >= data.width || z < 0 || z >= data.depth || y != 0)
+        // TODO: Potential bottleneck of fetching 2 variables for every time we check an index
+        int width = data.GetLength(0);
+        int depth = data.GetLength(1);
+
+        if (x < 0 || x >= width || z < 0 || z >= depth || y != 0)
             return 0;
-        return data.terrainMap[x, z];
+        return data[x, z];
     }
 
-    public static int GetNeighborBlockType(MapData data, int x, int y, int z, GridDirection direction)
+    public static int GetValue(int[,] data, Vector3Int index)
+        => GetValue(data, index.x, index.y, index.z);
+
+
+    public static int GetNeighbourValue(int[,] data, int x, int y, int z, GridDirection neighbourDirection)
     {
-        Vector3Int neighbourOffset = kNeighbourOffsets[(int)direction];
-        return GetBlockType(data, new Vector3Int(x, y, z) + neighbourOffset);
+        Vector3Int neighbourOffset = kNeighbourOffsets[(int)neighbourDirection];
+        return GetValue(data, new Vector3Int(x, y, z) + neighbourOffset);
     }
 }

@@ -10,7 +10,7 @@ public class FabricateTerrain : MapFabricationPass
         TextureAtlas atlas = GameResources.Get.BlockAtlas;
 
         // Generate Mesh Game Object
-        WorldMesh voxelMesh = VoxelMeshGenerator.GenerateMesh(data, atlas);
+        VoxelMesh voxelMesh = VoxelMeshGenerator.GenerateMesh(data.terrainMap, atlas);
         voxelMesh.transform.parent = root.transform;
         voxelMesh.transform.position = new Vector3(0, -0.5f, 0);
         voxelMesh.name = "TerrainMesh";
