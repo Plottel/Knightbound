@@ -20,12 +20,9 @@ MonoBehaviour:
     00000000:
       type: {class: RenderTerrain, ns: , asm: Assembly-CSharp}
       data:
-        errorColor: {r: 1, g: 0, b: 1, a: 1}
-        terrainColors:
-        - {r: 0.5849056, g: 0.31568506, b: 0.13519046, a: 0}
-        - {r: 0.5335371, g: 0.8207547, b: 0.20518868, a: 0}
+        ErrorColor: {r: 1, g: 0, b: 1, a: 1}
     00000001:
       type: {class: RenderSpawnPoint, ns: , asm: Assembly-CSharp}
       data:
-        spawnPointRadius: 8
-        spawnPointColor: {r: 1, g: 0, b: 0, a: 0}
+        SpawnPointRadius: 4
+        SpawnPointColor: {r: 0.8207547, g: 0.14324492, b: 0.14324492, a: 0}

@@ -3,13 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
-// NOTE: More Advanced Solution Required...
-public struct LineSegment
-{
-    public Vector2 start;
-    public Vector2 end;
-}
-
 public class MapData
 {
     public int seed;

@@ -30,9 +30,12 @@ MonoBehaviour:
     00000001:
       type: {class: GenerateTerrainMap, ns: , asm: Assembly-CSharp}
       data:
-        TerrainHeightThresholds:
+        TerrainLevels:
         - 0
-        - 0.5
+        - 0.33
         - 1
+        TerrainBlockTypes: 000000000100000002000000
     00000002:
       type: {class: GenerateSpawnPosition, ns: , asm: Assembly-CSharp}
+      data:
+        Padding: 5

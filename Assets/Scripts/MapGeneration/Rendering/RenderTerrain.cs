@@ -4,8 +4,10 @@ using UnityEngine;
 
 public class RenderTerrain : MapRenderPass
 {
-    public Color errorColor = new Color(1, 0, 1);
-    public Color[] terrainColors = new Color[0];
+    public Color ErrorColor = new Color(1, 0, 1);
+
+    [SerializeReference] 
+    public Dictionary<BlockType, Color> TerrainColors = new Dictionary<BlockType, Color>();
 
     public override void Execute(MapData data, Color[] pixels)
     {
@@ -18,8 +20,8 @@ public class RenderTerrain : MapRenderPass
 
     Color TerrainToColor(int terrain)
     {
-        if (terrain < 0 || terrain >= terrainColors.Length)
-            return errorColor;
-        return terrainColors[terrain];
+        if (TerrainColors.TryGetValue((BlockType)terrain, out Color color))
+            return color;
+        return ErrorColor;
     }
 }
