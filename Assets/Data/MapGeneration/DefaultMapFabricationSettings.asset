@@ -18,5 +18,3 @@ MonoBehaviour:
     version: 1
     00000000:
       type: {class: FabricateTerrain, ns: , asm: Assembly-CSharp}
-      data:
-        TerrainPrefabs: []
