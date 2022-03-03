@@ -41,7 +41,7 @@ public class WelcomePacketHandlerServer : PacketHandlerServer
                     if (newPlayerID != 0)
                     {
                         rms.SendFullSync(newPlayerID);
-                        VoxelManagerServer.Get.SendVoxelData(newPlayerID);
+                        WorldManagerServer.Get.SendTerrainData(newPlayerID);
                     }
 
                     // Tell new player about all Players (including themselves)

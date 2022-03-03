@@ -9,5 +9,6 @@ public enum PacketType
     Replication = 2,
     Input = 3,
     SetPlayerInfo = 4,
-    SetVoxelData = 5
+    SetMapSettings = 5,
+    SendTerrainData = 6
 }
