@@ -53,7 +53,7 @@ public class ProgramEntryPoint : Manager<ProgramEntryPoint>
         server.AddManager<ReplicationManagerServer>();
         
         // Nothing-to-do-with-Networking
-        server.AddManager<VoxelManagerServer>();
+        server.AddManager<WorldManagerServer>();
 
         // Finalize
         server.NotifyManagersAwake();
@@ -81,7 +81,7 @@ public class ProgramEntryPoint : Manager<ProgramEntryPoint>
 
         // "Nothing to do with Networking"-Managers
         client.AddManager<UIController>();
-        client.AddManager<VoxelManagerClient>();
+        client.AddManager<WorldManagerClient>();
         client.AddManager<CameraManager>();
 
         // Finalize

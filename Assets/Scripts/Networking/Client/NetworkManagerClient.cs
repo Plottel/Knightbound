@@ -29,7 +29,7 @@ public class NetworkManagerClient : Manager<NetworkManagerClient>
         SetPacketHandler<ReplicationPacketHandlerClient>(PacketType.Replication);
         SetPacketHandler<InputPacketHandlerClient>(PacketType.Input);
         SetPacketHandler<SetPlayerInfoPacketHandlerClient>(PacketType.SetPlayerInfo);
-        SetPacketHandler<SetVoxelDataPacketHandlerClient>(PacketType.SetVoxelData);
+        SetPacketHandler<SetTerrainDataPacketHandlerClient>(PacketType.SendTerrainData);
     }
 
     public override void OnUpdate()

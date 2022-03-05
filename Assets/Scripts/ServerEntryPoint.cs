@@ -12,6 +12,6 @@ public class ServerEntryPoint : Manager<ServerEntryPoint>
 
         // Setup Server Simulation
         int seed = Random.Range(0, int.MaxValue);
-        VoxelManagerServer.Get.GenerateWorld(seed);
+        WorldManagerServer.Get.GenerateWorld(seed);
     }
 }

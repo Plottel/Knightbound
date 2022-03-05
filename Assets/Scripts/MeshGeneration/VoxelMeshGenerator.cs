@@ -12,7 +12,7 @@ public static class VoxelMeshGenerator
     static List<Vector2> uvs;
     static TextureAtlas atlas;
 
-    public static VoxelMesh GenerateMesh(int[,] data, TextureAtlas textures)
+    public static VoxelMesh GenerateMesh(string name, Vector3 position, int[,] data, TextureAtlas textures)
     {
         // Init Data
         mesh = new Mesh();
@@ -26,6 +26,8 @@ public static class VoxelMeshGenerator
         ApplyMeshData();
         
         VoxelMesh result = CreateMeshObject();
+        result.transform.position = position;
+        result.name = name;
 
         // Clear Data
         vertices.Clear(); 
