@@ -7,12 +7,12 @@ public class FabricateTerrain : MapFabricationPass
 {
     public override void Execute(MapData data, Map map)
     {
-        TextureAtlas atlas = GameResources.Get.BlockAtlas;
-
         // Generate Mesh Game Object
-        VoxelMesh voxelMesh = VoxelMeshGenerator.GenerateMesh(data.terrainMap, atlas);
-        voxelMesh.transform.position = new Vector3(0, -0.5f, 0);
-        voxelMesh.name = "TerrainMesh";
+        VoxelMesh voxelMesh = VoxelMeshGenerator.GenerateMesh(
+            "TerrainMesh", 
+            new Vector3(0, -0.5f, 0), 
+            data.terrainMap, 
+            GameResources.Get.BlockAtlas);
 
         map.terrain = voxelMesh;
     }

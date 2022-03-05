@@ -10,21 +10,15 @@ public class SetTerrainDataPacketHandlerClient : PacketHandlerClient
     public override void HandlePacket(string originIP, BinaryReader reader)
     {
         int width = reader.ReadInt32();
-        int row = reader.ReadInt32();
-        int[] terrainData = new int[width];
+        int depth = reader.ReadInt32();
+        int[,] terrainMap = new int[width, depth];
 
         for (int x = 0; x < width; ++x)
-            terrainData[x] = reader.ReadInt32();
+        {
+            for (int z = 0; z < depth; ++z)
+                terrainMap[x, z] = reader.ReadInt32();
+        }
 
-
-
-
-
-        //var message = new GenerateMapMessage();
-        //TextureAtlas atlas = GameResources.Get.BlockAtlas;
-
-        //message.Deserialize(reader);
-
-        //WorldManagerClient.Get.GenerateWorld(message.seed);
+        WorldManagerClient.Get.SetTerrainData(terrainMap);
     }
 }
