@@ -14,7 +14,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   passes:
   - id: 0
+  - id: 1
+  - id: 2
   references:
     version: 1
     00000000:
       type: {class: FabricateTerrain, ns: , asm: Assembly-CSharp}
+    00000001:
+      type: {class: FabricateProp, ns: , asm: Assembly-CSharp}
+      data:
+        PropType: 1
+        RandomizeRotations: 1
+    00000002:
+      type: {class: FabricateProp, ns: , asm: Assembly-CSharp}
+      data:
+        PropType: 2
+        RandomizeRotations: 1

@@ -11,6 +11,7 @@ public class MapData
     public int depth;
     public Vector2Int spawn;
     public float[,] heightMap;
-    public int[,] terrainMap;
+    public int[,] terrainMap; // Block Prefab Index
+    public int[,] propMap; // Prop NetworkObjectType Index
     public LineSegment[] roads;
 }

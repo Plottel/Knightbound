@@ -15,13 +15,29 @@ MonoBehaviour:
   passes:
   - id: 0
   - id: 1
+  - id: 2
+  - id: 3
   references:
     version: 1
     00000000:
       type: {class: RenderTerrain, ns: , asm: Assembly-CSharp}
       data:
         ErrorColor: {r: 1, g: 0, b: 1, a: 1}
+        TerrainColors:
+        - {r: 0, g: 0, b: 0, a: 0}
+        - {r: 0.509434, g: 0.37940255, b: 0.06488074, a: 1}
+        - {r: 0.17096703, g: 0.49056602, b: 0.085617654, a: 1}
     00000001:
+      type: {class: RenderProp, ns: , asm: Assembly-CSharp}
+      data:
+        PropType: 1
+        PropColor: {r: 0, g: 1, b: 0.0004093647, a: 1}
+    00000002:
+      type: {class: RenderProp, ns: , asm: Assembly-CSharp}
+      data:
+        PropType: 2
+        PropColor: {r: 0.122634605, g: 0.8207547, b: 0.07355818, a: 1}
+    00000003:
       type: {class: RenderSpawnPoint, ns: , asm: Assembly-CSharp}
       data:
         SpawnPointRadius: 4

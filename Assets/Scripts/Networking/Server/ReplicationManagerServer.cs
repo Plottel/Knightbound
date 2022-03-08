@@ -73,7 +73,8 @@ public class ReplicationManagerServer : Manager<ReplicationManagerServer>
                 // If Client has this Network ID, Update the existing object
                 if (playerReplicator.context.TryGetNetworkID(serverObject, out int networkID))
                 {
-                    SendUpdate(playerID, networkID, serverObject);
+                    if (serverObject.ShouldSendUpdate())
+                        SendUpdate(playerID, networkID, serverObject);
                 }
                 // Client does not have Network ID, Create new obj using existing Network ID.
                 else
@@ -128,6 +129,9 @@ public class ReplicationManagerServer : Manager<ReplicationManagerServer>
 
         return newObj;
     }
+
+    public T CreateNetworkObject<T>(int classID) where T : NetworkObject
+        => CreateNetworkObject<T>(classID, out int networkID);
 
     // NOTE: Cant pass T to TryGetValue...
     public bool TryGetNetworkObject(int networkID, out NetworkObject networkObject)

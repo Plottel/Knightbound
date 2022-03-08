@@ -4,15 +4,15 @@ using System.IO;
 using UnityEngine;
 using Deft.Networking;
 
-public class Tree : NetworkObject
+public class Prop : NetworkObject
 {
-    public override int GetClassID() => (int)NetworkObjectType.Tree;
+    public NetworkObjectType PropType;
 
-    public string treeName;
+    public override int GetClassID() => (int)PropType;
+    public override bool ShouldSendUpdate() => false;
 
-    public override void Serialize(BinaryWriter writer) 
+    public override void Serialize(BinaryWriter writer)
     {
-        writer.Write(treeName);
         writer.Write(transform.position.x);
         writer.Write(transform.position.y);
         writer.Write(transform.position.z);
@@ -20,8 +20,6 @@ public class Tree : NetworkObject
 
     public override void Deserialize(BinaryReader reader)
     {
-        treeName = reader.ReadString();
-
         float x = reader.ReadSingle();
         float y = reader.ReadSingle();
         float z = reader.ReadSingle();

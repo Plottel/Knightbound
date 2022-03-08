@@ -6,8 +6,7 @@ public class RenderTerrain : MapRenderPass
 {
     public Color ErrorColor = new Color(1, 0, 1);
 
-    [SerializeReference]
-    public Dictionary<BlockType, Color> TerrainColors;
+    public Color[] TerrainColors;
 
     public override void Execute(MapData data, Color[] pixels)
     {
@@ -20,8 +19,8 @@ public class RenderTerrain : MapRenderPass
 
     Color TerrainToColor(int terrain)
     {
-        if (TerrainColors.TryGetValue((BlockType)terrain, out Color color))
-            return color;
-        return ErrorColor;
+        if (terrain < 0 || terrain >= TerrainColors.Length)
+            return ErrorColor;
+        return TerrainColors[terrain];
     }
 }

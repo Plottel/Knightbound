@@ -10,17 +10,17 @@ namespace Deft.Networking
 
         public static void SetPrefabCount(int count) => prefabs = new NetworkObject[count];
 
-        public static void Register(int type, NetworkObject prefab)
-            => prefabs[type] = prefab;
+        public static void Register(int typeID, NetworkObject prefab)
+            => prefabs[typeID] = prefab;
 
-        public static T Create<T>(int type) where T : NetworkObject
+        public static T Create<T>(int typeID) where T : NetworkObject
         {
-            return Create(type) as T;   
+            return Create(typeID) as T;   
         }
 
-        public static NetworkObject Create(int type)
+        public static NetworkObject Create(int typeID)
         {
-            return Object.Instantiate(prefabs[type]);
+            return Object.Instantiate(prefabs[typeID]);
         }
     }
 }

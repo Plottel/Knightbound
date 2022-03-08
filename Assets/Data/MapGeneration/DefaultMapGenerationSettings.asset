@@ -12,11 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ef47e4f452bb9ea458a5e1005cff4048, type: 3}
   m_Name: DefaultMapGenerationSettings
   m_EditorClassIdentifier: 
-  size: 256
+  size: 100
   passes:
   - id: 0
   - id: 1
   - id: 2
+  - id: 3
+  - id: 4
   references:
     version: 1
     00000000:
@@ -36,6 +38,16 @@ MonoBehaviour:
         - 1
         TerrainBlockTypes: 000000000100000002000000
     00000002:
+      type: {class: GenerateProp, ns: , asm: Assembly-CSharp}
+      data:
+        PropType: 1
+        Density: 0.02
+    00000003:
+      type: {class: GenerateProp, ns: , asm: Assembly-CSharp}
+      data:
+        PropType: 2
+        Density: 0.02
+    00000004:
       type: {class: GenerateSpawnPosition, ns: , asm: Assembly-CSharp}
       data:
         Padding: 5

@@ -9,8 +9,6 @@ public class GenerateTerrainMap : MapGenerationPass
 
     public override void Execute(MapData data)
     {
-        data.terrainMap = new int[data.width, data.depth];
-
         for (int x = 0; x < data.width; ++x)
         {
             for (int z = 0; z < data.depth; ++z)

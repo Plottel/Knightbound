@@ -5,5 +5,6 @@ using UnityEngine;
 public enum NetworkObjectType
 {
     Player = 0,
-    Tree = 1
+    BasicTree = 1,
+    TreeWall = 2
 }
