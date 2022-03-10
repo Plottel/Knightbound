@@ -24,11 +24,8 @@ MonoBehaviour:
     00000000:
       type: {class: GenerateHeightMap, ns: , asm: Assembly-CSharp}
       data:
-        NoiseScale: 250
-        Octaves: 5
-        Persistance: 0.5
-        Lacunarity: 2
-        Offset: {x: 0, y: 0}
+        perlinNoise:
+          id: 5
     00000001:
       type: {class: GenerateTerrainMap, ns: , asm: Assembly-CSharp}
       data:
@@ -41,13 +38,41 @@ MonoBehaviour:
       type: {class: GenerateProp, ns: , asm: Assembly-CSharp}
       data:
         PropType: 1
-        Density: 0.02
+        Noise:
+          id: 6
+        NoiseRangeMin: 0.98
+        NoiseRangeMax: 1
     00000003:
       type: {class: GenerateProp, ns: , asm: Assembly-CSharp}
       data:
         PropType: 2
-        Density: 0.02
+        Noise:
+          id: 7
+        NoiseRangeMin: 0.98
+        NoiseRangeMax: 1
     00000004:
       type: {class: GenerateSpawnPosition, ns: , asm: Assembly-CSharp}
       data:
         Padding: 5
+    00000005:
+      type: {class: PerlinNoiseGenerator, ns: , asm: Assembly-CSharp}
+      data:
+        SeedOffset: 0
+        noiseScale: 250
+        octaves: 5
+        persistence: 0.5
+        lacunarity: 2
+        noiseOffset: {x: 0, y: 0}
+    00000006:
+      type: {class: PerlinNoiseGenerator, ns: , asm: Assembly-CSharp}
+      data:
+        SeedOffset: 0
+        noiseScale: 250
+        octaves: 5
+        persistence: 0.5
+        lacunarity: 2
+        noiseOffset: {x: 0, y: 0}
+    00000007:
+      type: {class: RandomNoiseGenerator, ns: , asm: Assembly-CSharp}
+      data:
+        SeedOffset: 0

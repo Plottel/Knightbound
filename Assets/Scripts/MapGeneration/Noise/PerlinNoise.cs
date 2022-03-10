@@ -11,7 +11,7 @@ public static class PerlinNoise
         int depth,
         float scale, 
         int octaves, 
-        float persistance, 
+        float persistence, 
         float lacunarity, 
         Vector2 noiseOffset)
     {
@@ -55,7 +55,7 @@ public static class PerlinNoise
                     noiseValue += Mathf.PerlinNoise(octaveX, octaveZ) * amplitude;
 
                     // Drop off for next octave
-                    amplitude *= persistance;
+                    amplitude *= persistence;
                     frequency *= lacunarity;
                 }
 
