@@ -1,0 +1,49 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ef47e4f452bb9ea458a5e1005cff4048, type: 3}
+  m_Name: TestMapGenerationSettings
+  m_EditorClassIdentifier: 
+  size: 100
+  passes:
+  - id: 0
+  - id: 1
+  references:
+    version: 1
+    00000000:
+      type: {class: GenerateProp, ns: , asm: Assembly-CSharp}
+      data:
+        PropType: 1
+        Noise:
+          id: 2
+        NoiseRangeMin: 0
+        NoiseRangeMax: 1
+    00000001:
+      type: {class: GenerateProp, ns: , asm: Assembly-CSharp}
+      data:
+        PropType: 2
+        Noise:
+          id: 3
+        NoiseRangeMin: 0.8
+        NoiseRangeMax: 0.81
+    00000002:
+      type: {class: RandomNoiseGenerator, ns: , asm: Assembly-CSharp}
+      data:
+        SeedOffset: 0
+    00000003:
+      type: {class: PerlinNoiseGenerator, ns: , asm: Assembly-CSharp}
+      data:
+        SeedOffset: 9
+        noiseScale: 11
+        octaves: 5
+        persistence: 0.85
+        lacunarity: 2
+        noiseOffset: {x: 0, y: 0}

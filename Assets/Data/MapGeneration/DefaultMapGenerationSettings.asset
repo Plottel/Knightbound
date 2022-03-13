@@ -19,13 +19,17 @@ MonoBehaviour:
   - id: 2
   - id: 3
   - id: 4
+  - id: 5
+  - id: 6
+  - id: 7
+  - id: 8
   references:
     version: 1
     00000000:
       type: {class: GenerateHeightMap, ns: , asm: Assembly-CSharp}
       data:
         perlinNoise:
-          id: 5
+          id: 9
     00000001:
       type: {class: GenerateTerrainMap, ns: , asm: Assembly-CSharp}
       data:
@@ -39,22 +43,54 @@ MonoBehaviour:
       data:
         PropType: 1
         Noise:
-          id: 6
-        NoiseRangeMin: 0.98
+          id: 10
+        NoiseRangeMin: 0.99
         NoiseRangeMax: 1
     00000003:
       type: {class: GenerateProp, ns: , asm: Assembly-CSharp}
       data:
         PropType: 2
         Noise:
-          id: 7
-        NoiseRangeMin: 0.98
+          id: 11
+        NoiseRangeMin: 0.99
         NoiseRangeMax: 1
     00000004:
+      type: {class: GenerateProp, ns: , asm: Assembly-CSharp}
+      data:
+        PropType: 3
+        Noise:
+          id: 12
+        NoiseRangeMin: 0.8
+        NoiseRangeMax: 0.82
+    00000005:
+      type: {class: GenerateProp, ns: , asm: Assembly-CSharp}
+      data:
+        PropType: 4
+        Noise:
+          id: 13
+        NoiseRangeMin: 0.8
+        NoiseRangeMax: 0.82
+    00000006:
+      type: {class: GenerateProp, ns: , asm: Assembly-CSharp}
+      data:
+        PropType: 5
+        Noise:
+          id: 14
+        NoiseRangeMin: 0.97
+        NoiseRangeMax: 1
+    00000007:
+      type: {class: GenerateProp, ns: , asm: Assembly-CSharp}
+      data:
+        PropType: 6
+        Noise:
+          id: 15
+        NoiseRangeMin: 0.97
+        NoiseRangeMax: 1
+    00000008:
       type: {class: GenerateSpawnPosition, ns: , asm: Assembly-CSharp}
       data:
         Padding: 5
-    00000005:
+    00000009:
       type: {class: PerlinNoiseGenerator, ns: , asm: Assembly-CSharp}
       data:
         SeedOffset: 0
@@ -63,16 +99,37 @@ MonoBehaviour:
         persistence: 0.5
         lacunarity: 2
         noiseOffset: {x: 0, y: 0}
-    00000006:
-      type: {class: PerlinNoiseGenerator, ns: , asm: Assembly-CSharp}
-      data:
-        SeedOffset: 0
-        noiseScale: 250
-        octaves: 5
-        persistence: 0.5
-        lacunarity: 2
-        noiseOffset: {x: 0, y: 0}
-    00000007:
+    0000000A:
       type: {class: RandomNoiseGenerator, ns: , asm: Assembly-CSharp}
       data:
         SeedOffset: 0
+    0000000B:
+      type: {class: RandomNoiseGenerator, ns: , asm: Assembly-CSharp}
+      data:
+        SeedOffset: 1
+    0000000C:
+      type: {class: PerlinNoiseGenerator, ns: , asm: Assembly-CSharp}
+      data:
+        SeedOffset: 2
+        noiseScale: 11
+        octaves: 5
+        persistence: 0.85
+        lacunarity: 2
+        noiseOffset: {x: 0, y: 0}
+    0000000D:
+      type: {class: PerlinNoiseGenerator, ns: , asm: Assembly-CSharp}
+      data:
+        SeedOffset: 3
+        noiseScale: 11
+        octaves: 5
+        persistence: 0.85
+        lacunarity: 2
+        noiseOffset: {x: 0, y: 0}
+    0000000E:
+      type: {class: RandomNoiseGenerator, ns: , asm: Assembly-CSharp}
+      data:
+        SeedOffset: 4
+    0000000F:
+      type: {class: RandomNoiseGenerator, ns: , asm: Assembly-CSharp}
+      data:
+        SeedOffset: 5

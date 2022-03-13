@@ -18,7 +18,7 @@ public class PerlinNoiseGenerator : NoiseGenerator
     {
         float[,] result = PerlinNoise.GenerateMap
         (
-            seed,
+            seed + SeedOffset,
             width,
             depth,
             noiseScale,

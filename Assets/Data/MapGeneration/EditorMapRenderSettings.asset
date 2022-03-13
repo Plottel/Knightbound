@@ -17,6 +17,10 @@ MonoBehaviour:
   - id: 1
   - id: 2
   - id: 3
+  - id: 4
+  - id: 5
+  - id: 6
+  - id: 7
   references:
     version: 1
     00000000:
@@ -38,7 +42,27 @@ MonoBehaviour:
         PropType: 2
         PropColor: {r: 0.122634605, g: 0.8207547, b: 0.07355818, a: 1}
     00000003:
+      type: {class: RenderProp, ns: , asm: Assembly-CSharp}
+      data:
+        PropType: 3
+        PropColor: {r: 0.33495015, g: 0.3496657, b: 0.3679245, a: 1}
+    00000004:
+      type: {class: RenderProp, ns: , asm: Assembly-CSharp}
+      data:
+        PropType: 4
+        PropColor: {r: 0.44827372, g: 0.13363297, b: 0.8584906, a: 1}
+    00000005:
       type: {class: RenderSpawnPoint, ns: , asm: Assembly-CSharp}
       data:
         SpawnPointRadius: 4
         SpawnPointColor: {r: 0.8207547, g: 0.14324492, b: 0.14324492, a: 0}
+    00000006:
+      type: {class: RenderProp, ns: , asm: Assembly-CSharp}
+      data:
+        PropType: 5
+        PropColor: {r: 0.3484336, g: 0.8490566, b: 0.43281364, a: 1}
+    00000007:
+      type: {class: RenderProp, ns: , asm: Assembly-CSharp}
+      data:
+        PropType: 6
+        PropColor: {r: 0.3370682, g: 0.9811321, b: 0.27305093, a: 1}

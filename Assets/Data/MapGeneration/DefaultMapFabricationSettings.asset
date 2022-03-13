@@ -16,6 +16,10 @@ MonoBehaviour:
   - id: 0
   - id: 1
   - id: 2
+  - id: 3
+  - id: 4
+  - id: 5
+  - id: 6
   references:
     version: 1
     00000000:
@@ -30,3 +34,23 @@ MonoBehaviour:
       data:
         PropType: 2
         RandomizeRotations: 1
+    00000003:
+      type: {class: FabricateProp, ns: , asm: Assembly-CSharp}
+      data:
+        PropType: 3
+        RandomizeRotations: 1
+    00000004:
+      type: {class: FabricateProp, ns: , asm: Assembly-CSharp}
+      data:
+        PropType: 4
+        RandomizeRotations: 1
+    00000005:
+      type: {class: FabricateProp, ns: , asm: Assembly-CSharp}
+      data:
+        PropType: 5
+        RandomizeRotations: 0
+    00000006:
+      type: {class: FabricateProp, ns: , asm: Assembly-CSharp}
+      data:
+        PropType: 6
+        RandomizeRotations: 0
