@@ -62,6 +62,7 @@ public class NetworkPrefabMapEditor : Editor
             }
 
             map.prefabs[i] = AssetDatabase.LoadAssetAtPath<NetworkObject>(path);
+            EditorUtility.SetDirty(map);
         }
     }
 
