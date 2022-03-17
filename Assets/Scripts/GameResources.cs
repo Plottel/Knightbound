@@ -13,7 +13,7 @@ public class GameResources : Manager<GameResources>
     public Canvas CanvasTemplate;
     public UIPanelCache GamePanels;
 
-    public NetworkObjectMap NetworkPrefabs;
+    public NetworkPrefabMap NetworkPrefabs;
     public Texture2D[] BlockTextures;
     [HideInInspector] public TextureAtlas BlockAtlas;
 

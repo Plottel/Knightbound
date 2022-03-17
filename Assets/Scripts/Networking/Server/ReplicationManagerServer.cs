@@ -73,7 +73,7 @@ public class ReplicationManagerServer : Manager<ReplicationManagerServer>
                 // If Client has this Network ID, Update the existing object
                 if (playerReplicator.context.TryGetNetworkID(serverObject, out int networkID))
                 {
-                    if (serverObject.ShouldSendUpdate())
+                    if (serverObject.shouldSendUpdates)
                         SendUpdate(playerID, networkID, serverObject);
                 }
                 // Client does not have Network ID, Create new obj using existing Network ID.
@@ -96,7 +96,7 @@ public class ReplicationManagerServer : Manager<ReplicationManagerServer>
             {
                 writer.Write((int)PacketType.Replication);
                 writer.Write((int)ReplicationAction.Create);
-                writer.Write(obj.GetClassID());
+                writer.Write((int)obj.classID);
                 writer.Write(networkID);
                 obj.Serialize(writer);
             }
@@ -113,7 +113,7 @@ public class ReplicationManagerServer : Manager<ReplicationManagerServer>
             {
                 writer.Write((int)PacketType.Replication);
                 writer.Write((int)ReplicationAction.Update);
-                writer.Write((int)obj.GetClassID());
+                writer.Write((int)obj.classID);
                 writer.Write(networkID);
                 obj.Serialize(writer);
             }

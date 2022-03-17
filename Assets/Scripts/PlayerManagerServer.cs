@@ -34,7 +34,7 @@ public class PlayerManagerServer : Manager<PlayerManagerServer>
     public PlayerInfo InitialSpawnPlayer(int playerID)
     {
         int characterID;
-        ReplicationManagerServer.Get.CreateNetworkObject<Player>((int)NetworkObjectType.Player, out characterID);
+        ReplicationManagerServer.Get.CreateNetworkObject<Player>((int)PrefabID.Player, out characterID);
 
         PlayerInfo playerInfo = playerIDToPlayerInfo[playerID];
         playerInfo.state = NetworkState.Welcomed;

@@ -6,11 +6,6 @@ using Deft.Networking;
 
 public class Prop : NetworkObject
 {
-    public NetworkObjectType PropType;
-
-    public override int GetClassID() => (int)PropType;
-    public override bool ShouldSendUpdate() => false;
-
     public override void Serialize(BinaryWriter writer)
     {
         writer.Write(transform.position.x);

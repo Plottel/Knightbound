@@ -640,9 +640,8 @@ GameObject:
   - component: {fileID: 4524370631134622798}
   - component: {fileID: 4524370631134622793}
   - component: {fileID: 4524370631134622792}
-  - component: {fileID: 4524370631134622795}
-  - component: {fileID: 4524370631134622794}
   - component: {fileID: 7267496103158559993}
+  - component: {fileID: 9047725308660153200}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -741,35 +740,6 @@ MonoBehaviour:
   animations:
   - {fileID: 7400000, guid: f9f4d7e1c0a45d24db67c341277ac8df, type: 2}
   - {fileID: 7400000, guid: e126d5951c36af342b3980ea36b33e17, type: 2}
---- !u!114 &4524370631134622795
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4524370631134622805}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 89203fb95efcc2742a4ba344b809f2ca, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  data: {fileID: 11400000, guid: e9b207e804a644d40b15bedcfea1fc14, type: 2}
-  mesh: {fileID: 4524370631134622799}
-  animator: {fileID: 4524370631134622792}
---- !u!114 &4524370631134622794
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4524370631134622805}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 18fd0e06737ff4c4e9a598ccc0fc4016, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  controller: {fileID: 7267496103158559993}
-  direction: {x: 0, y: 0, z: 0}
 --- !u!143 &7267496103158559993
 CharacterController:
   m_ObjectHideFlags: 0
@@ -788,6 +758,25 @@ CharacterController:
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &9047725308660153200
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4524370631134622805}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18fd0e06737ff4c4e9a598ccc0fc4016, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  classID: 0
+  shouldSendUpdates: 1
+  data: {fileID: 11400000, guid: e9b207e804a644d40b15bedcfea1fc14, type: 2}
+  mesh: {fileID: 4524370631134622799}
+  animator: {fileID: 4524370631134622792}
+  controller: {fileID: 7267496103158559993}
+  direction: {x: 0, y: 0, z: 0}
 --- !u!1 &4524370631138470812
 GameObject:
   m_ObjectHideFlags: 0

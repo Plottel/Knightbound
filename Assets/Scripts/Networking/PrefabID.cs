@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum NetworkObjectType
+public enum PrefabID
 {
     Player = 0,
     BasicTree = 1,

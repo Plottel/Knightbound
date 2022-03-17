@@ -7,8 +7,8 @@ namespace Deft.Networking
 {
     public abstract class NetworkObject : MonoBehaviour
     {
-        public abstract int GetClassID();
-        public virtual bool ShouldSendUpdate() => true;
+        public PrefabID classID;
+        public bool shouldSendUpdates;
 
         public abstract void Serialize(BinaryWriter writer);
         public abstract void Deserialize(BinaryReader reader);

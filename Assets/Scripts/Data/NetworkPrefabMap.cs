@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using Deft.Networking;
 
-[CreateAssetMenu(fileName = "Data/NetworkObjectMap", menuName = "NetworkObjectMap")]
-public class NetworkObjectMap : ScriptableObject
+[CreateAssetMenu(fileName = "Data/NetworkPrefabMap", menuName = "NetworkPrefabMap")]
+public class NetworkPrefabMap : ScriptableObject
 {
     public NetworkObject[] prefabs;
 }

@@ -13,7 +13,7 @@ public class FabricateProp : MapFabricationPass
     };
 
 
-    public NetworkObjectType PropType;
+    public PrefabID PropType;
     public bool RandomizeRotations;
 
     public override void Execute(MapData data, Map map)

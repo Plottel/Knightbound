@@ -6,9 +6,6 @@ using System.IO;
 
 public class TreeWall : NetworkObject
 {
-    public override int GetClassID() => (int)NetworkObjectType.TreeWall;
-    public override bool ShouldSendUpdate() => false;
-
     public override void Serialize(BinaryWriter writer)
     {
         writer.Write(transform.position.x);

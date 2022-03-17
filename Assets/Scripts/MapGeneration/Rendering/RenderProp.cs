@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class RenderProp : MapRenderPass
 {
-    public NetworkObjectType PropType;
+    public PrefabID PropType;
     public Color PropColor = new Color(1, 0, 1);
 
     public override void Execute(MapData data, Color[] pixels)

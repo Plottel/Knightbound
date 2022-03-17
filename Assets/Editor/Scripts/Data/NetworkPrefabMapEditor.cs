@@ -5,8 +5,8 @@ using UnityEngine;
 using UnityEditor;
 using Deft.Networking;
 
-[CustomEditor(typeof(NetworkObjectMap))]
-public class NetworkObjectMapEditor : Editor
+[CustomEditor(typeof(NetworkPrefabMap))]
+public class NetworkPrefabMapEditor : Editor
 {
     public override void OnInspectorGUI()
     {
@@ -18,15 +18,15 @@ public class NetworkObjectMapEditor : Editor
 
     void FetchPrefabs()
     {
-        NetworkObjectMap map = target as NetworkObjectMap;
-        int prefabCount = Enum.GetValues(typeof(NetworkObjectType)).Length;
+        NetworkPrefabMap map = target as NetworkPrefabMap;
+        int prefabCount = Enum.GetValues(typeof(PrefabID)).Length;
 
         map.prefabs = new NetworkObject[prefabCount];
 
         // For each Enum Value
         for (int i = 0; i < prefabCount; ++i)
         {
-            string typeName = ((NetworkObjectType)i).ToString();
+            string typeName = ((PrefabID)i).ToString();
 
             // Fetch all Asset GUIDs containing the Enum Value name
             string[] guids = AssetDatabase.FindAssets(typeName + " t:prefab", new string[] { "Assets/Prefabs" });

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class GenerateProp : MapGenerationPass
 {
-    public NetworkObjectType PropType;
+    public PrefabID PropType;
     [SerializeReference] public NoiseGenerator Noise;
     public float NoiseRangeMin;
     public float NoiseRangeMax;
