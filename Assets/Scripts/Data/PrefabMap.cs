@@ -4,6 +4,6 @@ using UnityEngine;
 
 public class PrefabMap<T> : ScriptableObject
 {
-    [EnumArray(typeof(NetworkObjectType))]
+    [NamedEnumArray(typeof(NetworkObjectType))]
     public T[] prefabs;
 }

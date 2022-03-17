@@ -3,11 +3,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnumArrayAttribute : PropertyAttribute
+public class NamedEnumArrayAttribute : PropertyAttribute
 {
     public string[] names;
 
-    public EnumArrayAttribute(Type enumType)
+    public NamedEnumArrayAttribute(Type enumType)
     {
         names = Enum.GetNames(enumType);
     }

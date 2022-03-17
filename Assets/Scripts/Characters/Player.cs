@@ -8,12 +8,16 @@ public class Player : NetworkObject
 {
     public override int GetClassID() => (int)NetworkObjectType.Player;
 
+    public CharacterController controller;
+
+    [HideInInspector]
     public Vector3 direction;
     private float speed = 5f;
 
     private void Update()
     {
-        transform.position += direction * speed * Time.deltaTime;
+        Vector3 moveDelta = direction * speed;
+        controller.SimpleMove(moveDelta);
     }
 
     public override void Serialize(BinaryWriter writer)

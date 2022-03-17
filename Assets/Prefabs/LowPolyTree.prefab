@@ -56,6 +56,7 @@ GameObject:
   - component: {fileID: 3888479434947719541}
   - component: {fileID: 169303783631191760}
   - component: {fileID: 2719483325154036250}
+  - component: {fileID: 1556043311644476050}
   m_Layer: 0
   m_Name: LowPolyTree
   m_TagString: Untagged
@@ -126,3 +127,16 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &1556043311644476050
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4520901392940411855}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.011652492, y: 0.011834057, z: 0.098006725}
+  m_Center: {x: -0.00044526265, y: -0.00035683974, z: 0.049004443}

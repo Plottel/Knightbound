@@ -642,7 +642,6 @@ GameObject:
   - component: {fileID: 4524370631134622792}
   - component: {fileID: 4524370631134622795}
   - component: {fileID: 4524370631134622794}
-  - component: {fileID: 8317103132749717192}
   - component: {fileID: 7267496103158559993}
   m_Layer: 0
   m_Name: Player
@@ -769,20 +768,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 18fd0e06737ff4c4e9a598ccc0fc4016, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  controller: {fileID: 7267496103158559993}
   direction: {x: 0, y: 0, z: 0}
---- !u!65 &8317103132749717192
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4524370631134622805}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 0.81, y: 2.3272855, z: 0.33}
-  m_Center: {x: 0, y: 1.1786426, z: 0}
 --- !u!143 &7267496103158559993
 CharacterController:
   m_ObjectHideFlags: 0
