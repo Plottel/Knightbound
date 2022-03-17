@@ -43,6 +43,16 @@ public class Character : NetworkObject
         controller.SimpleMove(moveDelta);
     }
 
+    void OnControllerColliderHit(ControllerColliderHit hit)
+    {
+        Debug.LogWarning("CHARACTER - ControllerColliderHit " + hit.gameObject.name);
+    }
+
+    void OnCollisionEnter(Collision collision)
+    {
+        Debug.LogWarning("CHARACTER - CollisionEnter" + collision.gameObject.name);
+    }
+
     public override void Serialize(BinaryWriter writer)
     {
         writer.Write(transform.position.x);

@@ -21,4 +21,14 @@ public class Prop : NetworkObject
 
         transform.position = new Vector3(x, y, z);
     }
+
+    private void OnControllerColliderHit(ControllerColliderHit hit)
+    {
+        Debug.LogWarning("PROP - ControllerColliderHit" + hit.gameObject.name);
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        Debug.LogWarning("PROP - CollisionEnter" + collision.gameObject.name);
+    }
 }
