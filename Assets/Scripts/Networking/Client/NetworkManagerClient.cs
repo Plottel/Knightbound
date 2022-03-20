@@ -42,16 +42,16 @@ public class NetworkManagerClient : Manager<NetworkManagerClient>
         if (state == NetworkState.Uninitialized)
             return;
 
+        int packetCount = 0;
+
         using (MemoryStream stream = new MemoryStream())
         {
             long streamPosition = stream.Position;
 
             while (client.PumpPacket(stream))
             {
-                // We're writing to the Memory Stream.
-                // When it finishes writing, its position will be at the end.
-                // We want to reset it to where it was before it started writing,
-                // so that we can read what it just wrote.
+                ++packetCount;
+
                 long tempStreamPosition = stream.Position;
                 stream.Position = streamPosition;
                 streamPosition = tempStreamPosition;
@@ -66,6 +66,8 @@ public class NetworkManagerClient : Manager<NetworkManagerClient>
                 }
             }
         }
+
+        Debug.Log("PACKET COUNT: " + packetCount.ToString());
     }
 
     private void HandlePacket(string originIP, PacketType packetType, BinaryReader reader)

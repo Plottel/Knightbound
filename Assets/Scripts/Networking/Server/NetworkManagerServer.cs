@@ -75,11 +75,18 @@ public class NetworkManagerServer : Manager<NetworkManagerServer>
 
     public void HandleIncomingPackets()
     {
+        int packetCount = 0;
+
         using (MemoryStream stream = new MemoryStream())
         {
+            long streamPosition = stream.Position;
+
             while (server.PumpPacket(stream))
             {
-                stream.Position = 0;
+                ++packetCount;
+                long tempStreamPosition = stream.Position;
+                stream.Position = streamPosition;
+                streamPosition = tempStreamPosition;
 
                 // Memory Stream containing PacketData
                 using (BinaryReader reader = new BinaryReader(stream, Encoding.Default, true))
@@ -89,6 +96,8 @@ public class NetworkManagerServer : Manager<NetworkManagerServer>
                 }
             }
         }
+
+        Debug.Log("PACKET COUNT: " + packetCount.ToString());
     }
 
     private void HandlePacket(uint peerID, BinaryReader reader)

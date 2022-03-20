@@ -640,8 +640,8 @@ GameObject:
   - component: {fileID: 4524370631134622798}
   - component: {fileID: 4524370631134622793}
   - component: {fileID: 4524370631134622792}
-  - component: {fileID: 7267496103158559993}
   - component: {fileID: 9047725308660153200}
+  - component: {fileID: -4689962043028601513}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -740,24 +740,6 @@ MonoBehaviour:
   animations:
   - {fileID: 7400000, guid: f9f4d7e1c0a45d24db67c341277ac8df, type: 2}
   - {fileID: 7400000, guid: e126d5951c36af342b3980ea36b33e17, type: 2}
---- !u!143 &7267496103158559993
-CharacterController:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4524370631134622805}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Height: 2.5
-  m_Radius: 0.35
-  m_SlopeLimit: 45
-  m_StepOffset: 0.3
-  m_SkinWidth: 0.08
-  m_MinMoveDistance: 0.001
-  m_Center: {x: 0, y: 1.25, z: 0}
 --- !u!114 &9047725308660153200
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -775,8 +757,28 @@ MonoBehaviour:
   data: {fileID: 11400000, guid: e9b207e804a644d40b15bedcfea1fc14, type: 2}
   mesh: {fileID: 4524370631134622799}
   animator: {fileID: 4524370631134622792}
-  controller: {fileID: 7267496103158559993}
+  physics: {fileID: 0}
   direction: {x: 0, y: 0, z: 0}
+  speed: 10
+  maxSpeed: 10
+--- !u!143 &-4689962043028601513
+CharacterController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4524370631134622805}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Height: 2.5
+  m_Radius: 0.5
+  m_SlopeLimit: 45
+  m_StepOffset: 0.3
+  m_SkinWidth: 0.08
+  m_MinMoveDistance: 0.001
+  m_Center: {x: 0, y: 1.25, z: 0}
 --- !u!1 &4524370631138470812
 GameObject:
   m_ObjectHideFlags: 0

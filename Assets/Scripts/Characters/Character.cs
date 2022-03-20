@@ -20,7 +20,8 @@ public class Character : NetworkObject
 
     // Movement Fields (TODO: Factor out into DeftCharacterController or equivalent?)
     [HideInInspector] public Vector3 direction;
-    private float speed = 5f;
+    public float speed = 3f;
+    public float maxSpeed = 10f;
 
     private void FetchReferences()
     {
@@ -37,7 +38,7 @@ public class Character : NetworkObject
     void OnValidate() 
         => FetchReferences();
 
-    void Update()
+    void FixedUpdate()
     {
         Vector3 moveDelta = direction * speed;
         controller.SimpleMove(moveDelta);
@@ -51,6 +52,11 @@ public class Character : NetworkObject
     void OnCollisionEnter(Collision collision)
     {
         Debug.LogWarning("CHARACTER - CollisionEnter" + collision.gameObject.name);
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        Debug.LogWarning("CHARACTER - TriggerEnter" + other.gameObject.name);
     }
 
     public override void Serialize(BinaryWriter writer)

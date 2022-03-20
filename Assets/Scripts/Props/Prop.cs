@@ -31,4 +31,9 @@ public class Prop : NetworkObject
     {
         Debug.LogWarning("PROP - CollisionEnter" + collision.gameObject.name);
     }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        Debug.LogWarning("PROP - TriggerEnter" + other.gameObject.name);
+    }
 }
