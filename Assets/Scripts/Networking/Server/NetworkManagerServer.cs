@@ -84,6 +84,7 @@ public class NetworkManagerServer : Manager<NetworkManagerServer>
             while (server.PumpPacket(stream))
             {
                 ++packetCount;
+
                 long tempStreamPosition = stream.Position;
                 stream.Position = streamPosition;
                 streamPosition = tempStreamPosition;
