@@ -757,10 +757,9 @@ MonoBehaviour:
   data: {fileID: 11400000, guid: e9b207e804a644d40b15bedcfea1fc14, type: 2}
   mesh: {fileID: 4524370631134622799}
   animator: {fileID: 4524370631134622792}
-  physics: {fileID: 0}
+  controller: {fileID: -4689962043028601513}
   direction: {x: 0, y: 0, z: 0}
-  speed: 10
-  maxSpeed: 10
+  speed: 3
 --- !u!143 &-4689962043028601513
 CharacterController:
   m_ObjectHideFlags: 0

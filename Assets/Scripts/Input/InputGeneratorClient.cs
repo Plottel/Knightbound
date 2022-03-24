@@ -14,7 +14,6 @@ public class InputGeneratorClient : Manager<InputGeneratorClient>
         inputBuffer.AddLocalInputState(GenerateInputState());
     }
 
-
     InputState GenerateInputState()
     {
         return new InputState

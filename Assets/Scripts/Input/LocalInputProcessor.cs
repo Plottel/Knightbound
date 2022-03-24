@@ -12,7 +12,7 @@ public class LocalInputProcessor : Manager<LocalInputProcessor>
         float cameraYSpeed = UserInputSettings.Get.cameraYSpeed;
 
         // Rotate Camera
-        if (input.cameraLeft)   CameraManager.Get.RotateY(-cameraYSpeed);
-        if (input.cameraRight)  CameraManager.Get.RotateY(cameraYSpeed);
+        if (input.cameraLeft)   CameraManager.Get.RotateY(cameraYSpeed);
+        if (input.cameraRight)  CameraManager.Get.RotateY(-cameraYSpeed);
     }
 }

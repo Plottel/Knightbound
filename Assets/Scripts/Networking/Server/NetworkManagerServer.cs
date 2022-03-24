@@ -7,6 +7,7 @@ using System.IO;
 using System.Text;
 using Deft;
 using Deft.Networking;
+using Random = UnityEngine.Random;
 
 public class NetworkManagerServer : Manager<NetworkManagerServer>
 {
@@ -46,6 +47,13 @@ public class NetworkManagerServer : Manager<NetworkManagerServer>
     public void LaunchServer(ushort port)
     {
         server.LaunchServer(port);
+
+        // We know this is a Listen Server. Prevent duplication to Local Client.
+        ReplicationManagerClient.Get.SetNetworkContext(ReplicationManagerServer.Get.NetworkContext);
+
+        // TODO: Consider Server Launch event
+        int seed = Random.Range(0, int.MaxValue);
+        WorldManagerServer.Get.GenerateWorld(seed);
     }
 
     public int RegisterNewPeer(uint peerID)

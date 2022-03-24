@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using Deft;
 
-
 public class GameAdmin : MonoBehaviour
 {
     private List<Singleton> managers;

@@ -21,7 +21,6 @@ public class Character : NetworkObject
     // Movement Fields (TODO: Factor out into DeftCharacterController or equivalent?)
     [HideInInspector] public Vector3 direction;
     public float speed = 3f;
-    public float maxSpeed = 10f;
 
     private void FetchReferences()
     {

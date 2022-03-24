@@ -16,9 +16,7 @@ public class CameraManager : Manager<CameraManager>
         characterCamera = new GameObject("CharacterCamera").AddComponent<CharacterCamera>();
         characterCamera.transform.parent = transform;
         characterCamera.camera = FindObjectOfType<Camera>().transform; // TODO: Factor out.
-        characterCamera.TargetOffset = new Vector3(0, 20, -10);
-        characterCamera.SetDefaultRotation(60, 0, 0);
-    }
+    }   
 
     public override void OnStart()
     {
@@ -41,5 +39,5 @@ public class CameraManager : Manager<CameraManager>
             Debug.Log("CameraManager could not find Network ID " + characterID);
     }
 
-    public void RotateY(float delta) => characterCamera.RotateAroundTarget(delta);
+    public void RotateY(float delta) => characterCamera.RotateCamera(delta);
 }

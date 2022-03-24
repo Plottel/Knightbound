@@ -11,6 +11,7 @@ public class PlayerManagerServer : Manager<PlayerManagerServer>
     public event PlayerJoinedHandler eventPlayerJoined;
 
     private Dictionary<int, PlayerInfo> playerIDToPlayerInfo;
+    
 
     public override void OnAwake()
     {
