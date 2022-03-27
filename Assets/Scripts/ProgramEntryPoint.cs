@@ -49,6 +49,7 @@ public class ProgramEntryPoint : Manager<ProgramEntryPoint>
         server.AddManager<NetworkManagerServer>();
         server.AddManager<PlayerManagerServer>();
         server.AddManager<ReceivedInputProcessorServer>();
+        server.AddManager<CharacterMovementSystem>();
         server.AddManager<InputDispatcherServer>();
         server.AddManager<ReplicationManagerServer>();
         

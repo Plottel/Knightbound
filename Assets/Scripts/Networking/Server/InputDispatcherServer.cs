@@ -8,22 +8,23 @@ public class InputDispatcherServer : Manager<InputDispatcherServer>
 {
     public override void OnUpdate()
     {
-        DispatchClientInputStates();
+        //DispatchClientInputStates();
     }
 
     public override void OnLateUpdate()
     {
-        InputBufferServer.Get.ClearBuffer();
+        InputBufferServer.Get.ClearBuffers();
     }
 
     void DispatchClientInputStates()
     {
-        var inputBuffer = InputBufferServer.Get.GetBuffer();
-
-        foreach (InputState input in inputBuffer)
+        foreach (List<InputState> inputBuffer in InputBufferServer.Get.GetAllBuffers())
         {
-            var packet = PacketHelper.MakeInputPacket(input);
-            NetworkManagerServer.Get.TrueBroadcastPacket(packet);
+            foreach (InputState input in inputBuffer)
+            {
+                var packet = PacketHelper.MakeInputPacket(input);
+                NetworkManagerServer.Get.TrueBroadcastPacket(packet);
+            }
         }
     }
 }

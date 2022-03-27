@@ -16,7 +16,6 @@ public class Character : NetworkObject
     // Components
     [HideInInspector] public CharacterMesh mesh;
     [HideInInspector] public CharacterAnimator animator;
-    [HideInInspector] public CharacterController controller;
 
     // Movement Fields (TODO: Factor out into DeftCharacterController or equivalent?)
     [HideInInspector] public Vector3 direction;
@@ -26,7 +25,6 @@ public class Character : NetworkObject
     {
         mesh = GetComponent<CharacterMesh>();
         animator = GetComponent<CharacterAnimator>();
-        controller = GetComponent<CharacterController>();
     }
 
     void Awake()
@@ -36,12 +34,6 @@ public class Character : NetworkObject
 
     void OnValidate() 
         => FetchReferences();
-
-    void FixedUpdate()
-    {
-        Vector3 moveDelta = direction * speed;
-        controller.SimpleMove(moveDelta);
-    }
 
     void OnControllerColliderHit(ControllerColliderHit hit)
     {
@@ -67,11 +59,11 @@ public class Character : NetworkObject
 
     public override void Deserialize(BinaryReader reader)
     {
-        float x = reader.ReadSingle();
-        float y = reader.ReadSingle();
-        float z = reader.ReadSingle();
+        float xPos = reader.ReadSingle();
+        float yPos = reader.ReadSingle();
+        float zPos = reader.ReadSingle();
 
-        transform.position = new Vector3(x, y, z);
+        transform.position = new Vector3(xPos, yPos, zPos);
     }
 
     #region GIZMOS

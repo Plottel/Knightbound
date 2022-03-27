@@ -641,7 +641,6 @@ GameObject:
   - component: {fileID: 4524370631134622793}
   - component: {fileID: 4524370631134622792}
   - component: {fileID: 9047725308660153200}
-  - component: {fileID: -4689962043028601513}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -757,27 +756,8 @@ MonoBehaviour:
   data: {fileID: 11400000, guid: e9b207e804a644d40b15bedcfea1fc14, type: 2}
   mesh: {fileID: 4524370631134622799}
   animator: {fileID: 4524370631134622792}
-  controller: {fileID: -4689962043028601513}
   direction: {x: 0, y: 0, z: 0}
   speed: 3
---- !u!143 &-4689962043028601513
-CharacterController:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4524370631134622805}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Height: 2.5
-  m_Radius: 0.5
-  m_SlopeLimit: 45
-  m_StepOffset: 0.3
-  m_SkinWidth: 0.08
-  m_MinMoveDistance: 0.001
-  m_Center: {x: 0, y: 1.25, z: 0}
 --- !u!1 &4524370631138470812
 GameObject:
   m_ObjectHideFlags: 0

@@ -138,4 +138,9 @@ public class ReplicationManagerServer : Manager<ReplicationManagerServer>
     {
         return serverReplicator.context.TryGetNetworkObject(networkID, out networkObject);
     }
+
+    public bool TryGetNetworkObject<T>(int networkID, out T obj) where T : NetworkObject
+    {
+        return serverReplicator.context.TryGetNetworkObject<T>(networkID, out obj);
+    }
 }

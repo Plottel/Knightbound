@@ -12,20 +12,27 @@ public class ReceivedInputProcessorServer : Manager<ReceivedInputProcessorServer
         ProcessClientInputStates();
     }
 
-    // // TODO: "Advance The Simulation"
     void ProcessClientInputStates()
     {
         var rms = ReplicationManagerServer.Get;
-        var inputBuffer = InputBufferServer.Get.GetBuffer();
+        var buffers = InputBufferServer.Get.GetAllBuffers();
 
-        // TODO: AWFUL Data access pattern!!!
-        foreach (InputState input in inputBuffer)
+        // For each Player's Buffer
+        foreach (List<InputState> inputBuffer in buffers)
         {
-            int characterID = PlayerManagerServer.Get.GetPlayerInfo(input.playerID).characterID;
-            if (ReplicationManagerServer.Get.TryGetNetworkObject(characterID, out var playerBase))
+            if (inputBuffer.Count == 0)
+                continue;
+
+            int characterID = PlayerManagerServer.Get.GetPlayerInfo(inputBuffer[0].playerID).characterID;
+
+            // Try to fetch the Player
+            if (rms.TryGetNetworkObject(characterID, out var playerBase))
             {
-                Player player = playerBase as Player; // Lol so bad - find a T solution
-                ApplyInputState(player, input);
+                Player player = playerBase as Player; // TODO: Lol so bad - find a T solution.
+
+                // Process All the Input Packets for this Player
+                foreach (InputState state in inputBuffer)
+                    ApplyInputState(player, state);
             }
         }
     }
@@ -41,9 +48,5 @@ public class ReceivedInputProcessorServer : Manager<ReceivedInputProcessorServer
         if (inputState.right) x = 1f;
 
         player.direction = new Vector3(x, 0, z);
-        
-        // TODO: To Advance the simulation.. ACTUALLY move the player.
-        // We now need simulation time as player's movement CANNOT be based
-        // upon the number of Input Packets received.
     }
 }

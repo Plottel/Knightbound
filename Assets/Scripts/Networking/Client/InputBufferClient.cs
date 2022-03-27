@@ -7,13 +7,15 @@ using Deft;
 public class InputBufferClient : Manager<InputBufferClient>
 {
     List<InputState> localBuffer; // Outgoing Input
-    List<InputState> receivedBuffer; // Incoming Input
+
+
+    Dictionary<int, List<InputState>> playerIDToReceivedInputBuffer; // Incoming Input
 
     public override void OnAwake()
     {
         base.OnAwake();
         localBuffer = new List<InputState>();
-        receivedBuffer = new List<InputState>();
+        playerIDToReceivedInputBuffer = new Dictionary<int, List<InputState>>();
     }
 
     // Local Input
@@ -31,11 +33,19 @@ public class InputBufferClient : Manager<InputBufferClient>
 
     // Received Input
     public void AddReceivedInputState(InputState state)
-        => receivedBuffer.Add(state);
+    {
+        if (playerIDToReceivedInputBuffer.TryGetValue(state.playerID, out var buffer))
+            buffer.Add(state);
+        else
+            playerIDToReceivedInputBuffer.Add(state.playerID, new List<InputState> { state });
+    }
 
-    public void ClearReceivedBuffer()
-        => receivedBuffer.Clear();
+    public void ClearReceivedBuffers()
+        => playerIDToReceivedInputBuffer.Clear();
 
-    public List<InputState> GetReceivedBuffer()
-        => receivedBuffer;
+    public List<InputState> GetReceivedBuffer(int playerID)
+        => playerIDToReceivedInputBuffer[playerID];
+
+    public List<InputState>[] GetAllReceivedBuffers()
+        => playerIDToReceivedInputBuffer.Values.ToArray();
 }

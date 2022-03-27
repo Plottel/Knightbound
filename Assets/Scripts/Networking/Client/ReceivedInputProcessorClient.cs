@@ -9,27 +9,39 @@ public class ReceivedInputProcessorClient : Manager<ReceivedInputProcessorClient
 {
     public override void OnUpdate()
     {
-        ProcessPlayerInputStates();
+        //ProcessClientInputStates();
     }
 
     public override void OnLateUpdate()
     {
-        InputBufferClient.Get.ClearReceivedBuffer();
+        InputBufferClient.Get.ClearReceivedBuffers();
     }
 
-    void ProcessPlayerInputStates()
+    void ProcessClientInputStates()
     {
-        var rms = ReplicationManagerServer.Get;
-        var inputBuffer = InputBufferClient.Get.GetReceivedBuffer();
+        var rmc = ReplicationManagerClient.Get;
+        var buffers = InputBufferClient.Get.GetAllReceivedBuffers();
 
-        // TODO: AWFUL Data access pattern..
-        foreach (InputState input in inputBuffer)
+        // For each Player's Buffer
+        foreach (List<InputState> inputBuffer in buffers)
         {
-            int characterID = PlayerManagerClient.Get.GetCharacterID(input.playerID);
-            if (ReplicationManagerClient.Get.TryGetNetworkObject(characterID, out var playerBase))
+            if (inputBuffer.Count == 0)
+                continue;
+
+            int characterID = PlayerManagerClient.Get.GetCharacterID(inputBuffer[0].playerID);
+
+            // Try to fetch the Player
+            if (rmc.TryGetNetworkObject(characterID, out var playerBase))
             {
-                Player player = playerBase as Player; // Lol so bad - find a T solution
-                ApplyInputState(player, input);
+                Player player = playerBase as Player; // TODO: Lol so bad - find a T solution.
+
+                // Process All the Input Packets for this Player
+                foreach (InputState state in inputBuffer)
+                    ApplyInputState(player, state);
+
+                // Move this Player after all Input Packets processed
+                // TODO: Separate system. This is just for applying input states.
+                //MovePlayer(player);
             }
         }
     }
@@ -45,5 +57,12 @@ public class ReceivedInputProcessorClient : Manager<ReceivedInputProcessorClient
         if (inputState.right) x = 1f;
 
         player.direction = new Vector3(x, 0, z);
+    }
+
+    void MovePlayer(Player player)
+    {
+        Vector3 moveDelta = player.direction * player.speed;
+        player.transform.position += moveDelta;
+        //player.controller.SimpleMove(moveDelta);
     }
 }

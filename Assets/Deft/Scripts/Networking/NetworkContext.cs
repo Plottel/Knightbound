@@ -57,6 +57,16 @@ namespace Deft.Networking
             return networkObjects.TryGetValue(networkID, out obj);
         }
 
+        // WARNING: Boxing!
+        public bool TryGetNetworkObject<T>(int networkID, out T obj) where T : NetworkObject
+        {
+            NetworkObject baseObj;
+            bool result = networkObjects.TryGetValue(networkID, out baseObj);
+            obj = baseObj as T;
+
+            return result;
+        }
+
         public bool TryGetNetworkID(NetworkObject obj, out int networkID)
         {
             return networkIDs.TryGetValue(obj, out networkID);
