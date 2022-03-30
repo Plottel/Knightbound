@@ -6,43 +6,43 @@ using Deft;
 
 public class InputGeneratorClient : Manager<InputGeneratorClient>
 {
+    public DeviceReader deviceReader;
+
+    NetworkManagerClient nmc;
+    CameraManager cm;
+    InputBufferClient ibc;
+
+    public override void OnAwake()
+    {
+        deviceReader = new DeviceReader();
+    }
+
+    public override void OnStart()
+    {
+        nmc = NetworkManagerClient.Get;
+        cm = CameraManager.Get;
+        ibc = InputBufferClient.Get;
+    }
+
     public override void OnUpdate()
     {
-        var inputBuffer = InputBufferClient.Get;
-
-        inputBuffer.ClearLocalBuffer();
-        inputBuffer.AddLocalInputState(GenerateInputState());
+        ibc.ClearLocalBuffer();
+        ibc.AddLocalInputState(GenerateInputState());
     }
 
     InputState GenerateInputState()
     {
-        return new InputState
-        {
-            playerID = NetworkManagerClient.Get.playerID, // TODO: Data Singleton ConnectionInfo something?
-            up = Input.GetKey(KeyCode.W),
-            down = Input.GetKey(KeyCode.S),
-            left = Input.GetKey(KeyCode.A),
-            right = Input.GetKey(KeyCode.D),
-            movement = GetMovementInput(),
-            cameraLeft = Input.GetKey(KeyCode.Q),
-            cameraRight = Input.GetKey(KeyCode.E)
-        };
+        InputState result = deviceReader.ReadDeviceState();
+
+        result.playerID = nmc.playerID; // TODO: Data Singleton ConnectionInfo something?
+        result.movement = WorldToCameraSpace(result.movement);
+
+        return result;
     }
 
-    Vector2 GetMovementInput()
+    Vector2 WorldToCameraSpace(Vector2 world)
     {
-        float x = 0;
-        float z = 0;
-
-        Transform camera = CameraManager.Get.Camera;
-
-        if (Input.GetKey(KeyCode.W)) z = 1f;
-        if (Input.GetKey(KeyCode.S)) z = -1f;
-        if (Input.GetKey(KeyCode.A)) x = -1f;
-        if (Input.GetKey(KeyCode.D)) x = 1f;
-
-        Vector3 input = new Vector3(x, 0, z);
-        Vector3 relativeInput = camera.TransformDirection(input);
+        Vector3 relativeInput = cm.Camera.TransformDirection(new Vector3(world.x, 0, world.y));
         relativeInput.y = 0;
         relativeInput.Normalize();
 

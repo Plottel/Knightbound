@@ -6,10 +6,6 @@ using UnityEngine;
 public class InputState
 {
     public int playerID;
-    public bool up;
-    public bool down;
-    public bool left;
-    public bool right;
     public Vector2 movement;
     public bool cameraLeft;
     public bool cameraRight;
@@ -17,10 +13,6 @@ public class InputState
     public void Serialize(BinaryWriter writer)
     {
         writer.Write(playerID);
-        writer.Write(up);
-        writer.Write(down);
-        writer.Write(left);
-        writer.Write(right);
 
         writer.Write(movement.x);
         writer.Write(movement.y);
@@ -32,10 +24,6 @@ public class InputState
     public void Deserialize(BinaryReader reader)
     {
         playerID = reader.ReadInt32();
-        up = reader.ReadBoolean();
-        down = reader.ReadBoolean();
-        left = reader.ReadBoolean();
-        right = reader.ReadBoolean();
 
         movement = new Vector2
         {
