@@ -81,6 +81,8 @@ public class Character : NetworkObject
                 }
             }
         }
+
+        Gizmos.DrawLine(transform.position, transform.position + direction);
     }
     #endregion
 }

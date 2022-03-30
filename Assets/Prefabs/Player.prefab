@@ -757,7 +757,7 @@ MonoBehaviour:
   mesh: {fileID: 4524370631134622799}
   animator: {fileID: 4524370631134622792}
   direction: {x: 0, y: 0, z: 0}
-  speed: 3
+  speed: 36
 --- !u!1 &4524370631138470812
 GameObject:
   m_ObjectHideFlags: 0

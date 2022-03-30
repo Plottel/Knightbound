@@ -9,6 +9,8 @@ public class CameraManager : Manager<CameraManager>
 {
     private CharacterCamera characterCamera;
 
+    public Transform Camera { get => characterCamera.camera.transform; }
+
     public override void OnAwake()
     {
         base.OnAwake();

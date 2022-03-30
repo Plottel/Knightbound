@@ -39,14 +39,16 @@ public class ReceivedInputProcessorServer : Manager<ReceivedInputProcessorServer
 
     void ApplyInputState(Player player, InputState inputState)
     {
-        float x = 0;
-        float z = 0;
+        //float x = 0;
+        //float z = 0;
 
-        if (inputState.up) z = 1f;
-        if (inputState.down) z = -1f;
-        if (inputState.left) x = -1f;
-        if (inputState.right) x = 1f;
+        //if (inputState.up) z = 1f;
+        //if (inputState.down) z = -1f;
+        //if (inputState.left) x = -1f;
+        //if (inputState.right) x = 1f;
 
-        player.direction = new Vector3(x, 0, z);
+        //player.direction = new Vector3(x, 0, z).normalized;
+
+        player.direction = new Vector3(inputState.movement.x, 0, inputState.movement.y);
     }
 }

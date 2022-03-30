@@ -10,6 +10,7 @@ public class InputState
     public bool down;
     public bool left;
     public bool right;
+    public Vector2 movement;
     public bool cameraLeft;
     public bool cameraRight;
 
@@ -20,6 +21,10 @@ public class InputState
         writer.Write(down);
         writer.Write(left);
         writer.Write(right);
+
+        writer.Write(movement.x);
+        writer.Write(movement.y);
+
         writer.Write(cameraLeft);
         writer.Write(cameraRight);
     }
@@ -31,6 +36,13 @@ public class InputState
         down = reader.ReadBoolean();
         left = reader.ReadBoolean();
         right = reader.ReadBoolean();
+
+        movement = new Vector2
+        {
+            x = reader.ReadSingle(),
+            y = reader.ReadSingle()
+        };
+
         cameraLeft = reader.ReadBoolean();
         cameraRight = reader.ReadBoolean();
     }
