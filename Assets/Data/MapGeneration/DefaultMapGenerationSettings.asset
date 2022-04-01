@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ef47e4f452bb9ea458a5e1005cff4048, type: 3}
   m_Name: DefaultMapGenerationSettings
   m_EditorClassIdentifier: 
-  size: 256
+  size: 100
   passes:
   - id: 0
   - id: 1

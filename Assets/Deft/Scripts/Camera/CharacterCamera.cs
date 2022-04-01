@@ -31,33 +31,27 @@ namespace Deft
         public void RotateCamera(float delta)
         {
             cameraRotationOffset += delta;
-
-            // Rotate the Camera around the point above player at Camera height
-            //Vector3 rotationPoint = target.position;
-            //rotationPoint.y = camera.position.y;
-
-            //camera.RotateAround(target.position, Vector3.up, delta);
         }
 
         void SnapToTarget()
         {
-            float height = target.position.y + CameraHeight;
-            Vector3 back = target.forward * -1;
-            back.y = 0;
+            // Get Player position
+            Vector3 cameraPosition = target.position;
 
-            Vector3 rotatedBack = Quaternion.AngleAxis(cameraRotationOffset, Vector3.up) * back;
+            // Go up by Camera Height
+            cameraPosition.y += CameraHeight;
 
-            // Player position
-            // Add camera height in Y
-            // X/Z by a vector with CameraRadius based on Target's Back vector
-            // Get camera angle by "LookAt" target.
+            // Get Angle Vector to project out by radius
+            Vector3 zeroAngle = new Vector3(1, 0, 0);
+            Vector3 cameraAngle = Quaternion.AngleAxis(cameraRotationOffset, Vector3.up) * zeroAngle;
 
-            Vector3 position = target.position;
-            position.y += CameraHeight;
-            position += rotatedBack * CameraRadius;
+            // Move out along Angle Vector by Camera Radius
+            cameraPosition += cameraAngle * CameraRadius;
 
-            // Set Position and Rotation
-            camera.position = position;
+            // Set Camera Position
+            camera.position = cameraPosition;
+
+            // Set Camera Rotation
             camera.LookAt(target, Vector3.up);
         }
     }
