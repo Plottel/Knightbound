@@ -22,6 +22,11 @@ public class CharacterMovementSystem : Manager<CharacterMovementSystem>
     void MovePlayer(Player player)
     {
         Vector3 moveDelta = player.direction * player.speed;
+        Vector3 flatMoveDelta = new Vector3(moveDelta.x, 0, moveDelta.z);
+
         player.transform.position += moveDelta * Time.deltaTime;
+
+        if (moveDelta != Vector3.zero)
+            player.transform.LookAt(player.transform.position + flatMoveDelta);
     }
 }

@@ -43,7 +43,7 @@ MonoBehaviour:
         PropType: 1
         Noise:
           id: 9
-        NoiseRangeMin: 0.97
+        NoiseRangeMin: 0.99
         NoiseRangeMax: 1
     00000003:
       type: {class: GenerateProp, ns: , asm: Assembly-CSharp}

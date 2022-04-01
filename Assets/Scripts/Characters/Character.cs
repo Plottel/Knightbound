@@ -55,6 +55,11 @@ public class Character : NetworkObject
         writer.Write(transform.position.x);
         writer.Write(transform.position.y);
         writer.Write(transform.position.z);
+
+        writer.Write(transform.rotation.x);
+        writer.Write(transform.rotation.y);
+        writer.Write(transform.rotation.z);
+        writer.Write(transform.rotation.w);
     }
 
     public override void Deserialize(BinaryReader reader)
@@ -64,6 +69,13 @@ public class Character : NetworkObject
         float zPos = reader.ReadSingle();
 
         transform.position = new Vector3(xPos, yPos, zPos);
+
+        float xRot = reader.ReadSingle();
+        float yRot = reader.ReadSingle();
+        float zRot = reader.ReadSingle();
+        float wRot = reader.ReadSingle();
+
+        transform.rotation = new Quaternion(xRot, yRot, zRot, wRot);
     }
 
     #region GIZMOS
